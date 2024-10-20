@@ -1,0 +1,39 @@
+{
+  "cesVersion": "2.11.24",
+  "projectName": "nawigacjaSGGW-mobile",
+  "packages": [
+    {
+      "name": "expo-router",
+      "type": "navigation",
+      "options": {
+        "type": "stack"
+      }
+    },
+    {
+      "name": "nativewind",
+      "type": "styling"
+    },
+    {
+      "name": "i18next",
+      "type": "internationalization"
+    }
+  ],
+  "flags": {
+    "noGit": true,
+    "noInstall": false,
+    "overwrite": false,
+    "importAlias": true,
+    "packageManager": "npm",
+    "eas": false
+  },
+  "packageManager": {
+    "type": "npm",
+    "version": "10.8.2"
+  },
+  "os": {
+    "type": "Linux",
+    "platform": "linux",
+    "arch": "x64",
+    "kernelVersion": "6.11.3"
+  }
+}
