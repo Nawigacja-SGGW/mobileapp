@@ -13,9 +13,6 @@ export default function Home() {
         <ScreenContent path="app/index.tsx" title="Home">
           <InternalizationExample />
         </ScreenContent>
-        <Link href={{ pathname: '/details', params: { name: 'Dan' } }} asChild>
-          <Button title="Show Details" />
-        </Link>
 
         <Link href={{ pathname: '/counter-example' }} asChild>
           <Button title="Go to counter Example" />
@@ -23,6 +20,19 @@ export default function Home() {
 
         <Link href={{ pathname: '/location-example' }} asChild>
           <Button title="Go to location Example" />
+        </Link>
+
+        <Link href={{ pathname: '/map-example' }} asChild>
+          <Button title="Go to map Example" />
+        </Link>
+
+        <Link
+          href={{
+            pathname: '/details',
+            params: { name: 'Dan' },
+          }}
+          asChild>
+          <Button title="Show Details" />
         </Link>
       </Container>
     </>

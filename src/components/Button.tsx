@@ -11,14 +11,9 @@ export const Button = forwardRef<TouchableOpacity, ButtonProps>(
       <TouchableOpacity
         ref={ref}
         {...touchableProps}
-        className={`${styles.button} ${touchableProps.className}`}>
-        <Text className={styles.buttonText}>{title}</Text>
+        className={`my-1 items-center rounded-[28px] bg-indigo-500 p-4 shadow-md ${touchableProps.className}`}>
+        <Text className="text-center text-lg font-semibold text-white">{title}</Text>
       </TouchableOpacity>
     );
   }
 );
-
-const styles = {
-  button: 'my-1 items-center bg-indigo-500 rounded-[28px] shadow-md p-4',
-  buttonText: 'text-white text-lg font-semibold text-center',
-};
