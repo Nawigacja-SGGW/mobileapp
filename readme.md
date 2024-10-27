@@ -8,9 +8,9 @@
 ```bash
 npm install
 # android
-npm run android:go
+npm run android
 # android
-npm run ios:go
+npm run ios
 
 ```
 
