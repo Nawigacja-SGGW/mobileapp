@@ -9,9 +9,6 @@
 npm install
 # android
 npm run android
-# android
-npm run ios
-
 ```
 
 ## Dir structure
