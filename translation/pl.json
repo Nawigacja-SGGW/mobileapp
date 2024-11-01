@@ -1,0 +1,35 @@
+{
+  "button": {
+    "polish": "Polski",
+    "english": "Angielski"
+  },
+  "navigation": {
+    "home": "Strona główna",
+    "counter": "Licznik",
+    "location": "Lokalizacja",
+    "map": "Mapa",
+    "details": "Szczegóły"
+  },
+  "getStarted": "Otwórz kod dla tego ekranu:",
+  "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.", 
+  
+  "counter": {
+    "title": "Przykład licznika",
+    "increment": "Zwiększ",
+    "decrement": "Zmniejsz",
+    "value": "Licznik",
+	"cunter-example": "przykład licznika",
+  },
+  "location": {
+    "title": "Lokalizacja",
+    "permissionStatus": "Status uprawnień",
+    "granted": "przyznane",
+    "yourLocation": "Twoja lokalizacja"
+  },
+  "menu": {
+    "map": "Mapa",
+    "objects": "Obiekty",
+    "profile": "Profil",
+    "settings": "Ustawienia"
+  }
+}
