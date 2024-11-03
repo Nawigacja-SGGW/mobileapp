@@ -22,7 +22,7 @@ export default function Home() {
           <Button title="Go to location Example" />
         </Link>
 
-        <Link href={{ pathname: '/map-example' }} asChild>
+        <Link href={{ pathname: '/map-screen' }} asChild>
           <Button title="Go to map Example" />
         </Link>
 
