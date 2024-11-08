@@ -1,11 +1,9 @@
 import '../../global.css';
 import '../../translation';
 import Drawer from 'expo-router/drawer';
-import { useState } from 'react';
 
-import { TopPanel } from './TopPanel';
-import { SlidingMenu } from './menu';
+import { DrawerMenu } from '~/components/menu';
 
 export default function Layout() {
-  return <Drawer />;
+  return <Drawer drawerContent={() => <DrawerMenu />} />;
 }

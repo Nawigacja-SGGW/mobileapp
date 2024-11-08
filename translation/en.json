@@ -1,6 +1,6 @@
 {
   "button": {
-    "polish": "Polsih",
+    "polish": "Polish",
     "english": "English"
   },
   "navigation": {
@@ -16,6 +16,10 @@
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Logout"
+  },
+  "map": {
+    "search.startingPoint": "Your location",
+    "search.destination": "Destination"
   },
 
   "getStarted": "Open this display's code:",

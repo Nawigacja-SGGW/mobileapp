@@ -1,18 +1,14 @@
 import MapLibreGL from '@maplibre/maplibre-react-native';
-import { DrawerActions } from '@react-navigation/native';
-import { useNavigation } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { View, Text, TextInput } from 'react-native';
 
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
-import MenuIcon from '../../assets/menus1.svg';
-import NavigationIcon from '../../assets/navigation.svg';
 import SearchIcon1 from '../../assets/search1.svg';
-import SearchIcon2 from '../../assets/search2.svg';
 
-import TopBar from '~/app/TopPanel';
+import TopHeader from '~/components/TopHeader';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -25,6 +21,7 @@ const campusBounds = {
 const campusCenter = [21.04635389581634, 52.16357007158958];
 
 export default function MapExample() {
+  const { t } = useTranslation();
   const camera = useRef(null);
   const [isExpanded, setIsExpanded] = useState(true);
 
@@ -41,13 +38,11 @@ export default function MapExample() {
     <>
       <Drawer.Screen
         options={{
-          header: () => <TopBar isExpanded={isExpanded} toggleSearchBar={toggleSearchBar} />,
+          header: () => <TopHeader isExpanded={isExpanded} toggleSearchBar={toggleSearchBar} />,
         }}
       />
       <Text>Map</Text>
       <View className="mt-20 flex-1">
-        {/* Navbar */}
-
         {/* Search Bar */}
         <View
           className={`absolute left-4 right-4 z-10 mt-6 rounded-[25] bg-white p-3 ${
@@ -59,7 +54,7 @@ export default function MapExample() {
                 <LightGreenDot width={20} height={20} className="ml-4 mr-2" />
                 <TextInput
                   className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
-                  placeholder="Your location"
+                  placeholder={t('map.search.startingPoint')}
                   placeholderTextColor="#000"
                 />
               </View>
@@ -68,7 +63,7 @@ export default function MapExample() {
                 <DarkGreenDot width={20} height={20} className="ml-4 mr-2" />
                 <TextInput
                   className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
-                  placeholder="Destination"
+                  placeholder={t('map.search.destination')}
                   placeholderTextColor="#000"
                 />
               </View>

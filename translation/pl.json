@@ -32,5 +32,9 @@
     "profile": "Profil",
     "settings": "Ustawienia",
     "logout": "Wyloguj się"
+  },
+  "map": {
+    "search.startingPoint": "Twoja lokacja",
+    "search.destination": "Miejsce docelowe"
   }
 }
