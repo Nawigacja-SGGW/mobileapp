@@ -1,11 +1,11 @@
-import { TouchableOpacity, View, Text, Dimensions, Animated } from 'react-native';
-import { useState, useEffect } from 'react';
-import { LanguageSwitch } from '~/components/LanguageSwitch';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TouchableOpacity, View, Text, Dimensions, Animated } from 'react-native';
+
+import { LanguageSwitch } from '~/components/LanguageSwitch';
 
 const screenWidth = Dimensions.get('window').width;
-
 interface SlidingMenuProps {
   visible: boolean;
   onClose: () => void;
@@ -22,28 +22,28 @@ export function SlidingMenu({ visible, onClose }: SlidingMenuProps) {
       icon: <FontAwesome5 name="map" size={20} color="black" />,
       onPress: () => {
         console.log('Open Map');
-      }
+      },
     },
     {
       label: t('menu.objects'),
       icon: <FontAwesome5 name="box" size={20} color="black" />,
       onPress: () => {
         console.log('Open Objects');
-      }
+      },
     },
     {
       label: t('menu.profile'),
       icon: <FontAwesome5 name="user" size={20} color="black" />,
       onPress: () => {
         console.log('Open Profile');
-      }
+      },
     },
     {
       label: t('menu.settings'),
       icon: <FontAwesome5 name="cog" size={20} color="black" />,
       onPress: () => {
         console.log('Open Settings');
-      }
+      },
     },
   ];
 
@@ -52,7 +52,7 @@ export function SlidingMenu({ visible, onClose }: SlidingMenuProps) {
     icon: <FontAwesome5 name="sign-out-alt" size={20} color="black" />,
     onPress: () => {
       console.log('Log out');
-    }
+    },
   };
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export function SlidingMenu({ visible, onClose }: SlidingMenuProps) {
       )}
 
       {/* Panel Menu */}
-      <Animated.View 
+      <Animated.View
         style={{
           position: 'absolute',
           left: 0,
@@ -106,8 +106,7 @@ export function SlidingMenu({ visible, onClose }: SlidingMenuProps) {
           bottom: 0,
           zIndex: 1000,
           transform: [{ translateX: slideAnim }],
-        }}
-      >
+        }}>
         <View
           style={{
             position: 'absolute',
@@ -117,14 +116,14 @@ export function SlidingMenu({ visible, onClose }: SlidingMenuProps) {
             height: '100%',
             backgroundColor: 'white',
             zIndex: 10,
-          }}
-        >
-          <View style={{ 
-            flex: 1, 
-            paddingHorizontal: 10,
-            paddingTop: 10,
-            marginTop: 80,
           }}>
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: 10,
+              paddingTop: 10,
+              marginTop: 80,
+            }}>
             {menuOptions.map((option, index) => (
               <TouchableOpacity
                 key={index}
@@ -136,8 +135,7 @@ export function SlidingMenu({ visible, onClose }: SlidingMenuProps) {
                   flexDirection: 'row',
                   alignItems: 'center',
                   marginBottom: 10,
-                }}
-              >
+                }}>
                 {option.icon}
                 <Text style={{ marginLeft: 10, color: 'black' }}>{option.label}</Text>
               </TouchableOpacity>
@@ -153,8 +151,7 @@ export function SlidingMenu({ visible, onClose }: SlidingMenuProps) {
                 alignItems: 'center',
                 marginTop: 'auto',
                 marginBottom: 50,
-              }}
-            >
+              }}>
               {logoutOption.icon}
               <Text style={{ marginLeft: 10, color: 'black' }}>{logoutOption.label}</Text>
             </TouchableOpacity>

@@ -11,14 +11,14 @@
     "details": "Szczegóły"
   },
   "getStarted": "Otwórz kod dla tego ekranu:",
-  "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.", 
-  
+  "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.",
+
   "counter": {
     "title": "Przykład licznika",
     "increment": "Zwiększ",
     "decrement": "Zmniejsz",
     "value": "Licznik",
-	"cunter-example": "przykład licznika",
+    "cunter-example": "przykład licznika"
   },
   "location": {
     "title": "Lokalizacja",

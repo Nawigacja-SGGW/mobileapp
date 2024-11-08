@@ -1,30 +1,11 @@
 import '../../global.css';
 import '../../translation';
+import Drawer from 'expo-router/drawer';
 import { useState } from 'react';
-import { SlidingMenu } from './menu';
+
 import { TopPanel } from './TopPanel';
+import { SlidingMenu } from './menu';
 
 export default function Layout() {
-  const [showSettings, setShowSettings] = useState(false);
-
-  const handleMenuToggle = () => {
-    setShowSettings(!showSettings);
-  };
-
-  return (
-    <>
-      <TopPanel 
-        showSettings={showSettings}
-        onMenuToggle={handleMenuToggle}
-      />
-
-      <SlidingMenu 
-        visible={showSettings} 
-        onClose={() => {
-          console.log("Closing menu");
-          setShowSettings(false);
-        }}
-      />
-    </>
-  );
+  return <Drawer />;
 }

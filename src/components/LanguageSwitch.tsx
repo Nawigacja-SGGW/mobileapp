@@ -8,23 +8,21 @@ export function LanguageSwitch() {
   return (
     <View className="flex-row gap-2">
       <TouchableOpacity onPress={() => i18n.changeLanguage('pl')}>
-        <Text 
+        <Text
           className={`text-lg ${
-            i18n.language === 'pl' ? 'text-indigo-500 font-bold' : 'text-gray-500'
-          }`}
-        >
+            i18n.language === 'pl' ? 'font-bold text-indigo-500' : 'text-gray-500'
+          }`}>
           PL
         </Text>
       </TouchableOpacity>
-      
+
       <Text className="text-lg text-gray-500">/</Text>
-      
+
       <TouchableOpacity onPress={() => i18n.changeLanguage('en')}>
-        <Text 
+        <Text
           className={`text-lg ${
-            i18n.language === 'en' ? 'text-indigo-500 font-bold' : 'text-gray-500'
-          }`}
-        >
+            i18n.language === 'en' ? 'font-bold text-indigo-500' : 'text-gray-500'
+          }`}>
           EN
         </Text>
       </TouchableOpacity>

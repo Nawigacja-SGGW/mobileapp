@@ -1,5 +1,6 @@
 import en from './en.json';
 import pl from './pl.json';
+
 import { init18n } from '~/core/i18n/init';
 
 export const resources = {
