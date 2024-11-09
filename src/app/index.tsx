@@ -14,6 +14,10 @@ export default function Home() {
           <InternalizationExample />
         </ScreenContent>
 
+        <Link href={{ pathname: '/login' }} asChild>
+          <Button title="Go to login view" />
+        </Link>
+
         <Link href={{ pathname: '/counter-example' }} asChild>
           <Button title="Go to counter Example" />
         </Link>
