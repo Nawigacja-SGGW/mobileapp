@@ -1,13 +1,14 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Drawer } from 'expo-router/drawer';
 import MapLibreGL from '@maplibre/maplibre-react-native';
+import { Drawer } from 'expo-router/drawer';
+import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { View, Text, TextInput } from 'react-native';
+
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
-import MenuIcon from '../../assets/menus1.svg';
-import NavigationIcon from '../../assets/navigation.svg';
 import SearchIcon1 from '../../assets/search1.svg';
-import SearchIcon2 from '../../assets/search2.svg';
+
+import TopHeader from '~/components/TopHeader';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -20,11 +21,13 @@ const campusBounds = {
 const campusCenter = [21.04635389581634, 52.16357007158958];
 
 export default function MapExample() {
+  const { t } = useTranslation();
   const camera = useRef(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const toggleSearchBar = () => {
-    setIsExpanded(!isExpanded);
+    console.log('toggle');
+    setIsExpanded((n) => !n);
   };
 
   const handleMapPress = () => {
@@ -35,29 +38,14 @@ export default function MapExample() {
     <>
       <Drawer.Screen
         options={{
-          header: () => (
-            <View className="absolute left-0 right-0 top-0 z-20 h-28 flex-row items-center justify-between bg-[#0F4530] px-4 pt-4">
-              <TouchableOpacity className="p-2">
-                <MenuIcon width={40} height={40} fill="#FFF" />
-              </TouchableOpacity>
-              <Text className="text-lg font-bold text-white">logo/nazwa</Text>
-              <TouchableOpacity className="p-2" onPress={toggleSearchBar}>
-                {isExpanded ? (
-                  <NavigationIcon width={40} height={40} fill="#FFF" />
-                ) : (
-                  <SearchIcon2 width={28} height={28} fill="#FFF" />
-                )}
-              </TouchableOpacity>
-            </View>
-          ),
+          header: () => <TopHeader isExpanded={isExpanded} toggleSearchBar={toggleSearchBar} />,
         }}
       />
-      <View className="flex-1">
-        {/* Navbar */}
-
+      <Text>Map</Text>
+      <View className="mt-20 flex-1">
         {/* Search Bar */}
         <View
-          className={`absolute left-4 right-4 top-16 z-10 mt-9 h-20 rounded-full bg-white p-3 ${
+          className={`absolute left-4 right-4 z-10 mt-6 rounded-[25] bg-white p-3 ${
             isExpanded ? 'h-32' : 'h-15'
           }`}>
           {isExpanded ? (
@@ -66,7 +54,7 @@ export default function MapExample() {
                 <LightGreenDot width={20} height={20} className="ml-4 mr-2" />
                 <TextInput
                   className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
-                  placeholder="Your location"
+                  placeholder={t('map.search.startingPoint')}
                   placeholderTextColor="#000"
                 />
               </View>
@@ -75,7 +63,7 @@ export default function MapExample() {
                 <DarkGreenDot width={20} height={20} className="ml-4 mr-2" />
                 <TextInput
                   className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
-                  placeholder="Destination"
+                  placeholder={t('map.search.destination')}
                   placeholderTextColor="#000"
                 />
               </View>
@@ -84,7 +72,7 @@ export default function MapExample() {
             <View className="flex-1 flex-row items-center">
               <SearchIcon1 width={28} height={28} className="mr-2" />
               <TextInput
-                className="ml-3 ml-8 flex-1 text-lg"
+                className="ml-3 flex-1 text-lg"
                 placeholder="Search"
                 placeholderTextColor="#000"
               />
@@ -97,7 +85,8 @@ export default function MapExample() {
           style={{ flex: 1 }}
           logoEnabled={false}
           styleURL="https://americanamap.org/style.json"
-          onPress={handleMapPress}>
+          onPress={handleMapPress}
+          compassEnabled={false}>
           <MapLibreGL.Camera
             ref={camera}
             centerCoordinate={campusCenter}

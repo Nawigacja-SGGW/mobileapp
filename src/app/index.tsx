@@ -1,40 +1,21 @@
-import { Stack, Link } from 'expo-router';
-
-import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
-import { InternalizationExample } from '~/components/InternalizationExample';
-import { ScreenContent } from '~/components/ScreenContent';
+import { useFocusEffect, useNavigation } from 'expo-router';
+import Drawer from 'expo-router/drawer';
 
 export default function Home() {
+  const navigation = useNavigation();
+
+  useFocusEffect(() => {
+    console.log('go to mpa-screen');
+    navigation.navigate('map-screen');
+  });
+
   return (
     <>
-      <Stack.Screen options={{ title: 'Home' }} />
-      <Container>
-        <ScreenContent path="app/index.tsx" title="Home">
-          <InternalizationExample />
-        </ScreenContent>
-
-        <Link href={{ pathname: '/counter-example' }} asChild>
-          <Button title="Go to counter Example" />
-        </Link>
-
-        <Link href={{ pathname: '/location-example' }} asChild>
-          <Button title="Go to location Example" />
-        </Link>
-
-        <Link href={{ pathname: '/map-screen' }} asChild>
-          <Button title="Go to map Example" />
-        </Link>
-
-        <Link
-          href={{
-            pathname: '/details',
-            params: { name: 'Dan' },
-          }}
-          asChild>
-          <Button title="Show Details" />
-        </Link>
-      </Container>
+      <Drawer.Screen
+        options={{
+          headerShown: false,
+        }}
+      />
     </>
   );
 }
