@@ -1,9 +1,9 @@
 import '../../global.css';
-
 import '../../translation';
+import Drawer from 'expo-router/drawer';
 
-import { Stack } from 'expo-router';
+import { DrawerMenu } from '~/components/menu';
 
 export default function Layout() {
-  return <Stack />;
+  return <Drawer drawerContent={() => <DrawerMenu />} />;
 }

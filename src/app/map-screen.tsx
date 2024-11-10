@@ -10,6 +10,7 @@ import SearchIcon1 from '../../assets/search1.svg';
 import SearchIcon2 from '../../assets/search2.svg'; // Icon in top bar
 import BookIcon from '../../assets/book1.svg';
 import BuildingIcon from '../../assets/building3.svg';
+import { useTranslation } from 'react-i18next';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -50,6 +51,7 @@ interface Location {
 }
 
 export default function MapExample() {
+  const { t } = useTranslation();
   const camera = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -134,7 +136,7 @@ export default function MapExample() {
                 </View>
                 <TextInput
                   className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
-                  placeholder="Your location"
+                  placeholder={t('map.search.startingPoint')}
                   placeholderTextColor="#000"
                 />
               </View>
@@ -145,7 +147,7 @@ export default function MapExample() {
                 </View>
                 <TextInput
                   className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
-                  placeholder="Destination"
+                  placeholder={t('map.search.destination')}
                   placeholderTextColor="#000"
                 />
               </View>
@@ -185,7 +187,8 @@ export default function MapExample() {
           style={{ flex: 1 }}
           logoEnabled={false}
           styleURL="https://americanamap.org/style.json"
-          onPress={handleMapPress}>
+          onPress={handleMapPress}
+          compassEnabled={false}>
           <MapLibreGL.Camera
             ref={camera}
             centerCoordinate={campusCenter}
