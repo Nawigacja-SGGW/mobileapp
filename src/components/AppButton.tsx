@@ -1,14 +1,16 @@
 import { forwardRef } from 'react';
-import { Text, TouchableOpacity, TouchableOpacityProps, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, TouchableOpacityProps, StyleSheet, StyleProp, ViewStyle, TextStyle } from 'react-native';
 
 type ButtonProps = {
   title: string;
+  buttonStyle?:StyleProp<ViewStyle>;
+  textStyle?:StyleProp<TextStyle>;
 } & TouchableOpacityProps;
 
-export const AppButton: React.FC<ButtonProps> = forwardRef<TouchableOpacity, ButtonProps>(({ title, ...touchableProps }, ref) => {
+export const AppButton: React.FC<ButtonProps> = forwardRef<TouchableOpacity, ButtonProps>(({ title, buttonStyle, textStyle, ...touchableProps }, ref) => {
   return (
-    <TouchableOpacity ref={ref} {...touchableProps} style={styles.button}>
-        <Text style={styles.buttonText}>{title}</Text>
+    <TouchableOpacity ref={ref} {...touchableProps} style={[styles.button,buttonStyle]}>
+        <Text style={[styles.buttonText,textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 }
