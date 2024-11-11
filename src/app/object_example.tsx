@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Pressable, StyleSheet } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
+import { LocationButton } from './LocationDetailsScreen';
 
 const LocationModal = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -79,8 +80,8 @@ const LocationModal = () => {
               <TouchableOpacity
                 style={styles.actionButton}
                 onPress={() => {
-                  // Add navigation logic here
                   setIsVisible(false);
+                  
                 }}
               >
                 <Text style={styles.buttonText}>Nawiguj</Text>
@@ -89,7 +90,8 @@ const LocationModal = () => {
               <TouchableOpacity
                 style={styles.actionButton}
                 onPress={() => {
-                  // Add more info logic here
+                  console.log('wiecej informacji');
+                  navigation.navigate('LocationDetailsScreen');
                   setIsVisible(false);
                 }}
               >
