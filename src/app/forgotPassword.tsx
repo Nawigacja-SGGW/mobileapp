@@ -1,10 +1,10 @@
 import { Stack, Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 import { AppButton } from '~/components/AppButton';
-import { AppInput, AppSecureInput } from '~/components/AppInput';
+import { AppInput } from '~/components/AppInput';
 import { Logo } from '~/components/Logo';
 
 export default function Login() {
@@ -22,14 +22,6 @@ export default function Login() {
     content: {
       flex: 1,
       justifyContent: 'center',
-    },
-    boldedText: {
-      color: '#003228',
-      fontSize: 12,
-      textAlign: 'right',
-      textDecorationLine: 'underline',
-      marginTop: 10,
-      fontWeight: 700,
     },
     title:{
       fontSize: 24,
