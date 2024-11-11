@@ -86,11 +86,11 @@ export default function Login() {
             togglePasswordVisibility={togglePasswordVisibility}
             />
 
-          <Link href={{ pathname: '/login' }} asChild>
+          <Link href={{ pathname: '/forgotPassword' }} asChild>
             <Text style={styles.boldedText}> {t('login.password.forgotPassword')}</Text>
           </Link>
 
-          <Link href={{ pathname: '/login' }} asChild>
+          <Link href={{ pathname: '/' }} asChild>
             <AppButton title={t('login.signInButton')} />
           </Link>
         </View>

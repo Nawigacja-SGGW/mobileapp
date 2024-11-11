@@ -94,7 +94,7 @@ export default function Login() {
             togglePasswordVisibility={togglePassword2Visibility}
             />
 
-          <Link href={{ pathname: '/login' }} asChild>
+          <Link href={{ pathname: '/' }} asChild>
             <AppButton title={t('login.signUpButton')} />
           </Link>
         </View>
