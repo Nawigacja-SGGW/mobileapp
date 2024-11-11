@@ -46,9 +46,7 @@ export function DrawerMenu() {
     {
       label: t('menu.object_example'),
       icon: <FontAwesome5 name="box" size={20} color="black" />,
-      onPress: () => {
-        navigation.navigate('object_example')
-      },
+      onPress: () => navigation.navigate('object_example')
     },
 
 
