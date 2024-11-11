@@ -21,6 +21,20 @@
     "search.startingPoint": "Your location",
     "search.destination": "Destination"
   },
+  "login":{
+    "screenTitle" : "Login",
+    "usernameOrEmail" : {
+      "label" : "Username or e-mail",
+      "placeholder" : "Enter your email"
+    },
+    "password" : {
+      "label" : "Password",
+      "placeholder" : "Enter your password",
+      "forgotText" : "Forgot password?"
+    },
+    "signIn" : "sign in",
+    "continueWith" : "Or continue with"
+  },
 
   "getStarted": "Open this display's code:",
   "changeCode": "Change any text, save the file and the app will update automatically."

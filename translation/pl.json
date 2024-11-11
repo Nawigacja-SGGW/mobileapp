@@ -36,5 +36,19 @@
   "map": {
     "search.startingPoint": "Twoja lokacja",
     "search.destination": "Miejsce docelowe"
+  },
+  "login":{
+    "screenTitle" : "Login",
+    "usernameOrEmail" : {
+      "label" : "Username or e-mail",
+      "placeholder" : "Enter your email"
+    },
+    "password" : {
+      "label" : "Password",
+      "placeholder" : "Enter your password",
+      "forgotText" : "Forgot password?"
+    },
+    "signIn" : "sign in",
+    "continueWith" : "Or continue with"
   }
 }
