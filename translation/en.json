@@ -36,19 +36,19 @@
       "label" : "Username",
       "placeholder" : "Enter your username"
     },
-    "Email" : {
+    "email" : {
       "label" : "E-mail",
       "placeholder" : "Enter your e-mail"
     },
-    "ConfirmPassword" : {
+    "confirmPassword" : {
       "label" : "Confirm password",
       "placeholder" : "Enter your password"
     },
-    "NewPassword" : {
+    "newPassword" : {
       "label" : "New password",
       "placeholder" : "Enter new password"
     },
-    "ConfirmNewPassword" : {
+    "confirmNewPassword" : {
       "label" : "Confirm new password",
       "placeholder" : "Enter new password"
     },

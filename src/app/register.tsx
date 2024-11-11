@@ -1,7 +1,7 @@
 import { Stack, Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
@@ -9,14 +9,19 @@ import { Logo } from '~/components/Logo';
 
 export default function Login() {
 
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPassword2Visible, setIsPassword2Visible] = useState(false);
   const { t } = useTranslation();
-  const externalIconsSize = 44;
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
+  };
+  const togglePassword2Visibility = () => {
+    setIsPassword2Visible(!isPassword2Visible);
   };
 
   const styles = StyleSheet.create({
@@ -44,21 +49,6 @@ export default function Login() {
       textAlign: 'center',
       fontWeight: 500,
     },
-    bottom:{
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginTop:10,
-      marginBottom:20,
-    },
-    circle:{
-      height : externalIconsSize,
-      width : externalIconsSize,
-      borderRadius: externalIconsSize,
-      justifyContent: 'center',
-      alignItems: "center",
-      backgroundColor: '#cccccc',
-      marginHorizontal:5,
-    },
   });
   
   return (
@@ -69,11 +59,19 @@ export default function Login() {
 
         <View style={styles.content}>
           <AppInput
-            label = {t('login.usernameOrEmail.label')}
-            placeholder = {t('login.usernameOrEmail.placeholder')}
+            label = {t('login.email.label')}
+            placeholder = {t('login.email.placeholder')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address" 
+            />
+
+          <AppInput
+            label = {t('login.username.label')}
+            placeholder = {t('login.username.placeholder')}
+            value={username}
+            onChangeText={setUsername}
+            keyboardType="default" 
             />
 
           <AppSecureInput
@@ -86,22 +84,19 @@ export default function Login() {
             togglePasswordVisibility={togglePasswordVisibility}
             />
 
-          <Link href={{ pathname: '/login' }} asChild>
-            <Text style={styles.boldedText}> {t('login.password.forgotPassword')}</Text>
-          </Link>
+          <AppSecureInput
+            label= {t('login.confirmPassword.label')}
+            placeholder= {t('login.confirmPassword.placeholder')}
+            value={password2}
+            onChangeText={setPassword2}
+            keyboardType="default"
+            isPasswordVisible={isPassword2Visible}
+            togglePasswordVisibility={togglePassword2Visibility}
+            />
 
           <Link href={{ pathname: '/login' }} asChild>
-            <AppButton title={t('login.signInButton')} />
+            <AppButton title={t('login.signUpButton')} />
           </Link>
-        </View>
-        <Text style={styles.text}> {t('login.continueWith')}</Text>
-        <View style={styles.bottom}>
-          <TouchableOpacity style={styles.circle}>
-            <Image source={require("./../../assets/google.png")} alt="Google logo"/>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.circle}>
-            <Image source={require("./../../assets/apple.png")} alt="Apple logo"/>
-          </TouchableOpacity>
         </View>
       </View>
     </>
