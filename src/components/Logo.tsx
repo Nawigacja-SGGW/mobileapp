@@ -14,7 +14,7 @@ export const Logo: React.FC<TouchableOpacityProps> = forwardRef<TouchableOpacity
 
         <View style={[styles.box, styles.rightBox]}>
         <View  style={[styles.circle,{backgroundColor: '#fff'}]}>
-            <Image source={require("./../../assets/logoSGGW.png")} alt="Hide icon" style={styles.image} resizeMode="contain"/>
+            <Image source={require("./../../assets/logoSGGW.png")} alt="SGGW logo" style={styles.image} resizeMode="contain"/>
         </View>
         </View>
     </View>

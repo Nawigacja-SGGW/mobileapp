@@ -87,20 +87,20 @@ export default function Login() {
             />
 
           <Link href={{ pathname: '/login' }} asChild>
-            <Text style={styles.boldedText}> {t('login.password.forgotText')}</Text>
+            <Text style={styles.boldedText}> {t('login.password.forgotPassword')}</Text>
           </Link>
 
           <Link href={{ pathname: '/login' }} asChild>
-            <AppButton title="sign in" />
+            <AppButton title={t('login.signInButton')} />
           </Link>
         </View>
         <Text style={styles.text}> {t('login.continueWith')}</Text>
         <View style={styles.bottom}>
           <TouchableOpacity onPress={togglePasswordVisibility} style={styles.circle}>
-            <Image source={require("./../../assets/google.png")} alt="Hide icon"/>
+            <Image source={require("./../../assets/google.png")} alt="Google logo"/>
           </TouchableOpacity>
           <TouchableOpacity onPress={togglePasswordVisibility} style={styles.circle}>
-            <Image source={require("./../../assets/apple.png")} alt="Hide icon"/>
+            <Image source={require("./../../assets/apple.png")} alt="Apple logo"/>
           </TouchableOpacity>
         </View>
       </View>
