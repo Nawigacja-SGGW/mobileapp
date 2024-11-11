@@ -6,6 +6,9 @@ import { TouchableOpacity, View, Text } from 'react-native';
 
 import { LanguageSwitch } from '~/components/LanguageSwitch';
 
+
+
+
 export function DrawerMenu() {
   const { t } = useTranslation();
   const navigation = useNavigation();
@@ -44,7 +47,7 @@ export function DrawerMenu() {
       label: t('menu.object_example'),
       icon: <FontAwesome5 name="box" size={20} color="black" />,
       onPress: () => {
-        navigation.navigate('object_example');
+        navigation.navigate('object_example')
       },
     },
 
@@ -97,3 +100,5 @@ export function DrawerMenu() {
     </>
   );
 }
+
+
