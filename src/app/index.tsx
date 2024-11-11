@@ -7,6 +7,7 @@ export default function Home() {
   useFocusEffect(() => {
     console.log('go to mpa-screen');
     navigation.navigate('map-screen');
+    
   });
 
   return (
