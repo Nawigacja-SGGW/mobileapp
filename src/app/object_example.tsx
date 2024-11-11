@@ -1,127 +1,178 @@
 import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { X, ArrowLeft, MapPin, Building, Mail } from 'lucide-react';
-import { DrawerActions } from '@react-navigation/native';
-
+import { Drawer } from 'expo-router/drawer';
+import { useNavigation } from 'expo-router';
 
 const ObjectExample = () => {
   const [showDetails, setShowDetails] = useState(false);
+  const navigation = useNavigation();
   
   const locationData = {
     title: "Centrum Wodne SGGW",
     buildingNo: "Budynek nr 49",
     address: "ul. Nowoursynowska 159, 02-776 Warszawa",
     email: "centrum_wodne@sggw.edu.pl",
-    description: "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.",
-    photos: [1, 2, 3, 4] // Przykładowa lista zdjęć
+    description: "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    photos: [1, 2, 3, 4]
   };
 
   const BaseModal = ({ children }) => (
-    <div className="fixed inset-x-0 bottom-0 bg-green-900 text-white rounded-t-lg p-4 max-w-xl mx-auto">
-      <div className="relative">
-        {children}
-      </div>
-    </div>
+    <View style={{ 
+      position: 'absolute', 
+      bottom: 0, 
+      left: 0, 
+      right: 0,
+      backgroundColor: '#166534', 
+      padding: 16,
+      borderTopLeftRadius: 8,
+      borderTopRightRadius: 8,
+    }}>
+      <View>{children}</View>
+    </View>
   );
 
   if (showDetails) {
     return (
-      <div className="fixed inset-0 bg-green-900 text-white">
-        <div className="p-4">
-          <button 
-            onClick={() => setShowDetails(false)}
-            className="p-2"
+      <View style={{ flex: 1, backgroundColor: '#166534' }}>
+        <ScrollView style={{ padding: 16 }}>
+          <TouchableOpacity 
+            onPress={() => setShowDetails(false)}
+            style={{ padding: 8 }}
           >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
           
-          <div className="mt-4">
-            <h1 className="text-2xl font-bold mb-6">{locationData.title}</h1>
+          <View style={{ marginTop: 16 }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', color: 'white', marginBottom: 24 }}>
+              {locationData.title}
+            </Text>
             
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <Building className="w-5 h-5 mt-1" />
-                <span>{locationData.buildingNo}</span>
-              </div>
+            <View style={{ gap: 16 }}>
+              <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
+                <Building color="white" size={20} />
+                <Text style={{ color: 'white' }}>{locationData.buildingNo}</Text>
+              </View>
               
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 mt-1" />
-                <span>{locationData.address}</span>
-              </div>
+              <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
+                <MapPin color="white" size={20} />
+                <Text style={{ color: 'white' }}>{locationData.address}</Text>
+              </View>
               
-              <div className="flex items-start gap-3">
-                <Mail className="w-5 h-5 mt-1" />
-                <span>{locationData.email}</span>
-              </div>
-            </div>
+              <View style={{ flexDirection: 'row', gap: 12, alignItems: 'flex-start' }}>
+                <Mail color="white" size={20} />
+                <Text style={{ color: 'white' }}>{locationData.email}</Text>
+              </View>
+            </View>
 
-            <p className="mt-6 text-gray-200">
+            <Text style={{ marginTop: 24, color: '#e5e7eb' }}>
               {locationData.description}
-            </p>
+            </Text>
 
-            <button className="w-full bg-gray-100 text-green-900 rounded-lg py-3 mt-6">
-              Nawiguj
-            </button>
+            <TouchableOpacity 
+              style={{ 
+                backgroundColor: '#f3f4f6',
+                padding: 12,
+                borderRadius: 8,
+                marginTop: 24,
+                alignItems: 'center'
+              }}
+            >
+              <Text style={{ color: '#166534' }}>Nawiguj</Text>
+            </TouchableOpacity>
 
-            <div className="mt-8">
-              <h2 className="text-center mb-4">photos</h2>
-              <div className="flex justify-center gap-2 mt-4">
+            <View style={{ marginTop: 32, alignItems: 'center' }}>
+              <Text style={{ color: 'white', marginBottom: 16 }}>Photos</Text>
+              <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'center' }}>
                 {locationData.photos.map((_, idx) => (
-                  <div 
+                  <View 
                     key={idx}
-                    className={`w-2 h-2 rounded-full ${idx === 0 ? 'bg-white' : 'bg-gray-400'}`}
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: idx === 0 ? 'white' : '#9ca3af'
+                    }}
                   />
                 ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 
   return (
-
-
     <BaseModal>
-      <button 
-        className="absolute right-0 top-0"
-        onClick={() => setShowDetails(false)}
+      <TouchableOpacity 
+        style={{ position: 'absolute', right: 0, top: 0 }}
+        onPress={() => navigation.goBack()}
       >
-        <X className="w-5 h-5" />
-      </button>
+        <X color="white" size={20} />
+      </TouchableOpacity>
 
-      <h2 className="text-xl font-bold mb-4">{locationData.title}</h2>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', marginBottom: 16 }}>
+        {locationData.title}
+      </Text>
       
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center gap-2">
-          <MapPin className="w-4 h-4" />
-          <span className="text-sm">{locationData.buildingNo}</span>
-        </div>
+      <View style={{ marginBottom: 16, gap: 8 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <MapPin color="white" size={16} />
+          <Text style={{ fontSize: 14, color: 'white' }}>{locationData.buildingNo}</Text>
+        </View>
         
-        <div className="flex items-center gap-2">
-          <Building className="w-4 h-4" />
-          <span className="text-sm">{locationData.address}</span>
-        </div>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Building color="white" size={16} />
+          <Text style={{ fontSize: 14, color: 'white' }}>{locationData.address}</Text>
+        </View>
         
-        <div className="flex items-center gap-2">
-          <Mail className="w-4 h-4" />
-          <span className="text-sm">{locationData.email}</span>
-        </div>
-      </div>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <Mail color="white" size={16} />
+          <Text style={{ fontSize: 14, color: 'white' }}>{locationData.email}</Text>
+        </View>
+      </View>
 
-      <div className="flex gap-3">
-        <button 
-          className="flex-1 bg-gray-100 text-green-900 rounded-lg py-2"
+      <View style={{ flexDirection: 'row', gap: 12 }}>
+        <TouchableOpacity 
+          style={{ 
+            flex: 1,
+            backgroundColor: '#f3f4f6',
+            padding: 8,
+            borderRadius: 8,
+            alignItems: 'center'
+          }}
         >
-          Nawiguj
-        </button>
-        <button 
-          className="flex-1 bg-gray-100 text-green-900 rounded-lg py-2"
-          onClick={() => setShowDetails(true)}
+          <Text style={{ color: '#166534' }}>Nawiguj</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={{ 
+            flex: 1,
+            backgroundColor: '#f3f4f6',
+            padding: 8,
+            borderRadius: 8,
+            alignItems: 'center'
+          }}
+          onPress={() => setShowDetails(true)}
         >
-          Więcej informacji
-        </button>
-      </div>
+          <Text style={{ color: '#166534' }}>Więcej informacji</Text>
+        </TouchableOpacity>
+      </View>
     </BaseModal>
   );
 };
+
+export default function Page() {
+  return (
+    <>
+      <Drawer.Screen 
+        name="object_example"
+        options={{
+          headerShown: true,
+          title: "Object Details"
+        }}
+      />
+      <ObjectExample />
+    </>
+  );
+}
