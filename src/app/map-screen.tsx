@@ -1,3 +1,4 @@
+import * as Location from 'expo-location';
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import { Drawer } from 'expo-router/drawer';
 import React, { useEffect, useRef, useState } from 'react';
@@ -57,6 +58,23 @@ export default function MapExample() {
       return [...p];
     });
   };
+
+  const [location, setLocation] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setLocation(JSON.stringify(location));
+      console.log(location);
+    })();
+  }, [1]);
 
   return (
     <>
@@ -119,6 +137,7 @@ export default function MapExample() {
             maxBounds={campusBounds}
             minZoomLevel={12.5}
           />
+          <MapLibreGL.UserLocation />
 
           {route.length >= 2 && (
             <MapLibreGL.ShapeSource
