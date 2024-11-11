@@ -2,14 +2,6 @@ import React, { useState } from 'react';
 import { X, ArrowLeft, MapPin, Building, Mail } from 'lucide-react';
 import { DrawerActions } from '@react-navigation/native';
 
-export default function ObjectExample() {
-    return (
-      <Drawer.Screen 
-        name="object_example"
-        component={LocationDetailsModal}
-      />
-    );
-  }
 
 const ObjectExample = () => {
   const [showDetails, setShowDetails] = useState(false);
@@ -133,5 +125,3 @@ const ObjectExample = () => {
     </BaseModal>
   );
 };
-
-export default LocationDetailsModal;
