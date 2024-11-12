@@ -7,9 +7,9 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
 import SearchIcon1 from '../../assets/search1.svg';
+import useLocationStore from '../store/useLocationStore';
 
 import TopHeader from '~/components/TopHeader';
-import useLocationStore from '../store/useLocationStore';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -25,7 +25,7 @@ export default function MapExample() {
   const { t } = useTranslation();
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  
+
   // Zustand store
   const {
     searchQuery,
@@ -38,7 +38,7 @@ export default function MapExample() {
   const expandFullSearchBar = () => {
     setIsExpanded(true);
     clearFilteredLocations();
-    setSearchQuery('');      
+    setSearchQuery('');
   };
 
   const handleMapPress = () => {
@@ -113,7 +113,7 @@ export default function MapExample() {
             <View className="flex-row items-center">
               <SearchIcon1 width={28} height={28} className="mr-2" />
               <TextInput
-                className="ml-3 flex-1 text-lg"
+                className="ml-3 ml-8 flex-1 text-lg"
                 placeholder="Search"
                 placeholderTextColor="#000"
                 value={searchQuery}
