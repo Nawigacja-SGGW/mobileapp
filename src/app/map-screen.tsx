@@ -38,6 +38,7 @@ export default function MapExample() {
   }, []);
 
   const route = useRouteQuery(points ?? []);
+  const lastRoutePoint = route?.at(-1);
 
   const toggleSearchBar = () => {
     console.log('toggle');
@@ -49,17 +50,12 @@ export default function MapExample() {
 
     console.log(e, 'elo');
     console.log(e.geometry.coordinates, points);
-    map.current &&
-      console.log(
-        map.current.queryRenderedFeaturesAtPoint([
-          e.properties.screenPointX,
-          e.properties.screenPointY,
-        ])
-      );
-    setPoints([
-      [userLocation.current?.coords.longitude, userLocation.current?.coords.latitude],
-      e.geometry.coordinates,
-    ]);
+    if (userLocation.current) {
+      setPoints([
+        [userLocation.current?.coords.longitude, userLocation.current?.coords.latitude],
+        e.geometry.coordinates,
+      ]);
+    }
   };
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -220,18 +216,17 @@ export default function MapExample() {
                     type: 'Point',
                   },
                 },
-                points &&
-                  points[1] && {
-                    type: 'Feature',
-                    id: 'endpoint',
-                    properties: {
-                      icon: 'pin',
-                    },
-                    geometry: {
-                      coordinates: points[1],
-                      type: 'Point',
-                    },
+                lastRoutePoint && {
+                  type: 'Feature',
+                  id: 'endpoint',
+                  properties: {
+                    icon: 'pin',
                   },
+                  geometry: {
+                    coordinates: lastRoutePoint,
+                    type: 'Point',
+                  },
+                },
               ].filter(Boolean),
             }}>
             <MapLibreGL.SymbolLayer
