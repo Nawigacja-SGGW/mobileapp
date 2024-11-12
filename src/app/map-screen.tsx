@@ -7,8 +7,8 @@ import { View, Text, TextInput } from 'react-native';
 
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
+import MapPin from '../../assets/map-pin.png';
 import SearchIcon1 from '../../assets/search1.svg';
-import MapPin2 from './../../assets/map-pin.png';
 
 import TopHeader from '~/components/TopHeader';
 import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
@@ -22,20 +22,25 @@ const campusBounds = {
   sw: [21.038764000472895, 52.156410516716925],
 };
 
+const locations = [
+  [21.04635389581634, 52.16357007158958],
+  [21.038764000472895, 52.156410516716925],
+  [21.054976793556115, 52.16900258184394],
+];
+
 const campusCenter = [21.04635389581634, 52.16357007158958];
 
 export default function MapExample() {
-  const { t } = useTranslation();
   const camera = useRef(null);
   const map = useRef(null);
   const [isExpanded, setIsExpanded] = useState(true);
-
+  const [locationFrom, setlocationFrom] = useState(undefined);
+  const [locationTo, setlocationTo] = useState(undefined);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [points, setPoints] = useState<[number, number][] | null>(null);
   const userLocation = useRef<Location.LocationObject>();
-  useEffect(() => {
-    // console.log('map', map.current);
-    // console.log(map.current?.getCoordinateFromView(0, 0));
-  }, []);
+
+  const { t } = useTranslation();
 
   const route = useRouteQuery(points ?? []);
   const lastRoutePoint = route?.at(-1);
@@ -57,8 +62,6 @@ export default function MapExample() {
       ]);
     }
   };
-
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -141,7 +144,7 @@ export default function MapExample() {
           compassEnabled={false}>
           <MapLibreGL.Images
             images={{
-              pin: MapPin2,
+              pin: MapPin,
             }}
           />
 
@@ -153,45 +156,8 @@ export default function MapExample() {
             maxBounds={campusBounds}
             minZoomLevel={12.5}
           />
-
-          <MapLibreGL.ShapeSource
-            id="symbolLocationSource1"
-            hitbox={{ width: 20, height: 20 }}
-            shape={{
-              type: 'FeatureCollection',
-              features: [
-                route &&
-                  route.length >= 2 && {
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                      type: 'LineString',
-                      coordinates: route,
-                    },
-                  },
-              ].filter(Boolean),
-            }}>
-            <MapLibreGL.LineLayer
-              id="layer1"
-              style={{
-                lineColor: '#fff',
-                lineCap: 'round',
-                lineJoin: 'round',
-                lineWidth: 10,
-                lineSortKey: -2,
-              }}
-            />
-            <MapLibreGL.LineLayer
-              id="layer2"
-              style={{
-                lineColor: '#003228',
-                lineCap: 'round',
-                lineJoin: 'round',
-                lineWidth: 6,
-                lineSortKey: -1,
-              }}
-            />
-          </MapLibreGL.ShapeSource>
+          {/* linia trasy */}
+          <MapLine route={route} />
 
           <MapLibreGL.ShapeSource
             id="symbolLocationSource"
@@ -205,17 +171,6 @@ export default function MapExample() {
             shape={{
               type: 'FeatureCollection',
               features: [
-                {
-                  type: 'Feature',
-                  id: 'campusCenter',
-                  properties: {
-                    icon: 'pin',
-                  },
-                  geometry: {
-                    coordinates: [21.04635389581634, 52.16357007158958],
-                    type: 'Point',
-                  },
-                },
                 lastRoutePoint && {
                   type: 'Feature',
                   id: 'endpoint',
@@ -227,6 +182,18 @@ export default function MapExample() {
                     type: 'Point',
                   },
                 },
+
+                ...locations.map((n, i) => ({
+                  type: 'Feature',
+                  id: i,
+                  properties: {
+                    icon: 'pin',
+                  },
+                  geometry: {
+                    coordinates: n,
+                    type: 'Point',
+                  },
+                })),
               ].filter(Boolean),
             }}>
             <MapLibreGL.SymbolLayer
@@ -243,5 +210,52 @@ export default function MapExample() {
         </MapLibreGL.MapView>
       </View>
     </>
+  );
+}
+
+interface MapLineProps {
+  route: [number, number][];
+}
+
+function MapLine({ route }: MapLineProps) {
+  return (
+    <MapLibreGL.ShapeSource
+      id="symbolLocationSource1"
+      hitbox={{ width: 20, height: 20 }}
+      shape={{
+        type: 'FeatureCollection',
+        features: [
+          route &&
+            route.length >= 2 && {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: route,
+              },
+            },
+        ].filter(Boolean),
+      }}>
+      <MapLibreGL.LineLayer
+        id="layer1"
+        style={{
+          lineColor: '#fff',
+          lineCap: 'round',
+          lineJoin: 'round',
+          lineWidth: 10,
+          lineSortKey: -2,
+        }}
+      />
+      <MapLibreGL.LineLayer
+        id="layer2"
+        style={{
+          lineColor: '#003228',
+          lineCap: 'round',
+          lineJoin: 'round',
+          lineWidth: 6,
+          lineSortKey: -1,
+        }}
+      />
+    </MapLibreGL.ShapeSource>
   );
 }
