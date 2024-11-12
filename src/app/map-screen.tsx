@@ -1,15 +1,15 @@
-import MapLibreGL from '@maplibre/maplibre-react-native';
-import { Drawer } from 'expo-router/drawer';
 import React, { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-
+import { Drawer } from 'expo-router/drawer';
+import MapLibreGL from '@maplibre/maplibre-react-native';
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
+import MenuIcon from '../../assets/menus1.svg';
+import NavigationIcon from '../../assets/navigation.svg';
 import SearchIcon1 from '../../assets/search1.svg';
-import useLocationStore from '../store/useLocationStore';
-
 import TopHeader from '~/components/TopHeader';
+import useLocationStore from '../store/useLocationStore';
+import { useTranslation } from 'react-i18next';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -82,12 +82,11 @@ export default function MapExample() {
           header: () => <TopHeader isExpanded={isExpanded} toggleSearchBar={expandFullSearchBar} />,
         }}
       />
-      <Text>Map</Text>
-      <View className="mt-20 flex-1">
+      <View className="flex-1">
         {/* Search Bar */}
         <View
-          className={`absolute left-4 right-4 z-10 mt-6 rounded-[25] bg-white p-3 ${
-            isExpanded ? 'h-32' : 'h-15'
+          className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${
+            isExpanded ? 'min-h-28 py-4' : 'h-15'
           }`}>
           {isExpanded ? (
             <View className="flex-col">
