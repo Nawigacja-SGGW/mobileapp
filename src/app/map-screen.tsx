@@ -42,11 +42,6 @@ export default function MapExample() {
   };
 
   const handleMapPress = () => {
-    if (isExpanded) {
-      setIsExpanded(false);
-    } else {
-      expandFullSearchBar();
-    }
   };
 
   const handleSearch = (text: string) => {
