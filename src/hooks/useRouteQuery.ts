@@ -12,11 +12,11 @@ export function useRouteQuery(waypoints: [number, number][]) {
     }, '');
 
     console.log(
-      `http://router.project-osrm.org/route/v1/walking/${wayString}?overview=full&geometries=geojson`
+      `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${wayString}?overview=full&geometries=geojson`
     );
 
     fetch(
-      `http://router.project-osrm.org/route/v1/walking/${wayString}?overview=full&geometries=geojson`
+      `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${wayString}?overview=full&geometries=geojson`
     )
       .then((n) => n.json())
       .then((n) => {

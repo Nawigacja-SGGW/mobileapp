@@ -1,5 +1,5 @@
-import * as Location from 'expo-location';
 import MapLibreGL from '@maplibre/maplibre-react-native';
+import * as Location from 'expo-location';
 import { Drawer } from 'expo-router/drawer';
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,8 +8,10 @@ import { View, Text, TextInput } from 'react-native';
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
 import SearchIcon1 from '../../assets/search1.svg';
+import MapPin2 from './../../assets/map-pin.png';
 
 import TopHeader from '~/components/TopHeader';
+import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
 
 MapLibreGL.setAccessToken(null);
@@ -22,17 +24,14 @@ const campusBounds = {
 
 const campusCenter = [21.04635389581634, 52.16357007158958];
 
-const initialQuery = [
-  [21.04140547436029, 52.16335178481617],
-  [21.05198654696983, 52.163067821889484],
-] as [number, number][];
-
 export default function MapExample() {
   const { t } = useTranslation();
   const camera = useRef(null);
+  const map = useRef(null);
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const [points, setPoints] = useState<Array<[number, number]> | null>(null);
+  const [points, setPoints] = useState<[number, number][] | null>(null);
+  const userLocation = useRef<Location.LocationObject>();
   useEffect(() => {
     // console.log('map', map.current);
     // console.log(map.current?.getCoordinateFromView(0, 0));
@@ -50,16 +49,19 @@ export default function MapExample() {
 
     console.log(e, 'elo');
     console.log(e.geometry.coordinates, points);
-    setPoints((p) => {
-      console.log(p);
-      if (!p) return [e.geometry.coordinates];
-      p = [...p, e.geometry.coordinates];
-      if (p.length > 2) return [...p.slice(1)];
-      return [...p];
-    });
+    map.current &&
+      console.log(
+        map.current.queryRenderedFeaturesAtPoint([
+          e.properties.screenPointX,
+          e.properties.screenPointY,
+        ])
+      );
+    setPoints([
+      [userLocation.current?.coords.longitude, userLocation.current?.coords.latitude],
+      e.geometry.coordinates,
+    ]);
   };
 
-  const [location, setLocation] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -69,12 +71,23 @@ export default function MapExample() {
         setErrorMsg('Permission to access location was denied');
         return;
       }
+      Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 100,
+        },
+        (location) => {
+          userLocation.current = location;
+          console.log(location);
+        }
+      );
 
       const location = await Location.getCurrentPositionAsync({});
+      userLocation.current = location;
       setLocation(JSON.stringify(location));
-      console.log(location);
+      console.log(userLocation.current);
     })();
-  }, [1]);
+  }, []);
 
   return (
     <>
@@ -94,6 +107,7 @@ export default function MapExample() {
             <>
               <View className="mb-2 ml-4 flex-row items-center">
                 <LightGreenDot width={20} height={20} className="ml-4 mr-2" />
+
                 <TextInput
                   className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
                   placeholder={t('map.search.startingPoint')}
@@ -122,13 +136,19 @@ export default function MapExample() {
           )}
         </View>
 
-        {/* Map View */}
         <MapLibreGL.MapView
+          ref={map}
           style={{ flex: 1 }}
           logoEnabled={false}
-          styleURL="https://americanamap.org/style.json"
+          styleJSON={OSM_RASTER_STYLE}
           onPress={handleMapPress}
           compassEnabled={false}>
+          <MapLibreGL.Images
+            images={{
+              pin: MapPin2,
+            }}
+          />
+
           <MapLibreGL.Camera
             ref={camera}
             centerCoordinate={campusCenter}
@@ -137,27 +157,94 @@ export default function MapExample() {
             maxBounds={campusBounds}
             minZoomLevel={12.5}
           />
-          <MapLibreGL.UserLocation />
 
-          {route.length >= 2 && (
-            <MapLibreGL.ShapeSource
-              id="source1"
-              lineMetrics
-              shape={{
-                type: 'LineString',
-                coordinates: route,
-              }}>
-              <MapLibreGL.LineLayer
-                id="layer1"
-                style={{
-                  lineColor: 'red',
-                  lineCap: 'round',
-                  lineJoin: 'round',
-                  lineWidth: 8,
-                }}
-              />
-            </MapLibreGL.ShapeSource>
-          )}
+          <MapLibreGL.ShapeSource
+            id="symbolLocationSource1"
+            hitbox={{ width: 20, height: 20 }}
+            shape={{
+              type: 'FeatureCollection',
+              features: [
+                route &&
+                  route.length >= 2 && {
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                      type: 'LineString',
+                      coordinates: route,
+                    },
+                  },
+              ].filter(Boolean),
+            }}>
+            <MapLibreGL.LineLayer
+              id="layer1"
+              style={{
+                lineColor: '#fff',
+                lineCap: 'round',
+                lineJoin: 'round',
+                lineWidth: 10,
+                lineSortKey: -2,
+              }}
+            />
+            <MapLibreGL.LineLayer
+              id="layer2"
+              style={{
+                lineColor: '#003228',
+                lineCap: 'round',
+                lineJoin: 'round',
+                lineWidth: 6,
+                lineSortKey: -1,
+              }}
+            />
+          </MapLibreGL.ShapeSource>
+
+          <MapLibreGL.ShapeSource
+            id="symbolLocationSource"
+            hitbox={{ width: 20, height: 20 }}
+            onPress={(e) => {
+              console.log(e);
+              console.log(e.features.length);
+              if (e.features.length > 0) console.log(e.features[0]);
+              e.features.forEach((f) => console.log(f));
+            }}
+            shape={{
+              type: 'FeatureCollection',
+              features: [
+                {
+                  type: 'Feature',
+                  id: 'campusCenter',
+                  properties: {
+                    icon: 'pin',
+                  },
+                  geometry: {
+                    coordinates: [21.04635389581634, 52.16357007158958],
+                    type: 'Point',
+                  },
+                },
+                points &&
+                  points[1] && {
+                    type: 'Feature',
+                    id: 'endpoint',
+                    properties: {
+                      icon: 'pin',
+                    },
+                    geometry: {
+                      coordinates: points[1],
+                      type: 'Point',
+                    },
+                  },
+              ].filter(Boolean),
+            }}>
+            <MapLibreGL.SymbolLayer
+              id="symbolLocationSymbols"
+              style={{
+                iconImage: ['get', 'icon'],
+                iconSize: 0.1,
+                iconAnchor: 'bottom',
+              }}
+            />
+          </MapLibreGL.ShapeSource>
+
+          <MapLibreGL.UserLocation renderMode="native" androidRenderMode="compass" />
         </MapLibreGL.MapView>
       </View>
     </>
