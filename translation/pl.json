@@ -37,45 +37,45 @@
     "search.startingPoint": "Twoja lokacja",
     "search.destination": "Miejsce docelowe"
   },
-  "login":{
-    "usernameOrEmail" : {
-      "label" : "Username or e-mail",
-      "placeholder" : "Enter your username or e-mail"
+  "login": { 
+    "usernameOrEmail": {
+      "label": "Nazwa użytkownika lub e-mail",
+      "placeholder": "Wprowadź nazwę użytkownika lub e-mail"
     },
-    "password" : {
-      "label" : "Password",
-      "placeholder" : "Enter your password",
-      "forgotPassword" : "Forgot password?"
+    "password": {
+      "label": "Hasło",
+      "placeholder": "Wprowadź swoje hasło",
+      "forgotPassword": "Zapomniałeś hasła?"
     },
-    "username" : {
-      "label" : "Username",
-      "placeholder" : "Enter your username"
+    "username": {
+      "label": "Nazwa użytkownika",
+      "placeholder": "Wprowadź swoją nazwę użytkownika"
     },
-    "email" : {
-      "label" : "E-mail",
-      "placeholder" : "Enter your e-mail"
+    "email": {
+      "label": "E-mail",
+      "placeholder": "Wprowadź swój e-mail"
     },
-    "confirmPassword" : {
-      "label" : "Confirm password",
-      "placeholder" : "Enter your password"
+    "confirmPassword": {
+      "label": "Potwierdź hasło",
+      "placeholder": "Wprowadź swoje hasło"
     },
-    "newPassword" : {
-      "label" : "New password",
-      "placeholder" : "Enter new password"
+    "newPassword": {
+      "label": "Nowe hasło",
+      "placeholder": "Wprowadź nowe hasło"
     },
-    "confirmNewPassword" : {
-      "label" : "Confirm new password",
-      "placeholder" : "Enter new password"
+    "confirmNewPassword": {
+      "label": "Potwierdź nowe hasło",
+      "placeholder": "Wprowadź nowe hasło"
     },
-    "signInButton" : "sign in",
-    "signUpButton":"sign up",
-    "sendButton":"send",
-    "resetButton":"reset password",
-    "forgotPassword":"Forgot password",
-    "forgotPasswordText":"Please enter the e-mail address and we will send you instructions to reset your password",
-    "resetPassword":"Reset password",
-    "resetPasswordText":"Enter a new password for ",
-    "continueWith" : "Or continue with",
-    "backToLogin" : "Back to login"
+    "signInButton": "Zaloguj się",
+    "signUpButton": "Zarejestruj się",
+    "sendButton": "Wyślij",
+    "resetButton": "Zresetuj hasło",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła",
+    "resetPassword": "Zresetuj hasło",
+    "resetPasswordText": "Wprowadź nowe hasło dla ",
+    "continueWith": "Lub kontynuuj z",
+    "backToLogin": "Wróć do logowania"
   }
 }
