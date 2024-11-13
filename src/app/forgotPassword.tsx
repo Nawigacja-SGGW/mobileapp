@@ -1,7 +1,9 @@
-import { Stack, Link } from 'expo-router';
+import { Link, useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import Drawer from 'expo-router/drawer';
+import { useForm, Controller } from 'react-hook-form';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput } from '~/components/AppInput';
@@ -9,8 +11,14 @@ import { Logo } from '~/components/Logo';
 
 export default function Login() {
 
-  const [email, setEmail] = useState('');
+  const { control, handleSubmit } = useForm();
   const { t } = useTranslation();
+  const navigation = useNavigation();
+
+  const onSubmit = (data:any) => {
+    console.log(data); // logowanie danych formularza
+    navigation.navigate('index')
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -45,24 +53,27 @@ export default function Login() {
   
   return (
     <>
-      <Stack.Screen options={{ title: t('login.screenTitle') }} />
+      <Drawer.Screen options={{ headerShown: false, }}/>
       <View style={styles.container}>
         <Logo/>
         <View style={styles.content}>
           <Text style={styles.title}>{t('login.forgotPassword')}</Text>
           <Text style={styles.text}>{t('login.forgotPasswordText')}</Text>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <AppInput
+              label = {t('login.email.label')}
+              placeholder = {t('login.email.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="email-address" 
+              />
+            )}
+          />
 
-          <AppInput
-            label = {t('login.email.label')}
-            placeholder = {t('login.email.placeholder')}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address" 
-            />
-
-          <Link href={{ pathname: '/' }} asChild>
-            <AppButton title={t('login.sendButton')} />
-          </Link>
+          <AppButton title={t('login.sendButton')} onPress={handleSubmit(onSubmit)}/>
 
           <Link href={{ pathname: '/login' }} asChild>
             <Text style={styles.bottomText}>{t('login.backToLogin')}</Text>

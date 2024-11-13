@@ -1,7 +1,9 @@
-import { Stack, Link } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import {View, StyleSheet} from 'react-native';
+import Drawer from 'expo-router/drawer';
+import { useForm, Controller } from 'react-hook-form';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
@@ -9,19 +11,23 @@ import { Logo } from '~/components/Logo';
 
 export default function Login() {
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [password2, setPassword2] = useState('');
+  const { control, handleSubmit } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPassword2Visible, setIsPassword2Visible] = useState(false);
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
   const togglePassword2Visibility = () => {
     setIsPassword2Visible(!isPassword2Visible);
+  };
+
+  const onSubmit = (data:any) => {
+    console.log(data); // logowanie danych formularza
+    navigation.navigate('index')
   };
 
   const styles = StyleSheet.create({
@@ -53,50 +59,72 @@ export default function Login() {
   
   return (
     <>
-      <Stack.Screen options={{ title: t('login.screenTitle') }} />
+      <Drawer.Screen options={{ headerShown: false, }}/>
       <View style={styles.container}>
         <Logo/>
 
         <View style={styles.content}>
-          <AppInput
-            label = {t('login.email.label')}
-            placeholder = {t('login.email.placeholder')}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address" 
-            />
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <AppInput
+              label = {t('login.email.label')}
+              placeholder = {t('login.email.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="email-address" 
+              />
+            )}
+          />
+          
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <AppInput
+              label = {t('login.username.label')}
+              placeholder = {t('login.username.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="default" 
+              />
+            )}
+          />
+          
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <AppSecureInput
+              label= {t('login.password.label')}
+              placeholder= {t('login.password.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="default"
+              isPasswordVisible={isPasswordVisible}
+              togglePasswordVisibility={togglePasswordVisibility}
+              />
+            )}
+          />
+          
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <AppSecureInput
+              label= {t('login.confirmPassword.label')}
+              placeholder= {t('login.confirmPassword.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="default"
+              isPasswordVisible={isPassword2Visible}
+              togglePasswordVisibility={togglePassword2Visibility}
+              />
+            )}
+          />
 
-          <AppInput
-            label = {t('login.username.label')}
-            placeholder = {t('login.username.placeholder')}
-            value={username}
-            onChangeText={setUsername}
-            keyboardType="default" 
-            />
-
-          <AppSecureInput
-            label= {t('login.password.label')}
-            placeholder= {t('login.password.placeholder')}
-            value={password}
-            onChangeText={setPassword}
-            keyboardType="default"
-            isPasswordVisible={isPasswordVisible}
-            togglePasswordVisibility={togglePasswordVisibility}
-            />
-
-          <AppSecureInput
-            label= {t('login.confirmPassword.label')}
-            placeholder= {t('login.confirmPassword.placeholder')}
-            value={password2}
-            onChangeText={setPassword2}
-            keyboardType="default"
-            isPasswordVisible={isPassword2Visible}
-            togglePasswordVisibility={togglePassword2Visibility}
-            />
-
-          <Link href={{ pathname: '/' }} asChild>
-            <AppButton title={t('login.signUpButton')} />
-          </Link>
+          <AppButton title={t('login.signUpButton')} onPress={handleSubmit(onSubmit)}/>
         </View>
       </View>
     </>

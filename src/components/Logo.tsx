@@ -25,6 +25,7 @@ export const Logo: React.FC<TouchableOpacityProps> = forwardRef<TouchableOpacity
 const styles = StyleSheet.create({
     logo: {
         flexDirection: 'row',
+        marginTop: '10%',
       },
       box: {
         flex: 1,

@@ -1,7 +1,8 @@
-import { Stack, Link } from 'expo-router';
+import { Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
 import {View, StyleSheet, Text } from 'react-native';
+import Drawer from 'expo-router/drawer';
 
 import { AppButton } from '~/components/AppButton';
 import Background from '../../assets/background.svg';
@@ -39,7 +40,7 @@ export default function Login() {
   
   return (
     <>
-      <Stack.Screen options={{ title: t('login.screenTitle') }} />
+      <Drawer.Screen options={{ headerShown: false, }}/>
       <View style={styles.container}>
         <Background style={styles.background}/>
         <View style={styles.content}>

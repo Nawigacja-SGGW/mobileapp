@@ -1,7 +1,9 @@
-import { Stack, Link } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import Drawer from 'expo-router/drawer';
+import { useForm } from 'react-hook-form';
 
 import { AppButton } from '~/components/AppButton';
 import { AppSecureInput } from '~/components/AppInput';
@@ -9,11 +11,13 @@ import { Logo } from '~/components/Logo';
 
 export default function Login(email:string) {
 
+  const { handleSubmit } = useForm();
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password2, setPassword2] = useState('');
   const [isPassword2Visible, setIsPassword2Visible] = useState(false);
   const { t } = useTranslation();
+  const navigation = useNavigation();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -21,6 +25,11 @@ export default function Login(email:string) {
 
   const togglePassword2Visibility = () => {
     setIsPassword2Visible(!isPassword2Visible);
+  };
+
+  const onSubmit = (data:any) => {
+    console.log(data); // logowanie danych formularza
+    navigation.navigate('index')
   };
 
   const styles = StyleSheet.create({
@@ -50,7 +59,7 @@ export default function Login(email:string) {
   
   return (
     <>
-      <Stack.Screen options={{ title: t('login.screenTitle') }} />
+      <Drawer.Screen options={{ headerShown: false, }}/>
       <View style={styles.container}>
         <Logo/>
         <View style={styles.content}>
@@ -77,9 +86,7 @@ export default function Login(email:string) {
             togglePasswordVisibility={togglePassword2Visibility}
             />
 
-          <Link href={{ pathname: '/' }} asChild>
-            <AppButton title={t('login.resetButton')} />
-          </Link>
+          <AppButton title={t('login.resetButton')} onPress={handleSubmit(onSubmit)}/>
         </View>
       </View>
     </>

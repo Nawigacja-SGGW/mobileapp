@@ -22,7 +22,6 @@
     "search.destination": "Destination"
   },
   "login":{
-    "screenTitle" : "Login",
     "usernameOrEmail" : {
       "label" : "Username or e-mail",
       "placeholder" : "Enter your username or e-mail"
