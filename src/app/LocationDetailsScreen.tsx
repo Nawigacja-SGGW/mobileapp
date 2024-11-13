@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
+import Drawer from 'expo-router/drawer';
 
 // Button component that appears in the modal
 export const LocationButton = () => {
@@ -32,21 +33,17 @@ const LocationDetailsScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Drawer.Screen options={{ headerShown: false, }}/>
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity 
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <FontAwesome5 name="arrow-left" color="white" size={20} />
+      <View className="mt-8" style={[styles.header, { flexDirection: 'row', alignItems: 'center', position: 'absolute'}]}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton} >
+          <FontAwesome5 name="chevron-left" size={40} color="white"/>
         </TouchableOpacity>
         
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>logo</Text>
-        </View>
+        <Text style={styles.logo}>logo</Text>
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView className="mt-20" style={styles.content}>
         {/* Title */}
         <Text style={styles.title}>{locationData.title}</Text>
 
@@ -80,6 +77,12 @@ const LocationDetailsScreen = () => {
         <View style={styles.photosContainer}>
           <View style={styles.photoPlaceholder}>
             <Text style={styles.photoText}>photos</Text>
+            <TouchableOpacity onPress={() => router.back()} style={[styles.photoButton, styles.Left, {transform: [{ scaleY: 1.5 }]}]} >
+              <FontAwesome5 name="chevron-left" size={30} color="#003228"/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.back()} style={[styles.photoButton, styles.Right, {transform: [{ scaleY: 1.5 }]}]} >
+              <FontAwesome5 name="chevron-right" size={30} color="#003228"/>
+            </TouchableOpacity>
           </View>
           
           {/* Dots indicator */}
@@ -103,18 +106,19 @@ const LocationDetailsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#064E3B',
+    //backgroundColor: '#064E3B',
+    backgroundColor: '#003228',
   },
   backButton: {
-    padding: 8,
+    position: 'absolute',
+    left: 10,
+    zIndex: 1,
   },
-  logoContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  logoText: {
+  logo: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 22,
+    textAlign: 'center',
+    width: '100%',
   },
   content: {
     flex: 1,
@@ -145,15 +149,17 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   navigationButton: {
-    backgroundColor: '#047857',
-    padding: 16,
-    borderRadius: 8,
+    backgroundColor: 'white',
+    marginLeft: '25%',
+    maxWidth: '50%',
+    padding: 10,
+    borderRadius: 20,
     alignItems: 'center',
     marginBottom: 24,
   },
   navigationButtonText: {
-    color: 'white',
-    fontWeight: '500',
+    color: '#003228',
+    fontWeight: '600',
   },
   photosContainer: {
     marginBottom: 24,
@@ -193,6 +199,17 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
   },
+  photoButton: {
+    position: 'absolute',
+    zIndex: 1,
+    opacity: 0.8,
+  },
+  Left: {
+    left: 10,
+  },
+  Right: {
+    right: 10,
+  }
 });
 
 export default LocationDetailsScreen;
