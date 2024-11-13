@@ -105,12 +105,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#064E3B',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: 48,
-  },
   backButton: {
     padding: 8,
   },
