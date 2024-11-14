@@ -3,19 +3,18 @@ import * as Location from 'expo-location';
 import { Drawer } from 'expo-router/drawer';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
-import type { MapLocation } from '~/store/useLocationStore';
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
 import MapPin from '../../assets/map-pin.png';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import MenuIcon from '../../assets/menus1.svg';
-import NavigationIcon from '../../assets/navigation.svg';
 import SearchIcon1 from '../../assets/search1.svg';
+
 import TopHeader from '~/components/TopHeader';
 import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
-import useLocationStore from '../store/useLocationStore';
+import type { MapLocation } from '~/store/useLocationStore';
+import useLocationStore from '~/store/useLocationStore';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -34,7 +33,9 @@ export default function MapScreen() {
   const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(
     undefined
   );
-  const [locationTo, setlocationTo] = useState<MapLocation>(undefined);
+  const [locationTo, setlocationTo] = useState<undefined | [number, number] | MapLocation>(
+    undefined
+  );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [points, setPoints] = useState<[number, number][] | null>(null);
   const userLocation = useRef<Location.LocationObject>();
@@ -54,17 +55,8 @@ export default function MapScreen() {
     setSearchQuery('');
   };
 
-  const handleMapPress = (e) => {
-    setIsExpanded(true);
-
-    console.log(e, 'elo');
-    console.log(e.geometry.coordinates, points);
-    if (userLocation.current) {
-      setPoints([
-        [userLocation.current?.coords.longitude, userLocation.current?.coords.latitude],
-        e.geometry.coordinates,
-      ]);
-    }
+  const toggleSearchBar = () => {
+    setIsExpanded((n) => !n);
   };
 
   useEffect(() => {
@@ -87,7 +79,6 @@ export default function MapScreen() {
 
       const location = await Location.getCurrentPositionAsync({});
       userLocation.current = location;
-      setLocation(JSON.stringify(location));
       console.log(userLocation.current);
     })();
   }, []);
@@ -108,7 +99,7 @@ export default function MapScreen() {
   };
 
   const handleMarkerPress = (id: number, location: [number, number]) => {
-    let locationObject = locations.find((l) => l.id === id);
+    const locationObject = locations.find((l) => l.id === id);
     setIsExpanded(true);
     console.log(locationObject);
 
@@ -124,18 +115,21 @@ export default function MapScreen() {
     <>
       <Drawer.Screen
         options={{
-          header: () => <TopHeader isExpanded={isExpanded} toggleSearchBar={expandFullSearchBar} />,
+          header: () => <TopHeader isExpanded={isExpanded} toggleSearchBar={toggleSearchBar} />,
         }}
       />
       <View className="flex-1">
-        <SearchBar handleSearch={handleSearch} isExpanded={isExpanded} />
+        <SearchBar
+          handleSearch={handleSearch}
+          isExpanded={isExpanded}
+          handleLocationSelect={handleLocationSelect}
+        />
 
         <MapLibreGL.MapView
           ref={map}
           style={{ flex: 1 }}
           logoEnabled={false}
           styleJSON={OSM_RASTER_STYLE}
-          onPress={handleMapPress}
           compassEnabled={false}>
           <MapLibreGL.Camera
             ref={camera}
@@ -284,6 +278,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: seaarchBa
   const { t } = useTranslation();
 
   const { searchQuery, filteredLocations } = useLocationStore();
+  console.log('render');
   return (
     <>
       <View
@@ -294,7 +289,6 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: seaarchBa
           <View className="flex-col">
             <View className="mb-2 ml-4 flex-row items-center">
               <LightGreenDot width={20} height={20} className="ml-4 mr-2" />
-
               <TextInput
                 className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
                 placeholder={t('map.search.startingPoint')}
