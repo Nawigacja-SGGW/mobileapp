@@ -1,15 +1,21 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Drawer } from 'expo-router/drawer';
 import MapLibreGL from '@maplibre/maplibre-react-native';
+import * as Location from 'expo-location';
+import { Drawer } from 'expo-router/drawer';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import type { MapLocation } from '~/store/useLocationStore';
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
+import MapPin from '../../assets/map-pin.png';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import MenuIcon from '../../assets/menus1.svg';
 import NavigationIcon from '../../assets/navigation.svg';
 import SearchIcon1 from '../../assets/search1.svg';
 import TopHeader from '~/components/TopHeader';
+import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
+import { useRouteQuery } from '~/hooks/useRouteQuery';
 import useLocationStore from '../store/useLocationStore';
-import { useTranslation } from 'react-i18next';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -21,19 +27,26 @@ const campusBounds = {
 
 const campusCenter = [21.04635389581634, 52.16357007158958];
 
-export default function MapExample() {
-  const { t } = useTranslation();
+export default function MapScreen() {
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const map = useRef(null);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(
+    undefined
+  );
+  const [locationTo, setlocationTo] = useState<MapLocation>(undefined);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [points, setPoints] = useState<[number, number][] | null>(null);
+  const userLocation = useRef<Location.LocationObject>();
+
+  const { t } = useTranslation();
+
+  const waypoints = useMemo(() => [locationFrom, locationTo], [locationFrom, locationTo]);
+  const route = useRouteQuery(waypoints ?? []);
+  const lastRoutePoint = route?.at(-1);
 
   // Zustand store
-  const {
-    searchQuery,
-    filteredLocations,
-    setSearchQuery,
-    filterLocations,
-    clearFilteredLocations,
-  } = useLocationStore();
+  const { locations, setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
 
   const expandFullSearchBar = () => {
     setIsExpanded(true);
@@ -41,8 +54,43 @@ export default function MapExample() {
     setSearchQuery('');
   };
 
-  const handleMapPress = () => {
+  const handleMapPress = (e) => {
+    setIsExpanded(true);
+
+    console.log(e, 'elo');
+    console.log(e.geometry.coordinates, points);
+    if (userLocation.current) {
+      setPoints([
+        [userLocation.current?.coords.longitude, userLocation.current?.coords.latitude],
+        e.geometry.coordinates,
+      ]);
+    }
   };
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 100,
+        },
+        (location) => {
+          userLocation.current = location;
+          console.log(location);
+        }
+      );
+
+      const location = await Location.getCurrentPositionAsync({});
+      userLocation.current = location;
+      setLocation(JSON.stringify(location));
+      console.log(userLocation.current);
+    })();
+  }, []);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -59,16 +107,18 @@ export default function MapExample() {
     clearFilteredLocations();
   };
 
-  // Render location
-  const renderLocationItem = (item: { id: number; name: string; icon: JSX.Element }) => (
-    <TouchableOpacity
-      key={item.id}
-      className="flex-row items-center bg-white p-2"
-      onPress={() => handleLocationSelect(item.name)}>
-      <View>{item.icon}</View>
-      <Text className="ml-3 text-lg text-black">{item.name}</Text>
-    </TouchableOpacity>
-  );
+  const handleMarkerPress = (id: number, location: [number, number]) => {
+    let locationObject = locations.find((l) => l.id === id);
+    setIsExpanded(true);
+    console.log(locationObject);
+
+    if (userLocation.current !== undefined) {
+      setlocationFrom(
+        (n) => n ?? [userLocation.current.coords.longitude, userLocation.current.coords.latitude]
+      );
+      setlocationTo(location);
+    }
+  };
 
   return (
     <>
@@ -78,65 +128,13 @@ export default function MapExample() {
         }}
       />
       <View className="flex-1">
-        {/* Search Bar */}
-        <View
-          className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${
-            isExpanded ? 'min-h-28 py-4' : 'h-15'
-          }`}>
-          {isExpanded ? (
-            <View className="flex-col">
-              <View className="mb-2 ml-4 flex-row items-center">
-                <LightGreenDot width={20} height={20} className="ml-4 mr-2" />
-                <TextInput
-                  className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
-                  placeholder={t('map.search.startingPoint')}
-                  placeholderTextColor="#000"
-                />
-              </View>
-              <View className="my-1 ml-16 h-px w-5/6 bg-gray-300" />
-              <View className="ml-4 flex-row items-center">
-                <DarkGreenDot width={20} height={20} className="ml-4 mr-2" />
-                <TextInput
-                  className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
-                  placeholder={t('map.search.destination')}
-                  placeholderTextColor="#000"
-                />
-              </View>
-            </View>
-          ) : (
-            <View className="flex-row items-center">
-              <SearchIcon1 width={28} height={28} className="mr-2" />
-              <TextInput
-                className="ml-3 ml-8 flex-1 text-lg"
-                placeholder="Search"
-                placeholderTextColor="#000"
-                value={searchQuery}
-                onChangeText={handleSearch}
-                autoFocus={!isExpanded}
-              />
-            </View>
-          )}
-        </View>
+        <SearchBar handleSearch={handleSearch} isExpanded={isExpanded} />
 
-        {/* Wyświetlanie filtrowanych lokalizacji */}
-        {!isExpanded && filteredLocations.length > 0 && (
-          <View
-            className="absolute left-4 right-4 z-10 max-h-60 bg-white shadow"
-            style={{
-              top: isExpanded ? 140 : 160,
-              borderBottomLeftRadius: 100,
-              borderBottomRightRadius: 100,
-            }}>
-            <View className="h-px bg-gray-300" />
-            {filteredLocations.map((item) => renderLocationItem(item))}
-          </View>
-        )}
-
-        {/* Map View */}
         <MapLibreGL.MapView
+          ref={map}
           style={{ flex: 1 }}
           logoEnabled={false}
-          styleURL="https://americanamap.org/style.json"
+          styleJSON={OSM_RASTER_STYLE}
           onPress={handleMapPress}
           compassEnabled={false}>
           <MapLibreGL.Camera
@@ -147,8 +145,208 @@ export default function MapExample() {
             maxBounds={campusBounds}
             minZoomLevel={12.5}
           />
+          {/* linia trasy */}
+          <MapLine route={route} />
+          <MapMarkers
+            lastRoutePoint={lastRoutePoint}
+            locations={locations}
+            onMarkerPress={handleMarkerPress}
+          />
+          <MapLibreGL.UserLocation renderMode="native" androidRenderMode="compass" />
         </MapLibreGL.MapView>
       </View>
+    </>
+  );
+}
+
+interface MapLineProps {
+  route: [number, number][];
+}
+
+function MapLine({ route }: MapLineProps) {
+  return (
+    <MapLibreGL.ShapeSource
+      id="symbolLocationSource1"
+      hitbox={{ width: 20, height: 20 }}
+      shape={{
+        type: 'FeatureCollection',
+        features: [
+          route &&
+            route.length >= 2 && {
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: route,
+              },
+            },
+        ].filter(Boolean),
+      }}>
+      <MapLibreGL.LineLayer
+        id="layer1"
+        style={{
+          lineColor: '#fff',
+          lineCap: 'round',
+          lineJoin: 'round',
+          lineWidth: 10,
+          lineSortKey: -2,
+        }}
+      />
+      <MapLibreGL.LineLayer
+        id="layer2"
+        style={{
+          lineColor: '#003228',
+          lineCap: 'round',
+          lineJoin: 'round',
+          lineWidth: 6,
+          lineSortKey: -1,
+        }}
+      />
+    </MapLibreGL.ShapeSource>
+  );
+}
+
+interface mapMarkerProps {
+  lastRoutePoint?: [number, number];
+  locations: MapLocation[];
+  onMarkerPress?: (id: number, location: [number, number]) => void;
+}
+
+function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: mapMarkerProps) {
+  return (
+    <>
+      <MapLibreGL.Images
+        images={{
+          pin: MapPin,
+        }}
+      />
+      <MapLibreGL.ShapeSource
+        id="symbolLocationSource"
+        hitbox={{ width: 20, height: 20 }}
+        onPress={(e) => {
+          console.log(e);
+          console.log(e.features.length);
+          if (e.features.length > 0) {
+            console.log(e.features[0]);
+            onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
+          }
+
+          e.features.forEach((f) => console.log(f));
+        }}
+        shape={{
+          type: 'FeatureCollection',
+          features: [
+            lastRoutePoint && {
+              type: 'Feature',
+              id: 'endpoint',
+              properties: {
+                icon: 'pin',
+              },
+              geometry: {
+                coordinates: lastRoutePoint,
+                type: 'Point',
+              },
+            },
+
+            ...locations.map((n, i) => ({
+              type: 'Feature',
+              id: i,
+              properties: {
+                icon: 'pin',
+              },
+              geometry: {
+                coordinates: n.coordinates,
+                type: 'Point',
+              },
+            })),
+          ].filter(Boolean),
+        }}>
+        <MapLibreGL.SymbolLayer
+          id="symbolLocationSymbols"
+          style={{
+            iconImage: ['get', 'icon'],
+            iconSize: 0.1,
+            iconAnchor: 'bottom',
+          }}
+        />
+      </MapLibreGL.ShapeSource>
+    </>
+  );
+}
+
+interface seaarchBarProps {
+  handleSearch: (text: string) => void;
+  handleLocationSelect: (name: string) => void;
+  isExpanded: boolean;
+}
+
+function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: seaarchBarProps) {
+  const { t } = useTranslation();
+
+  const { searchQuery, filteredLocations } = useLocationStore();
+  return (
+    <>
+      <View
+        className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${
+          isExpanded ? 'min-h-28 py-4' : 'h-15'
+        }`}>
+        {isExpanded ? (
+          <View className="flex-col">
+            <View className="mb-2 ml-4 flex-row items-center">
+              <LightGreenDot width={20} height={20} className="ml-4 mr-2" />
+
+              <TextInput
+                className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
+                placeholder={t('map.search.startingPoint')}
+                placeholderTextColor="#000"
+              />
+            </View>
+            <View className="my-1 ml-16 h-px w-5/6 bg-gray-300" />
+            <View className="ml-4 flex-row items-center">
+              <DarkGreenDot width={20} height={20} className="ml-4 mr-2" />
+              <TextInput
+                className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
+                placeholder={t('map.search.destination')}
+                placeholderTextColor="#000"
+              />
+            </View>
+          </View>
+        ) : (
+          <View className="flex-row items-center">
+            <SearchIcon1 width={28} height={28} className="mr-2" />
+            <TextInput
+              className="ml-3 ml-8 flex-1 text-lg"
+              placeholder="Search"
+              placeholderTextColor="#000"
+              value={searchQuery}
+              onChangeText={handleSearch}
+              autoFocus={!isExpanded}
+            />
+          </View>
+        )}
+      </View>
+      {!isExpanded && filteredLocations.length > 0 && (
+        <View
+          className="absolute left-4 right-4 z-10 max-h-60 bg-white shadow"
+          style={{
+            top: isExpanded ? 140 : 160,
+            borderBottomLeftRadius: 100,
+            borderBottomRightRadius: 100,
+          }}>
+          <View className="h-px bg-gray-300" />
+          {filteredLocations.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              className="flex-row items-center bg-white p-2"
+              onPress={() => {
+                handleLocationSelect(item.name);
+              }}>
+              <View>{item.icon}</View>
+              <Text className="ml-3 text-lg text-black">{item.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
     </>
   );
 }
