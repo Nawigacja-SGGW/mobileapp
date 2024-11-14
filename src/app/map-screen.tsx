@@ -27,8 +27,7 @@ const campusBounds = {
 const campusCenter = [21.04635389581634, 52.16357007158958];
 
 export default function MapScreen() {
-  const camera = useRef<MapLibreGL.CameraRef | null>(null);
-  const map = useRef(null);
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(true);
   const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(
     undefined
@@ -40,14 +39,14 @@ export default function MapScreen() {
   const [points, setPoints] = useState<[number, number][] | null>(null);
   const userLocation = useRef<Location.LocationObject>();
 
-  const { t } = useTranslation();
-
   const waypoints = useMemo(() => [locationFrom, locationTo], [locationFrom, locationTo]);
-  const route = useRouteQuery(waypoints ?? []);
-  const lastRoutePoint = route?.at(-1);
-
+  const { route } = useRouteQuery(waypoints ?? [], 'foot');
   // Zustand store
   const { locations, setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
+
+  const camera = useRef<MapLibreGL.CameraRef | null>(null);
+  const map = useRef(null);
+  const lastRoutePoint = route?.at(-1);
 
   const expandFullSearchBar = () => {
     setIsExpanded(true);

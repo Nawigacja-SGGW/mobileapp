@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 
-export function useRouteQuery(waypoints: [number, number][]) {
-  const [route, setRoute] = useState([]);
+type RoutedBy = 'car' | 'bike' | 'foot';
+export function useRouteQuery(waypoints: [number, number][], routedBy: RoutedBy) {
+  const [routeData, setRouteData] = useState({
+    route: [],
+    distance: 0,
+    duration: 0,
+  });
+
   useEffect(() => {
     console.log(waypoints);
     if (waypoints.length < 2 || waypoints.filter(Boolean).length < waypoints.length) return;
@@ -11,18 +17,23 @@ export function useRouteQuery(waypoints: [number, number][]) {
       return acc;
     }, '');
 
-    console.log(
-      `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${wayString}?overview=full&geometries=geojson`
-    );
-
     fetch(
-      `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${wayString}?overview=full&geometries=geojson`
+      `https://routing.openstreetmap.de/routed-${routedBy}/route/v1/foot/${wayString}?overview=full&geometries=geojson`
     )
       .then((n) => n.json())
       .then((n) => {
+        console.log(n);
         console.log(n['routes'][0].geometry.coordinates);
-        setRoute(n['routes'][0].geometry.coordinates);
+        setRouteData({
+          route: n['routes'][0].geometry.coordinates,
+          distance: n['distance'],
+          duration: n['duration'],
+        });
       });
   }, [waypoints]);
-  return route;
+  return {
+    route: routeData.route,
+    distance: routeData.distance,
+    duration: routeData.duration,
+  } as const;
 }
