@@ -4,7 +4,7 @@ export function useRouteQuery(waypoints: [number, number][]) {
   const [route, setRoute] = useState([]);
   useEffect(() => {
     console.log(waypoints);
-    if (waypoints.length < 2) return;
+    if (waypoints.length < 2 || waypoints.filter(Boolean).length < waypoints.length) return;
     const wayString = waypoints.reduce((acc, c, i) => {
       acc += c[0].toString() + ',';
       acc += c[1].toString() + (waypoints.length - 1 === i ? '' : ';');

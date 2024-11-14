@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import BookIcon from '../../assets/book1.svg';
 import BuildingIcon from '../../assets/building3.svg';
 
-interface Location {
+export interface MapLocation {
   id: number;
   name: string;
   icon: JSX.Element;
@@ -11,15 +11,15 @@ interface Location {
 }
 
 interface LocationStore {
-  locations: Location[];
-  filteredLocations: Location[];
+  locations: MapLocation[];
+  filteredLocations: MapLocation[];
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   filterLocations: (query: string) => void;
   clearFilteredLocations: () => void;
 }
 
-const initialLocations: Location[] = [
+const initialLocations: MapLocation[] = [
   {
     id: 1,
     name: 'Basen',
