@@ -1,43 +1,11 @@
 import { forwardRef } from 'react';
 import { Text, TouchableOpacity, TouchableOpacityProps as RNTouchableOpacityProps, StyleSheet, StyleProp, ViewStyle, TextStyle} from 'react-native';
-import { 
-  useController, 
-  useFormContext, 
-  ControllerProps, 
-  UseControllerProps 
-} from 'react-hook-form';
 
 type ButtonProps = {
   title: string;
   buttonStyle?:StyleProp<ViewStyle>;
   textStyle?:StyleProp<TextStyle>;
 } & RNTouchableOpacityProps;
-
-// interface TouchableOpacityProps extends RNTouchableOpacityProps, UseControllerProps {
-//   title: string;
-//   buttonStyle?:StyleProp<ViewStyle>;
-//   textStyle?:StyleProp<TextStyle>;
-// }
-
-// export const AppButton = (props:TouchableOpacityProps) => {
-
-//   const {
-//     title,
-//     name,
-//     rules,
-//     buttonStyle,
-//     textStyle,
-//     ...touchableOpacityProps
-//   } = props;
-
-//   const { field } = useController({ name , rules}); 
-  
-//   return (
-//     <TouchableOpacity style={[styles.button,buttonStyle]} {...touchableOpacityProps}>
-//         <Text style={[styles.buttonText,textStyle]}>{title}</Text>
-//     </TouchableOpacity>
-//   );
-// };
 
 export const AppButton: React.FC<ButtonProps> = forwardRef<TouchableOpacity, ButtonProps>(({ title, buttonStyle, textStyle, ...touchableProps }, ref) => {
   return (

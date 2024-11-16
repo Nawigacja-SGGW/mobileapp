@@ -3,7 +3,7 @@ import Drawer from 'expo-router/drawer';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
-import {View, StyleSheet, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 
 import { Logo } from '~/components/Logo';
 import { AppButton } from '~/components/AppButton';
@@ -35,8 +35,6 @@ export default function Register() {
       padding: 20,
       backgroundColor: '#fff',
     },
-    content: {
-    },
     boldedText: {
       color: '#003228',
       fontSize: 12,
@@ -59,69 +57,63 @@ export default function Register() {
       <ScrollView style={styles.container}>
         <Logo/>
 
-        <View style={styles.content}>
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, value } }) => (
-              <AppInput
-              label = {t('login.email.label')}
-              placeholder = {t('login.email.placeholder')}
-              value={value}
-              onChangeText={onChange}
-              keyboardType="email-address" 
-              />
-            )}
-          />
-          
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, value } }) => (
-              <AppInput
-              label = {t('login.username.label')}
-              placeholder = {t('login.username.placeholder')}
-              value={value}
-              onChangeText={onChange}
-              keyboardType="default" 
-              />
-            )}
-          />
-          
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, value } }) => (
-              <AppSecureInput
-              label= {t('login.password.label')}
-              placeholder= {t('login.password.placeholder')}
-              value={value}
-              onChangeText={onChange}
-              keyboardType="default"
-              isPasswordVisible={isPasswordVisible}
-              togglePasswordVisibility={togglePasswordVisibility}
-              />
-            )}
-          />
-          
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange, value } }) => (
-              <AppSecureInput
-              label= {t('login.confirmPassword.label')}
-              placeholder= {t('login.confirmPassword.placeholder')}
-              value={value}
-              onChangeText={onChange}
-              keyboardType="default"
-              isPasswordVisible={isPassword2Visible}
-              togglePasswordVisibility={togglePassword2Visibility}
-              />
-            )}
-          />
-
-          <AppButton title={t('login.signUpButton')} onPress={handleSubmit(onSubmit)}/>
-        </View>
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <AppInput
+            label = {t('login.email.label')}
+            placeholder = {t('login.email.placeholder')}
+            value={value}
+            onChangeText={onChange}
+            keyboardType="email-address" 
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <AppInput
+            label = {t('login.username.label')}
+            placeholder = {t('login.username.placeholder')}
+            value={value}
+            onChangeText={onChange}
+            keyboardType="default" 
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <AppSecureInput
+            label= {t('login.password.label')}
+            placeholder= {t('login.password.placeholder')}
+            value={value}
+            onChangeText={onChange}
+            keyboardType="default"
+            isPasswordVisible={isPasswordVisible}
+            togglePasswordVisibility={togglePasswordVisibility}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="email"
+          render={({ field: { onChange, value } }) => (
+            <AppSecureInput
+            label= {t('login.confirmPassword.label')}
+            placeholder= {t('login.confirmPassword.placeholder')}
+            value={value}
+            onChangeText={onChange}
+            keyboardType="default"
+            isPasswordVisible={isPassword2Visible}
+            togglePasswordVisibility={togglePassword2Visibility}
+            />
+          )}
+        />
+        <AppButton title={t('login.signUpButton')} onPress={handleSubmit(onSubmit)}/>
       </ScrollView>
     </>
   );

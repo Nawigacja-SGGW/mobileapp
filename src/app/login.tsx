@@ -31,8 +31,6 @@ export default function Login() {
       padding: 20,
       backgroundColor: '#fff',
     },
-    content: {
-    },
     boldedText: {
       color: '#003228',
       fontSize: 12,
@@ -69,46 +67,40 @@ export default function Login() {
       <Drawer.Screen options={{ headerShown: false, }}/>
       <ScrollView style={styles.container}>
         <Logo/>
+        
+        <Controller
+          control={control}
+          name="usernameOrEmail"
+          render={({ field: { onChange, value } }) => (
+            <AppInput
+              label = {t('login.usernameOrEmail.label')}
+              placeholder = {t('login.usernameOrEmail.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="email-address" 
+              />
+          )}
+        />
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { onChange, value } }) => (
+            <AppSecureInput
+              label= {t('login.password.label')}
+              placeholder= {t('login.password.placeholder')}
+              value={value}
+              onChangeText={onChange}
+              keyboardType="default"
+              isPasswordVisible={isPasswordVisible}
+              togglePasswordVisibility={togglePasswordVisibility}
+              />
+          )}
+        />
+        <Link href={{ pathname: '/forgotPassword' }} asChild>
+          <Text style={styles.boldedText}> {t('login.password.forgotPassword')}</Text>
+        </Link>
 
-        <View style={styles.content}>
-
-          <Controller
-            control={control}
-            name="usernameOrEmail"
-            render={({ field: { onChange, value } }) => (
-              <AppInput
-                label = {t('login.usernameOrEmail.label')}
-                placeholder = {t('login.usernameOrEmail.placeholder')}
-                value={value}
-                onChangeText={onChange}
-                keyboardType="email-address" 
-                />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange, value } }) => (
-              <AppSecureInput
-                label= {t('login.password.label')}
-                placeholder= {t('login.password.placeholder')}
-                value={value}
-                onChangeText={onChange}
-                keyboardType="default"
-                isPasswordVisible={isPasswordVisible}
-                togglePasswordVisibility={togglePasswordVisibility}
-                />
-            )}
-          />
-
-          <Link href={{ pathname: '/forgotPassword' }} asChild>
-            <Text style={styles.boldedText}> {t('login.password.forgotPassword')}</Text>
-          </Link>
-
-          <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)}/>
-      
-        </View>
+        <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)}/>
 
         <Text style={styles.text}> {t('login.continueWith')}</Text>
         <View style={styles.bottom}>

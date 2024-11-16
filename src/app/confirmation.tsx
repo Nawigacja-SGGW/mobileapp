@@ -17,7 +17,6 @@ export default function Confirmation() {
     navigation.navigate('index')
   };
 
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -54,6 +53,7 @@ export default function Confirmation() {
       <Drawer.Screen options={{ headerShown: false, }}/>
       <View style={styles.container}>
         <Logo/>
+
         <View style={styles.content}>
           <Text style={styles.title}>{t('login.confirmation')}</Text>
           <Text style={styles.text}>{t('login.confirmationText')}</Text>

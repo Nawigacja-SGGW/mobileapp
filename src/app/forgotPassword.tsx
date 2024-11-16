@@ -53,6 +53,7 @@ export default function ForgotPassword() {
       <Drawer.Screen options={{ headerShown: false, }}/>
       <ScrollView style={styles.container}>
         <Logo/>
+        
         <View style={styles.content}>
           <Text style={styles.title}>{t('login.forgotPassword')}</Text>
           <Text style={styles.text}>{t('login.forgotPasswordText')}</Text>
