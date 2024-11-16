@@ -76,6 +76,9 @@
     "resetPassword": "Zresetuj hasło",
     "resetPasswordText": "Wprowadź nowe hasło dla ",
     "continueWith": "Lub kontynuuj z",
-    "backToLogin": "Wróć do logowania"
+    "backToLogin": "Wróć do logowania",
+    "confirmation" : "Sprawdź email w celu zresetowania hasła",
+    "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
+    "didntReceiveEmail" : "Nie otrzymałeś emaila?"
   }
 }

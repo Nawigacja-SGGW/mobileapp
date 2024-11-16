@@ -60,7 +60,10 @@
     "resetPassword":"Reset password",
     "resetPasswordText":"Enter a new password for ",
     "continueWith" : "Or continue with",
-    "backToLogin" : "Back to login"
+    "backToLogin" : "Back to login",
+    "confirmation" : "Check email for reset link",
+    "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
+    "didntReceiveEmail" : "Didn't receive an email?"
   },
 
   "getStarted": "Open this display's code:",
