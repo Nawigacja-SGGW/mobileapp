@@ -107,7 +107,7 @@ export default function Login() {
           <Link href={{ pathname: '/forgotPassword' }} asChild>
             <Text style={styles.boldedText}> {t('login.password.forgotPassword')}</Text>
           </Link>
-
+          <View style={{ marginTop: 16 }} />
           <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)} />
         </View>
         <View>
