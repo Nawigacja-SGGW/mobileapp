@@ -39,10 +39,9 @@ export default function Confirmation() {
       fontSize: 13,
       fontWeight: 300,
       color: '#000',
-      marginBottom:10,
+      marginBottom: '10%',
     },
     bottomText: {
-      marginTop: '10%',
       color: '#003228',
       textDecorationLine: 'underline',
       fontSize: 14,

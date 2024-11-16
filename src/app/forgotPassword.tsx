@@ -17,19 +17,16 @@ export default function ForgotPassword() {
 
   const onSubmit = (data:any) => {
     console.log(data); // logowanie danych formularza
-    navigation.navigate('index')
+    navigation.navigate('confirmation')
   };
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: 'column',
       padding: 20,
       backgroundColor: '#fff',
     },
     content: {
-      flex: 1,
-      justifyContent: 'center',
+      marginTop : '20%',
     },
     title:{
       fontSize: 24,

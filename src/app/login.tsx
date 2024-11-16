@@ -28,14 +28,10 @@ export default function Login() {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: 'column',
       padding: 20,
       backgroundColor: '#fff',
     },
     content: {
-      flex: 1,
-      justifyContent: 'center',
     },
     boldedText: {
       color: '#003228',
@@ -111,7 +107,9 @@ export default function Login() {
           </Link>
 
           <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)}/>
+      
         </View>
+
         <Text style={styles.text}> {t('login.continueWith')}</Text>
         <View style={styles.bottom}>
           <TouchableOpacity style={styles.circle}>

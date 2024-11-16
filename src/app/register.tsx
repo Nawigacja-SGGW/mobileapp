@@ -32,14 +32,10 @@ export default function Register() {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: 'column',
       padding: 20,
       backgroundColor: '#fff',
     },
     content: {
-      flex: 1,
-      justifyContent: 'center',
     },
     boldedText: {
       color: '#003228',

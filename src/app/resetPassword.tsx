@@ -38,14 +38,11 @@ export default function ResetPassword() {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      flexDirection: 'column',
       padding: 20,
       backgroundColor: '#fff',
     },
     content: {
-      flex: 1,
-      justifyContent: 'center',
+      marginTop : '20%',
     },
     title:{
       fontSize: 24,
