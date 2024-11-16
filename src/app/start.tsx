@@ -50,10 +50,10 @@ export default function Start() {
             </View>
           </View>
           <Link href={{ pathname: '/register' }} asChild>
-            <AppButton title={t('login.signUpButton')} buttonStyle="bg-black my-4"/>
+            <AppButton title={t('login.signUpButton')} buttonStyle="!bg-black my-4"/>
           </Link>
           <Link href={{ pathname: '/login' }} asChild>
-            <AppButton title={t('login.signInButton')} buttonStyle="bg-[#ffffff] my-4" textStyle="text-[#000000]" />
+            <AppButton title={t('login.signInButton')} buttonStyle="!bg-white my-4" textStyle="!text-black" />
           </Link>
         </View>
       </View>
