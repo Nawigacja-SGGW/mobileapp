@@ -2,7 +2,11 @@ import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
 
 type RoutedBy = 'car' | 'bike' | 'foot';
-export function useRouteQuery(waypoints: [number, number][], routedBy: RoutedBy) {
+export function useRouteQuery(
+  locationTo?: [number, number],
+  routedBy: RoutedBy,
+  navigationMode?: 'routing' | 'navigating'
+) {
   const [routeData, setRouteData] = useState({
     route: [],
     distance: 0,
@@ -21,7 +25,7 @@ export function useRouteQuery(waypoints: [number, number][], routedBy: RoutedBy)
       Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 100,
+          timeInterval: 1000,
         },
         (location) => {
           setUserLocation(location);
@@ -37,8 +41,8 @@ export function useRouteQuery(waypoints: [number, number][], routedBy: RoutedBy)
 
   useEffect(() => {
     console.log(waypoints);
-    if (waypoints.length < 2 || waypoints.filter(Boolean).length < waypoints.length) return;
-    const wayString = waypoints.reduce((acc, c, i) => {
+    if (!userlocation) return;
+    const wayString = [userlocation, locationTo].reduce((acc, c, i) => {
       acc += c[0].toString() + ',';
       acc += c[1].toString() + (waypoints.length - 1 === i ? '' : ';');
       return acc;
@@ -57,7 +61,7 @@ export function useRouteQuery(waypoints: [number, number][], routedBy: RoutedBy)
           duration: n['duration'],
         });
       });
-  }, [waypoints]);
+  }, [locationTo, userlocation]);
   return {
     route: routeData.route,
     distance: routeData.distance,

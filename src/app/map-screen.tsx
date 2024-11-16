@@ -37,7 +37,7 @@ export default function MapScreen() {
   );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [points, setPoints] = useState<[number, number][] | null>(null);
-  const [mode, setMode] = useState<'routing', 'navigating'>('routing');
+  const [mode, setMode] = useState<'routing' | 'navigating'>('routing');
   const userLocation = useRef<Location.LocationObject>();
 
   const waypoints = useMemo(() => [locationFrom, locationTo], [locationFrom, locationTo]);
@@ -140,7 +140,7 @@ export default function MapScreen() {
             minZoomLevel={12.5}
           />
           {/* linia trasy */}
-          <MapLine route={route} />
+          <MapLine route={route} locationFrom={locationFrom} />
           <MapMarkers
             lastRoutePoint={lastRoutePoint}
             locations={locations}
@@ -155,48 +155,96 @@ export default function MapScreen() {
 
 interface MapLineProps {
   route: [number, number][];
+  locationFrom?: [number, number];
+  locationTo?: [number, number];
 }
 
-function MapLine({ route }: MapLineProps) {
+function MapLine({ route, locationFrom, locationTo }: MapLineProps) {
+  console.log(locationFrom);
+  const drawLocationFrom =
+    locationFrom && route && route.length > 0 && mapDistance(locationFrom, route[0]) > 0.005;
   return (
-    <MapLibreGL.ShapeSource
-      id="symbolLocationSource1"
-      hitbox={{ width: 20, height: 20 }}
-      shape={{
-        type: 'FeatureCollection',
-        features: [
-          route &&
-            route.length >= 2 && {
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'LineString',
-                coordinates: route,
+    <>
+      <MapLibreGL.ShapeSource
+        id="symbolLocationSource1"
+        hitbox={{ width: 20, height: 20 }}
+        shape={{
+          type: 'FeatureCollection',
+          features: [
+            route &&
+              route.length >= 2 && {
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'LineString',
+                  coordinates: route,
+                },
               },
-            },
-        ].filter(Boolean),
-      }}>
-      <MapLibreGL.LineLayer
-        id="layer1"
-        style={{
-          lineColor: '#fff',
-          lineCap: 'round',
-          lineJoin: 'round',
-          lineWidth: 10,
-          lineSortKey: -2,
-        }}
-      />
-      <MapLibreGL.LineLayer
-        id="layer2"
-        style={{
-          lineColor: '#003228',
-          lineCap: 'round',
-          lineJoin: 'round',
-          lineWidth: 6,
-          lineSortKey: -1,
-        }}
-      />
-    </MapLibreGL.ShapeSource>
+          ].filter(Boolean),
+        }}>
+        <MapLibreGL.LineLayer
+          id="layer1"
+          style={{
+            lineColor: '#fff',
+            lineCap: 'round',
+            lineJoin: 'round',
+            lineWidth: 10,
+            lineSortKey: -2,
+          }}
+        />
+        <MapLibreGL.LineLayer
+          id="layer2"
+          style={{
+            lineColor: '#003228',
+            lineCap: 'round',
+            lineJoin: 'round',
+            lineWidth: 6,
+            lineSortKey: -1,
+          }}
+        />
+      </MapLibreGL.ShapeSource>
+      {drawLocationFrom && (
+        <MapLibreGL.ShapeSource
+          id="symbolLocationSource2"
+          hitbox={{ width: 20, height: 20 }}
+          shape={{
+            type: 'FeatureCollection',
+            features: [
+              route &&
+                route.length >= 2 &&
+                locationFrom && {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                    type: 'LineString',
+                    coordinates: [locationFrom, route[0]],
+                  },
+                },
+            ].filter(Boolean),
+          }}>
+          <MapLibreGL.LineLayer
+            id="layer3"
+            style={{
+              lineColor: '#fff',
+              lineCap: 'round',
+              lineJoin: 'round',
+              lineWidth: 10,
+              lineSortKey: -2,
+            }}
+          />
+          <MapLibreGL.LineLayer
+            id="layer4"
+            style={{
+              lineColor: '#777',
+              lineCap: 'round',
+              lineJoin: 'round',
+              lineWidth: 6,
+              lineSortKey: -1,
+            }}
+          />
+        </MapLibreGL.ShapeSource>
+      )}
+    </>
   );
 }
 
@@ -344,3 +392,19 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: seaarchBa
     </>
   );
 }
+
+const mapDistance = ([lat1, lon1]: [number, number], [lat2, lon2]: [number, number]): number => {
+  const toRad = (deg: number) => (deg * Math.PI) / 180,
+    R = 6371;
+  const [dLat, dLon] = [toRad(lat2 - lat1), toRad(lon2 - lon1)];
+  return (
+    R *
+    2 *
+    Math.asin(
+      Math.sqrt(
+        Math.sin(dLat / 2) ** 2 +
+          Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
+      )
+    )
+  );
+};
