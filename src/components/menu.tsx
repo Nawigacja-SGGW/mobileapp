@@ -45,7 +45,7 @@ export function DrawerMenu() {
     label: t('menu.logout'),
     icon: <FontAwesome5 name="sign-out-alt" size={20} color="black" />,
     onPress: () => {
-      console.log('Log out');
+      navigation.navigate('index');
     },
   };
 
