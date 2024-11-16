@@ -31,7 +31,7 @@ export default function ResetPassword() {
 
   const onSubmit = (data:any) => {
     console.log(data); // logowanie danych formularza
-    navigation.navigate('index')
+    navigation.navigate('login')
   };
 
   const styles = StyleSheet.create({

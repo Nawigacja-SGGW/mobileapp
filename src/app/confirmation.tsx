@@ -14,7 +14,7 @@ export default function Confirmation() {
   const { handleSubmit } = useForm();
 
   const onSubmit = () => {
-    navigation.navigate('index')
+    navigation.navigate('forgotPassword')
   };
 
   const styles = StyleSheet.create({

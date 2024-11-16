@@ -23,7 +23,7 @@ export default function Login() {
 
   const onSubmit = (data:any) => {
     console.log(data); // logowanie danych formularza
-    navigation.navigate('index')
+    navigation.navigate('map-screen')
   };
 
   const styles = StyleSheet.create({
