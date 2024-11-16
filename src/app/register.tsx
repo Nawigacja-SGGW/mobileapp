@@ -1,15 +1,15 @@
+import React, { useState } from 'react';
+import Drawer from 'expo-router/drawer';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
-import {View, StyleSheet} from 'react-native';
-import Drawer from 'expo-router/drawer';
 import { useForm, Controller } from 'react-hook-form';
+import {View, StyleSheet, ScrollView} from 'react-native';
 
+import { Logo } from '~/components/Logo';
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
-import { Logo } from '~/components/Logo';
 
-export default function Login() {
+export default function Register() {
 
   const { control, handleSubmit } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -60,7 +60,7 @@ export default function Login() {
   return (
     <>
       <Drawer.Screen options={{ headerShown: false, }}/>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Logo/>
 
         <View style={styles.content}>
@@ -126,7 +126,7 @@ export default function Login() {
 
           <AppButton title={t('login.signUpButton')} onPress={handleSubmit(onSubmit)}/>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }

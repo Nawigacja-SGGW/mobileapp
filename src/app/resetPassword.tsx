@@ -1,15 +1,19 @@
+import React, { useState } from 'react';
+import Drawer from 'expo-router/drawer';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import Drawer from 'expo-router/drawer';
 import { useForm } from 'react-hook-form';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
+import { Logo } from '~/components/Logo';
 import { AppButton } from '~/components/AppButton';
 import { AppSecureInput } from '~/components/AppInput';
-import { Logo } from '~/components/Logo';
 
-export default function Login(email:string) {
+export default function ResetPassword() {
+
+  const route = useRoute();
+  const { email } = route.params || {};
 
   const { handleSubmit } = useForm();
   const [password, setPassword] = useState('');
@@ -60,7 +64,7 @@ export default function Login(email:string) {
   return (
     <>
       <Drawer.Screen options={{ headerShown: false, }}/>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Logo/>
         <View style={styles.content}>
           <Text style={styles.title}>{t('login.resetPassword')}</Text>
@@ -88,7 +92,7 @@ export default function Login(email:string) {
 
           <AppButton title={t('login.resetButton')} onPress={handleSubmit(onSubmit)}/>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }

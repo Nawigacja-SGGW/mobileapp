@@ -16,7 +16,8 @@ export default function Home() {
       <Button title="sign in" onPress={ () => {navigation.navigate('login');}}/>
       <Button title="sign up" onPress={ () => {navigation.navigate('register');}}/>
       <Button title="forgot" onPress={ () => {navigation.navigate('forgotPassword');}}/>
-      <Button title="reset" onPress={ () => {navigation.navigate('resetPassword');}}/>
+      <Button title="reset" onPress={ () => {navigation.navigate('resetPassword', { email: 'user@example.com' });}}/>
+      <Button title="map" onPress={ () => {navigation.navigate('map-screen');}}/>
     </>
   );
 }

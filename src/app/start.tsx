@@ -1,13 +1,13 @@
+import React from 'react';
+import Drawer from 'expo-router/drawer';
 import { Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import React from 'react';
 import {View, StyleSheet, Text } from 'react-native';
-import Drawer from 'expo-router/drawer';
 
 import { AppButton } from '~/components/AppButton';
 import Background from '../../assets/background.svg';
 
-export default function Login() {
+export default function Start() {
 
   const { t } = useTranslation();
   const logoSize = 70;

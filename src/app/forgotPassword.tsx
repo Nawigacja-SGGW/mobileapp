@@ -1,15 +1,15 @@
+import React from 'react';
+import Drawer from 'expo-router/drawer';
 import { Link, useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import Drawer from 'expo-router/drawer';
 import { useForm, Controller } from 'react-hook-form';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 
+import { Logo } from '~/components/Logo';
 import { AppButton } from '~/components/AppButton';
 import { AppInput } from '~/components/AppInput';
-import { Logo } from '~/components/Logo';
 
-export default function Login() {
+export default function ForgotPassword() {
 
   const { control, handleSubmit } = useForm();
   const { t } = useTranslation();
@@ -54,7 +54,7 @@ export default function Login() {
   return (
     <>
       <Drawer.Screen options={{ headerShown: false, }}/>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Logo/>
         <View style={styles.content}>
           <Text style={styles.title}>{t('login.forgotPassword')}</Text>
@@ -79,7 +79,7 @@ export default function Login() {
             <Text style={styles.bottomText}>{t('login.backToLogin')}</Text>
           </Link>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }

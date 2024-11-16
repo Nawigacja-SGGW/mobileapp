@@ -1,13 +1,13 @@
+import React, { useState } from 'react';
+import Drawer from 'expo-router/drawer';
 import { Link, useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import React, { useState } from 'react';
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import Drawer from 'expo-router/drawer';
 import { useForm, Controller } from 'react-hook-form';
+import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView} from 'react-native';
 
-import { AppButton } from '~/components/AppButton';
-import { AppInput, AppSecureInput } from '~/components/AppInput';
 import { Logo } from '~/components/Logo';
+import { AppInput, AppSecureInput } from '~/components/AppInput';
+import { AppButton } from '~/components/AppButton';
 
 export default function Login() {
 
@@ -71,7 +71,7 @@ export default function Login() {
   return (
     <>
       <Drawer.Screen options={{ headerShown: false, }}/>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Logo/>
 
         <View style={styles.content}>
@@ -121,7 +121,7 @@ export default function Login() {
             <Image source={require("./../../assets/apple.png")} alt="Apple logo"/>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }
