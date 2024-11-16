@@ -49,13 +49,12 @@ export default function Start() {
               <Text>Logo</Text> 
             </View>
           </View>
-             <Link href={{ pathname: '/register' }} asChild>
-              <AppButton title={t('login.signUpButton')} buttonStyle={{backgroundColor: '#000',marginVertical:15}}/>
-            </Link>
-
-            <Link href={{ pathname: '/login' }} asChild>
-              <AppButton title={t('login.signInButton')} buttonStyle={{backgroundColor: '#fff',marginVertical:15}} textStyle={{color: '#000'}}/>
-            </Link>
+          <Link href={{ pathname: '/register' }} asChild>
+            <AppButton title={t('login.signUpButton')} buttonStyle="bg-black my-4"/>
+          </Link>
+          <Link href={{ pathname: '/login' }} asChild>
+            <AppButton title={t('login.signInButton')} buttonStyle="bg-[#ffffff] my-4" textStyle="text-[#000000]" />
+          </Link>
         </View>
       </View>
     </>
