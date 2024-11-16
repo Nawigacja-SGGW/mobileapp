@@ -37,6 +37,7 @@ export default function MapScreen() {
   );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [points, setPoints] = useState<[number, number][] | null>(null);
+  const [mode, setMode] = useState<'routing', 'navigating'>('routing');
   const userLocation = useRef<Location.LocationObject>();
 
   const waypoints = useMemo(() => [locationFrom, locationTo], [locationFrom, locationTo]);
