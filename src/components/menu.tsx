@@ -51,7 +51,7 @@ export function DrawerMenu() {
 
   return (
     <>
-      <View className="h-full w-7/12">
+      <View className="h-full">
         <View className="flex-1 px-4">
           <TouchableOpacity
             className="mt-10 w-20"
