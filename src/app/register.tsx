@@ -72,7 +72,7 @@ export default function Register() {
         />
         <Controller
           control={control}
-          name="email"
+          name="username"
           render={({ field: { onChange, value } }) => (
             <AppInput
             label = {t('login.username.label')}
@@ -85,7 +85,7 @@ export default function Register() {
         />
         <Controller
           control={control}
-          name="email"
+          name="password"
           render={({ field: { onChange, value } }) => (
             <AppSecureInput
             label= {t('login.password.label')}
@@ -100,7 +100,7 @@ export default function Register() {
         />
         <Controller
           control={control}
-          name="email"
+          name="confirmPassword"
           render={({ field: { onChange, value } }) => (
             <AppSecureInput
             label= {t('login.confirmPassword.label')}

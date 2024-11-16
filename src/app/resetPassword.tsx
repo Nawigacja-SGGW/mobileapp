@@ -68,7 +68,7 @@ export default function ResetPassword() {
 
           <Controller
             control={control}
-            name="email"
+            name="password"
             render={({ field: { onChange, value } }) => (
               <AppSecureInput
               label= {t('login.newPassword.label')}
@@ -84,7 +84,7 @@ export default function ResetPassword() {
 
           <Controller
             control={control}
-            name="email"
+            name="confirmPassword"
             render={({ field: { onChange, value } }) => (
               <AppSecureInput
               label= {t('login.confirmNewPassword.label')}
