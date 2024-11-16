@@ -29,20 +29,17 @@ const campusCenter = [21.04635389581634, 52.16357007158958];
 export default function MapScreen() {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(true);
-  const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(
-    undefined
-  );
-  const [locationTo, setlocationTo] = useState<undefined | [number, number] | MapLocation>(
-    undefined
-  );
+  const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(undefined);
+  const [locationTo, setlocationTo] = useState<undefined | [number, number] | MapLocation>(undefined);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [points, setPoints] = useState<[number, number][] | null>(null);
   const userLocation = useRef<Location.LocationObject>();
 
   const waypoints = useMemo(() => [locationFrom, locationTo], [locationFrom, locationTo]);
   const { route } = useRouteQuery(waypoints ?? [], 'foot');
+
   // Zustand store
-  const { locations, setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
+  const { locations, setSearchQuery, filterLocations, clearFilteredLocations, searchQuery, filteredLocations } = useLocationStore();
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -91,11 +88,11 @@ export default function MapScreen() {
     }
   };
 
-  const handleLocationSelect = (locationName: string) => {
+  function handleLocationSelect(locationName: string) {
     setSearchQuery(locationName);
-    setIsExpanded(false);
+    setIsExpanded(true);
     clearFilteredLocations();
-  };
+  }
 
   const handleMarkerPress = (id: number, location: [number, number]) => {
     const locationObject = locations.find((l) => l.id === id);
@@ -118,10 +115,11 @@ export default function MapScreen() {
         }}
       />
       <View className="flex-1">
+        {/* Pasek wyszukiwania */}
         <SearchBar
           handleSearch={handleSearch}
-          isExpanded={isExpanded}
           handleLocationSelect={handleLocationSelect}
+          isExpanded={isExpanded}
         />
 
         <MapLibreGL.MapView
@@ -199,13 +197,13 @@ function MapLine({ route }: MapLineProps) {
   );
 }
 
-interface mapMarkerProps {
+interface MapMarkersProps {
   lastRoutePoint?: [number, number];
   locations: MapLocation[];
   onMarkerPress?: (id: number, location: [number, number]) => void;
 }
 
-function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: mapMarkerProps) {
+function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProps) {
   return (
     <>
       <MapLibreGL.Images
@@ -218,13 +216,9 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: mapMarkerProps
         hitbox={{ width: 20, height: 20 }}
         onPress={(e) => {
           console.log(e);
-          console.log(e.features.length);
           if (e.features.length > 0) {
-            console.log(e.features[0]);
             onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
           }
-
-          e.features.forEach((f) => console.log(f));
         }}
         shape={{
           type: 'FeatureCollection',
@@ -267,23 +261,20 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: mapMarkerProps
   );
 }
 
-interface seaarchBarProps {
+interface SearchBarProps {
   handleSearch: (text: string) => void;
   handleLocationSelect: (name: string) => void;
   isExpanded: boolean;
 }
 
-function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: seaarchBarProps) {
+function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBarProps) {
   const { t } = useTranslation();
-
   const { searchQuery, filteredLocations } = useLocationStore();
-  console.log('render');
+
   return (
     <>
       <View
-        className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${
-          isExpanded ? 'min-h-28 py-4' : 'h-15'
-        }`}>
+        className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${isExpanded ? 'min-h-28 py-4' : 'h-15'}`}>
         {isExpanded ? (
           <View className="flex-col">
             <View className="mb-2 ml-4 flex-row items-center">
@@ -301,6 +292,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: seaarchBa
                 className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
                 placeholder={t('map.search.destination')}
                 placeholderTextColor="#000"
+                value={searchQuery}
               />
             </View>
           </View>
@@ -318,6 +310,8 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: seaarchBa
           </View>
         )}
       </View>
+
+      {/* Lista wyników wyszukiwania */}
       {!isExpanded && filteredLocations.length > 0 && (
         <View
           className="absolute left-4 right-4 z-10 max-h-60 bg-white shadow"
@@ -331,9 +325,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: seaarchBa
             <TouchableOpacity
               key={item.id}
               className="flex-row items-center bg-white p-2"
-              onPress={() => {
-                handleLocationSelect(item.name);
-              }}>
+              onPress={() => handleLocationSelect(item.name)}>
               <View>{item.icon}</View>
               <Text className="ml-3 text-lg text-black">{item.name}</Text>
             </TouchableOpacity>
