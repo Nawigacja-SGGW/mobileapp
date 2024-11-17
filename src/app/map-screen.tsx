@@ -1,4 +1,4 @@
-import MapLibreGL from '@maplibre/maplibre-react-native';
+import MapLibreGL, { CameraRef } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
 import { Drawer } from 'expo-router/drawer';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -15,6 +15,7 @@ import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -47,6 +48,7 @@ export default function MapScreen() {
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
   const lastRoutePoint = route?.at(-1);
+  const [currentCameraRotation, setCurrentCameraRotation] = useState(60);
 
   const expandFullSearchBar = () => {
     setIsExpanded(true);
@@ -72,12 +74,14 @@ export default function MapScreen() {
         },
         (location) => {
           userLocation.current = location;
+          console.log("map-screen.tsx location");
           console.log(location);
         }
       );
 
       const location = await Location.getCurrentPositionAsync({});
       userLocation.current = location;
+      console.log("map-screen.tsx userLocation.current");
       console.log(userLocation.current);
     })();
   }, []);
@@ -107,8 +111,25 @@ export default function MapScreen() {
         (n) => n ?? [userLocation.current.coords.longitude, userLocation.current.coords.latitude]
       );
       setlocationTo(location);
+
     }
   };
+
+  const handlePointNorth = () => {
+      console.log("handlePointNorth");
+      setCurrentCameraRotation(0);
+      if (camera.current) {
+        camera.current.setCamera({
+          heading: 0,
+          animationDuration: 1000,
+        });
+      }
+    }
+
+  const compassStyle = {
+    transform: `rotate(${(-currentCameraRotation - 45)}deg)`
+  };
+  console.log(-currentCameraRotation - 45);
 
   return (
     <>
@@ -134,7 +155,7 @@ export default function MapScreen() {
             ref={camera}
             centerCoordinate={campusCenter}
             zoomLevel={14}
-            heading={60}
+            heading={currentCameraRotation}
             maxBounds={campusBounds}
             minZoomLevel={12.5}
           />
@@ -147,6 +168,10 @@ export default function MapScreen() {
           />
           <MapLibreGL.UserLocation renderMode="native" androidRenderMode="compass" />
         </MapLibreGL.MapView>
+        {/* compass */}
+        <TouchableOpacity onPress={handlePointNorth} className='absolute bottom-5 right-5 z-10'>
+          <Ionicons name="compass-sharp" size={50} color="#003228" style={compassStyle}/>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -217,8 +242,8 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: mapMarkerProps
         id="symbolLocationSource"
         hitbox={{ width: 20, height: 20 }}
         onPress={(e) => {
-          console.log(e.features.length);
           //console.log(e);
+          //console.log(e.features.length);
           if (e.features.length > 0) {
             //console.log(e.features[0]);
             onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
