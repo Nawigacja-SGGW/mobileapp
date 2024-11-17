@@ -29,11 +29,11 @@ interface AreaObjectFaculty {
   floor: number | null;
 }
 
-interface Institute {
-  id: number;
-  name: string;
-  faculty: Faculty;
-}
+// interface Institute {
+//   id: number;
+//   name: string;
+//   faculty: Faculty;
+// }
 
 interface Faculty {
   id: number;
@@ -205,7 +205,15 @@ const fakePointObjects: PointObject[] = [
   },
 ];
 
-const useFakeLocationStore = create((set) => ({
+interface StoreState {
+  pointObjects: PointObject[];
+  areaObjects: AreaObject[];
+  loading: boolean;
+  error: string | null;
+  fetchData: () => Promise<void>;
+}
+
+const useFakeLocationStore = create<StoreState>((set) => ({
   pointObjects: [],
   areaObjects: [],
   loading: false,
