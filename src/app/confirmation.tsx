@@ -1,20 +1,19 @@
-import React from 'react';
-import Drawer from 'expo-router/drawer';
 import { useNavigation } from 'expo-router';
-import { useTranslation } from 'react-i18next';
+import Drawer from 'expo-router/drawer';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 import { Logo } from '~/components/Logo';
 
 export default function Confirmation() {
-
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { handleSubmit } = useForm();
 
   const onSubmit = () => {
-    navigation.navigate('forgotPassword')
+    navigation.navigate('forgotPassword');
   };
 
   const styles = StyleSheet.create({
@@ -26,13 +25,13 @@ export default function Confirmation() {
     content: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: "center",
+      alignItems: 'center',
     },
-    title:{
+    title: {
       fontSize: 20,
       fontWeight: 400,
       color: '#000',
-      marginBottom:10,
+      marginBottom: 10,
     },
     text: {
       fontSize: 13,
@@ -47,12 +46,14 @@ export default function Confirmation() {
       fontWeight: 700,
     },
   });
-  
+
   return (
     <>
-      <Drawer.Screen options={{ headerShown: false, }}/>
-      <View style={styles.container}>
-        <Logo/>
+      <Drawer.Screen options={{ headerShown: false }} />
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ height: '100%', paddingBottom: 32, paddingTop: 32 }}>
+        <Logo />
 
         <View style={styles.content}>
           <Text style={styles.title}>{t('login.confirmation')}</Text>
@@ -61,7 +62,7 @@ export default function Confirmation() {
             <Text style={styles.bottomText}>{t('login.didntReceiveEmail')}</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 }

@@ -1,23 +1,22 @@
-import React from 'react';
-import Drawer from 'expo-router/drawer';
 import { Link, useNavigation } from 'expo-router';
-import { useTranslation } from 'react-i18next';
+import Drawer from 'expo-router/drawer';
+import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 
-import { Logo } from '~/components/Logo';
 import { AppButton } from '~/components/AppButton';
 import { AppInput } from '~/components/AppInput';
+import { Logo } from '~/components/Logo';
 
 export default function ForgotPassword() {
-
   const { control, handleSubmit } = useForm();
   const { t } = useTranslation();
   const navigation = useNavigation();
 
-  const onSubmit = (data:any) => {
+  const onSubmit = (data: any) => {
     console.log(data); // logowanie danych formularza
-    navigation.navigate('confirmation')
+    navigation.navigate('confirmation');
   };
 
   const styles = StyleSheet.create({
@@ -26,19 +25,19 @@ export default function ForgotPassword() {
       backgroundColor: '#fff',
     },
     content: {
-      marginTop : '20%',
+      marginTop: '20%',
     },
-    title:{
+    title: {
       fontSize: 24,
       fontWeight: 700,
       color: '#000',
-      marginBottom:10,
+      marginBottom: 10,
     },
     text: {
       fontSize: 13,
       fontWeight: 300,
       color: '#000',
-      marginBottom:10,
+      marginBottom: 10,
     },
     bottomText: {
       color: '#003228',
@@ -47,13 +46,18 @@ export default function ForgotPassword() {
       fontWeight: 700,
     },
   });
-  
+
   return (
     <>
-      <Drawer.Screen options={{ headerShown: false, }}/>
-      <ScrollView style={styles.container}>
-        <Logo/>
-        
+      <Drawer.Screen options={{ headerShown: false }} />
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{
+          paddingTop: 32,
+          paddingBottom: 32,
+        }}>
+        <Logo />
+
         <View style={styles.content}>
           <Text style={styles.title}>{t('login.forgotPassword')}</Text>
           <Text style={styles.text}>{t('login.forgotPasswordText')}</Text>
@@ -62,16 +66,18 @@ export default function ForgotPassword() {
             name="email"
             render={({ field: { onChange, value } }) => (
               <AppInput
-              label = {t('login.email.label')}
-              placeholder = {t('login.email.placeholder')}
-              value={value}
-              onChangeText={onChange}
-              keyboardType="email-address" 
+                label={t('login.email.label')}
+                placeholder={t('login.email.placeholder')}
+                value={value}
+                onChangeText={onChange}
+                keyboardType="email-address"
               />
             )}
           />
 
-          <AppButton title={t('login.sendButton')} onPress={handleSubmit(onSubmit)}/>
+          <View style={{ height: 32 }} />
+
+          <AppButton title={t('login.sendButton')} onPress={handleSubmit(onSubmit)} />
 
           <Link href={{ pathname: '/login' }} asChild>
             <Text style={styles.bottomText}>{t('login.backToLogin')}</Text>
