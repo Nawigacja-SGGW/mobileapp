@@ -204,3 +204,25 @@ const fakePointObjects: PointObject[] = [
     eventEnd: null,
   },
 ];
+
+export const useFakeLocationStore = create((set) => ({
+  pointObjects: [],
+  areaObjects: [],
+  loading: false,
+  error: null,
+
+  fetchData: async () => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      set({
+        pointObjects: fakePointObjects,
+        areaObjects: fakeAreaObjects,
+        loading: false,
+        error: null,
+      });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+}));
