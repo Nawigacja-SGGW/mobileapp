@@ -27,12 +27,12 @@
       "tsconfigPaths": true
     },
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "icon": "./assets/logo-nsggw.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo-nsggw.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#274839"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -40,8 +40,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/logo-nsggw.png",
+        "backgroundColor": "#274839"
       },
       "package": "com.anonymous.nawigacjaSGGWmobile"
     },
