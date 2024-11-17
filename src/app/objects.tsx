@@ -67,7 +67,8 @@ interface searchBarProps {
   }
 
 function SearchBar({ handleSearch, handleLocationSelect }: searchBarProps) {
-    const { searchQuery, filteredLocations } = useLocationStore();
+    const { locations, searchQuery, filteredLocations } = useLocationStore();
+    const { t } = useTranslation();
 
     return (
     <>
@@ -86,16 +87,26 @@ function SearchBar({ handleSearch, handleLocationSelect }: searchBarProps) {
             </View>
         </View>
         <ScrollView>
-            {filteredLocations.length > 0 && filteredLocations.map((item,index) => (
+        {searchQuery === "" ? (locations.map((item, index) => (
+            <TouchableOpacity
+                activeOpacity={1}
+                key={item.id}
+                className={`flex-row items-center p-2 active:bg-[#EDEDED] ${index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}
+                onPress={() => { handleLocationSelect(item.name) }}>
+                <View>{item.icon}</View>
+                <Text className="ml-3 text-lg text-black">{item.name}</Text>
+            </TouchableOpacity>
+            ))) : (filteredLocations.length > 0 ? (filteredLocations.map((item, index) => (
                 <TouchableOpacity
-                    activeOpacity = {1}
-                    key={item.id}
-                    className={`flex-row items-center p-2 active:bg-[#EDEDED] ${index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}
-                    onPress={() => { handleLocationSelect(item.name)}}>
-                    <View>{item.icon}</View>
-                    <Text className="ml-3 text-lg text-black">{item.name}</Text>
+                activeOpacity={1}
+                key={item.id}
+                className={`flex-row items-center p-2 active:bg-[#EDEDED] ${index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}
+                onPress={() => { handleLocationSelect(item.name) }}>
+                <View>{item.icon}</View>
+                <Text className="ml-3 text-lg text-black">{item.name}</Text>
                 </TouchableOpacity>
-            ))}
+            ))) : (<Text className="text-center font-normal mt-5 text-[16px] text-[#8B8B8B]">{t('noResults')}</Text> ))
+        }
         </ScrollView>
     </View>
     </>

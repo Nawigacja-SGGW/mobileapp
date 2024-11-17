@@ -80,5 +80,6 @@
     "confirmation" : "Sprawdź email w celu zresetowania hasła",
     "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
     "didntReceiveEmail" : "Nie otrzymałeś emaila?"
-  }
+  },
+  "noResults" : "nie znaleziono wyników"
 }
