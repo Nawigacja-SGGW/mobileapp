@@ -14,6 +14,8 @@ interface LocationStore {
   locations: MapLocation[];
   filteredLocations: MapLocation[];
   searchQuery: string;
+  locationFrom: undefined | MapLocation | [number, number];
+  locationTo: undefined | MapLocation;
   setSearchQuery: (query: string) => void;
   filterLocations: (query: string) => void;
   clearFilteredLocations: () => void;
@@ -54,6 +56,8 @@ const initialLocations: MapLocation[] = [
 
 const useLocationStore = create<LocationStore>((set) => ({
   locations: initialLocations,
+  locationFrom: undefined,
+  locationTo: undefined,
   filteredLocations: [],
   searchQuery: '',
 
@@ -68,6 +72,14 @@ const useLocationStore = create<LocationStore>((set) => ({
     })),
 
   clearFilteredLocations: () => set({ filteredLocations: [] }),
+  setRoute: (options: { locationTo?: MapLocation; locationFrom?: MapLocation }) =>
+    set((state) => {
+      console.log('setroute', options);
+      return {
+        locationFrom: options.locationFrom ?? state.locationFrom,
+        locationTo: options.locationTo ?? state.locationTo,
+      };
+    }),
 }));
 
 export default useLocationStore;

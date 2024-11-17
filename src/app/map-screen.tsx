@@ -29,18 +29,17 @@ const campusCenter = [21.04635389581634, 52.16357007158958];
 export default function MapScreen() {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(true);
-  const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(
-    undefined
-  );
-  const [locationTo, setlocationTo] = useState<undefined | [number, number] | MapLocation>(
-    undefined
-  );
+  // const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(
+  //   undefined
+  // );
+  // const [locationTo, setlocationTo] = useState<undefined | [number, number] | MapLocation>(
+  //   undefined
+  // );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [points, setPoints] = useState<[number, number][] | null>(null);
   const userLocation = useRef<Location.LocationObject>();
 
   const waypoints = useMemo(() => [locationFrom, locationTo], [locationFrom, locationTo]);
-  const { route } = useRouteQuery(waypoints ?? [], 'foot');
 
   // Zustand store
   const {
@@ -50,7 +49,11 @@ export default function MapScreen() {
     clearFilteredLocations,
     searchQuery,
     filteredLocations,
+    locationTo,
+    locationFrom,
+    setRoute,
   } = useLocationStore();
+  const { route } = useRouteQuery(locationFrom, locationTo, 'foot');
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -99,13 +102,13 @@ export default function MapScreen() {
     }
   };
 
-  const handleLocationSelect = (locationName: string, coordinates: [number, number]) => {
-    console.log('Selected location:', locationName, coordinates);
+  const handleLocationSelect = (item: MapLocation) => {
+    console.log('Selected location:', item);
 
-    setSearchQuery(locationName);
+    setSearchQuery(item.name);
     setIsExpanded(true);
 
-    setlocationTo(coordinates);
+    setRoute({ locationTo: item });
 
     clearFilteredLocations();
   };
@@ -116,10 +119,10 @@ export default function MapScreen() {
     console.log(locationObject);
 
     if (userLocation.current !== undefined) {
-      setlocationFrom(
-        (n) => n ?? [userLocation.current.coords.longitude, userLocation.current.coords.latitude]
-      );
-      setlocationTo(location);
+      setRoute({
+        locationFrom: [userLocation.current.coords.latitude, userLocation.current.coords.longitude],
+        locationTo: location,
+      });
     }
   };
 
@@ -279,13 +282,13 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
 
 interface SearchBarProps {
   handleSearch: (text: string) => void;
-  handleLocationSelect: (name: string) => void;
+  handleLocationSelect: (name: MapLocation) => void;
   isExpanded: boolean;
 }
 
 function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBarProps) {
   const { t } = useTranslation();
-  const { searchQuery, filteredLocations } = useLocationStore();
+  const { searchQuery, filteredLocations, locationTo, locationFrom } = useLocationStore();
 
   return (
     <>
@@ -298,15 +301,18 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
             <View className="mb-2 ml-4 flex-row items-center">
               <LightGreenDot width={20} height={20} className="ml-4 mr-2" />
               <TextInput
+                readOnly
                 className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
                 placeholder={t('map.search.startingPoint')}
                 placeholderTextColor="#000"
+                value={locationFrom ? 'dupa' : t('map.search.startingPoint')}
               />
             </View>
             <View className="my-1 ml-16 h-px w-5/6 bg-gray-300" />
             <View className="ml-4 flex-row items-center">
               <DarkGreenDot width={20} height={20} className="ml-4 mr-2" />
               <TextInput
+                readOnly
                 className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
                 placeholder={t('map.search.destination')}
                 placeholderTextColor="#000"
@@ -344,7 +350,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
             <TouchableOpacity
               key={item.id}
               className="flex-row items-center bg-white p-2"
-              onPress={() => handleLocationSelect(item.name, item.coordinates)}>
+              onPress={() => handleLocationSelect(item)}>
               <View>{item.icon}</View>
               <Text className="ml-3 text-lg text-black">{item.name}</Text>
             </TouchableOpacity>
