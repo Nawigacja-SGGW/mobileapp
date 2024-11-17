@@ -35,7 +35,7 @@ const useUserStore = create<StoreState>((set) => ({
   logout: () => {
     try {
       // TODO send logout request
-      set({ email: null, token: null });
+      set({ email: null, token: null, loading: false, error: null });
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
     }
