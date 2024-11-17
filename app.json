@@ -28,9 +28,9 @@
     },
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "icon": "./assets/logo-nsggw.png",
+    "icon": "./assets/nawigacja-SGGW.png",
     "splash": {
-      "image": "./assets/logo-nsggw.png",
+      "image": "./assets/nawigacja-SGGW.png",
       "resizeMode": "contain",
       "backgroundColor": "#274839"
     },
@@ -40,7 +40,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo-nsggw.png",
+        "foregroundImage": "./assets/nawigacja-SGGW.png",
         "backgroundColor": "#274839"
       },
       "package": "com.anonymous.nawigacjaSGGWmobile"
