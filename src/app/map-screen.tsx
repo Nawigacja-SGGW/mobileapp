@@ -19,6 +19,7 @@ import useLocationStore from '~/store/useLocationStore';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Touchable } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import LocationModal from '~/components/object_example';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -32,18 +33,10 @@ const campusCenter = [21.04635389581634, 52.16357007158958];
 
 export default function MapScreen() {
   const { t } = useTranslation();
-  const [isExpanded, setIsExpanded] = useState(true);
-  // const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(
-  //   undefined
-  // );
-  // const [locationTo, setlocationTo] = useState<undefined | [number, number] | MapLocation>(
-  //   undefined
-  // );
+  const [isExpanded, setIsExpanded] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [points, setPoints] = useState<[number, number][] | null>(null);
+  const [selectedObject, setselectedObject] = useState(undefined);
   const userLocation = useRef<Location.LocationObject>();
-
-  const waypoints = useMemo(() => [locationFrom, locationTo], [locationFrom, locationTo]);
 
   // Zustand store
   const {
@@ -51,10 +44,7 @@ export default function MapScreen() {
     setSearchQuery,
     filterLocations,
     clearFilteredLocations,
-    searchQuery,
-    filteredLocations,
     searchMode,
-    locationTo,
     locationFrom,
     setRoute,
     setSearchMode,
@@ -140,6 +130,10 @@ export default function MapScreen() {
           locationTo: locationObject,
         });
         break;
+      case 'idle':
+        setselectedObject(locationObject?.id);
+        setIsExpanded(true);
+        break;
     }
   };
 
@@ -187,6 +181,11 @@ export default function MapScreen() {
           />
           <MapLibreGL.UserLocation renderMode="native" androidRenderMode="compass" />
         </MapLibreGL.MapView>
+        <LocationModal
+          isVisible={isExpanded}
+          setIsVisible={setIsExpanded}
+          objectId={selectedObject}
+        />
       </View>
     </>
   );

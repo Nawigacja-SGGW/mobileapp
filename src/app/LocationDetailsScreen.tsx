@@ -1,105 +1,108 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Link, useRouter } from 'expo-router';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import Drawer from 'expo-router/drawer';
+import useLocationStore from '~/store/useLocationStore';
+import TopHeader from '~/components/TopHeader';
 
-// Button component that appears in the modal
-export const LocationButton = () => {
-  const router = useRouter();
-
-  return (
-    <TouchableOpacity
-      style={styles.moreInfoButton}
-      onPress={() => router.push('/location-details')}
-    >
-      <Text style={styles.buttonText}>Więcej informacji</Text>
-    </TouchableOpacity>
-  );
-};
-
-// Detailed location view
 const LocationDetailsScreen = () => {
   const router = useRouter();
-  
+  const { objectId } = useLocalSearchParams();
+
+  const { locations, setRoute } = useLocationStore();
+  const object = locations.find((n) => n.id === Number(objectId));
+  console.log('objectId', objectId, object, locations);
+  if (!object) return null;
+
   const locationData = {
-    title: "Centrum Wodne SGGW",
-    buildingNo: "Budynek nr 49",
-    address: "ul. Nowoursynowska 159, 02-776 Warszawa",
-    email: "centrum_wodne@sggw.edu.pl",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.",
-    photos: [1, 2, 3] // Replace with actual photo URLs
+    title: object.name ?? 'title',
+    buildingNo: 'Budynek nr 49',
+
+    address: `${object?.address.city} ${object?.address.street} ${object?.address.postalCode}`,
+    website: object?.website,
+    coordinates: object?.coordinates,
+    description:
+      object.description ??
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.",
+    photos: [1, 2, 3], // Replace with actual photo URLs
   };
 
   return (
-    <View style={styles.container}>
-      <Drawer.Screen options={{ headerShown: false, }}/>
-      {/* Header */}
-      <View className="mt-8" style={[styles.header, { flexDirection: 'row', alignItems: 'center', position: 'absolute'}]}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton} >
-          <FontAwesome5 name="chevron-left" size={40} color="white"/>
-        </TouchableOpacity>
-        
-        <Text style={styles.logo}>logo</Text>
+    <>
+      <Drawer.Screen
+        options={{
+          headerShown: true,
+          header: () => <TopHeader onlyBack={true} modeSearch={''} toggleSearchBar={() => {}} />,
+        }}
+      />
+      <View style={styles.container}>
+        {/* Header */}
+
+        <ScrollView className="mt-28" style={styles.content}>
+          {/* Title */}
+          <Text style={styles.title}>{locationData.title}</Text>
+
+          {/* Location Details */}
+          <View style={styles.detailsContainer}>
+            <View style={styles.detailRow}>
+              <FontAwesome5 name="building" size={16} color="white" />
+              <Text style={styles.detailText}>{locationData.buildingNo}</Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <FontAwesome5 name="map-marker-alt" size={16} color="white" />
+              <Text style={styles.detailText}>{locationData.address}</Text>
+            </View>
+            {object?.website && (
+              <View style={styles.detailRow}>
+                <MaterialCommunityIcons name="web" size={16} color="white" />
+                <Text style={styles.detailText}>{locationData.website}</Text>
+              </View>
+            )}
+          </View>
+
+          {/* Description */}
+          <Text style={styles.description}>{locationData.description}</Text>
+
+          {/* Navigation Button */}
+          <TouchableOpacity
+            onPress={() => {
+              setRoute({
+                locationTo: object,
+              });
+              router.back();
+            }}
+            style={styles.navigationButton}>
+            <Text style={styles.navigationButtonText}>Nawiguj</Text>
+          </TouchableOpacity>
+
+          {/* Photos Section */}
+          <View style={styles.photosContainer}>
+            <View style={styles.photoPlaceholder}>
+              <Text style={styles.photoText}>photos</Text>
+              <TouchableOpacity
+                onPress={() => router.back()}
+                style={[styles.photoButton, styles.Left, { transform: [{ scaleY: 1.5 }] }]}>
+                <FontAwesome5 name="chevron-left" size={30} color="#003228" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => router.back()}
+                style={[styles.photoButton, styles.Right, { transform: [{ scaleY: 1.5 }] }]}>
+                <FontAwesome5 name="chevron-right" size={30} color="#003228" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Dots indicator */}
+            <View style={styles.dotsContainer}>
+              {[1, 2, 3].map((_, index) => (
+                <View key={index} style={[styles.dot, index === 0 ? styles.activeDot : null]} />
+              ))}
+            </View>
+          </View>
+        </ScrollView>
       </View>
-
-      <ScrollView className="mt-20" style={styles.content}>
-        {/* Title */}
-        <Text style={styles.title}>{locationData.title}</Text>
-
-        {/* Location Details */}
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailRow}>
-            <FontAwesome5 name="building" size={16} color="white" />
-            <Text style={styles.detailText}>{locationData.buildingNo}</Text>
-          </View>
-          
-          <View style={styles.detailRow}>
-            <FontAwesome5 name="map-marker-alt" size={16} color="white" />
-            <Text style={styles.detailText}>{locationData.address}</Text>
-          </View>
-          
-          <View style={styles.detailRow}>
-            <FontAwesome5 name="envelope" size={16} color="white" />
-            <Text style={styles.detailText}>{locationData.email}</Text>
-          </View>
-        </View>
-
-        {/* Description */}
-        <Text style={styles.description}>{locationData.description}</Text>
-
-        {/* Navigation Button */}
-        <TouchableOpacity style={styles.navigationButton}>
-          <Text style={styles.navigationButtonText}>Nawiguj</Text>
-        </TouchableOpacity>
-
-        {/* Photos Section */}
-        <View style={styles.photosContainer}>
-          <View style={styles.photoPlaceholder}>
-            <Text style={styles.photoText}>photos</Text>
-            <TouchableOpacity onPress={() => router.back()} style={[styles.photoButton, styles.Left, {transform: [{ scaleY: 1.5 }]}]} >
-              <FontAwesome5 name="chevron-left" size={30} color="#003228"/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => router.back()} style={[styles.photoButton, styles.Right, {transform: [{ scaleY: 1.5 }]}]} >
-              <FontAwesome5 name="chevron-right" size={30} color="#003228"/>
-            </TouchableOpacity>
-          </View>
-          
-          {/* Dots indicator */}
-          <View style={styles.dotsContainer}>
-            {[1, 2, 3].map((_, index) => (
-              <View 
-                key={index} 
-                style={[
-                  styles.dot,
-                  index === 0 ? styles.activeDot : null
-                ]} 
-              />
-            ))}
-          </View>
-        </View>
-      </ScrollView>
-    </View>
+    </>
   );
 };
 
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
   },
   Right: {
     right: 10,
-  }
+  },
 });
 
 export default LocationDetailsScreen;
