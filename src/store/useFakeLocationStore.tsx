@@ -29,17 +29,16 @@ interface AreaObjectFaculty {
   floor: number | null;
 }
 
-
 interface Institute {
-    id: number;
-    name: string;
-    faculty: Faculty;
+  id: number;
+  name: string;
+  faculty: Faculty;
 }
-  
+
 interface Faculty {
-    id: number;
-    name: string;
-    deansOfficeNumber: string;
+  id: number;
+  name: string;
+  deansOfficeNumber: string;
 }
 
 interface MapObject {
@@ -64,16 +63,144 @@ interface AreaObject extends MapObject {
   number: number | null;
   isPaid: boolean | null;
   entries: Entry[];
-  importantPlaces: ImportantPlace[];
-  faculties: AreaObjectFaculty[];
+  importantPlaces: ImportantPlace[] | null;
+  faculties: AreaObjectFaculty[] | null;
 }
 
+const fakeAreaObjects: AreaObject[] = [
+  {
+    latitude: '52.15751256140029',
+    longitude: '21.04533087961154',
+    name: 'Basen',
+    type: 'Obiekt sportowy',
+    description: 'Basen SGGW',
+    imageUrl: null,
+    website: 'http://obiektysportowe.sggw.pl/index.php/plywalnia/basen-sportowy/',
+    address: {
+      id: 1,
+      street: 'Jana Ciszewskiego 10',
+      postalCode: '02-786',
+      city: 'Warszawa',
+    },
+    guide: null,
+    number: 27,
+    isPaid: false,
+    entries: [
+      {
+        latitude: '52.157492963116354',
+        longitude: '21.045311993639817',
+      },
+      {
+        latitude: '52.15738477026233',
+        longitude: '21.045143685026403',
+      },
+    ],
+    importantPlaces: null,
+    faculties: null,
+  },
+  {
+    latitude: '52.161963648191104',
+    longitude: '21.046332383073644',
+    name: 'Wydział Zastosowań Informatyki i Matematyki',
+    type: 'Wydział',
+    description: 'Nasz wydział',
+    imageUrl: null,
+    website: null,
+    address: {
+      id: 2,
+      street: 'Nowoursynowska 159/bud. 34',
+      postalCode: '02-776',
+      city: 'Warszawa',
+    },
+    guide: null,
+    number: 34,
+    isPaid: false,
+    entries: [
+      {
+        latitude: '52.16223642854811',
+        longitude: '21.046152023033034',
+      },
+      {
+        latitude: '52.162163941623355,',
+        longitude: ' 21.045977882304165',
+      },
+      {
+        latitude: '52.16171375702599',
+        longitude: '21.046394576191098',
+      },
+      {
+        latitude: '52.16179578252496',
+        longitude: '21.046640239005036',
+      },
+    ],
+    importantPlaces: null,
+    faculties: null,
+  },
+  {
+    latitude: '52.16313727334748',
+    longitude: '21.03888543277215',
+    name: 'Dom Studencki Limba',
+    type: 'Dom Studencki',
+    description: null,
+    imageUrl: null,
+    website: null,
+    address: {
+      id: 3,
+      street: 'Nowoursynowska 161L',
+      postalCode: '02-787',
+      city: 'Warszawa',
+    },
+    guide: null,
+    number: 161,
+    isPaid: false,
+    entries: [
+      {
+        latitude: '52.16311211536585',
+        longitude: '21.038731335128542',
+      },
+    ],
+    importantPlaces: null,
+    faculties: null,
+  },
+];
 
 const fakePointObjects: PointObject[] = [
   {
-    latitude: "52.520008",
-    longitude: "13.404954",
-    name: "Berlin",
-    type: "City",
-    description: "The capital of Germany",
+    latitude: '52.15957117010191',
+    longitude: '21.046369211223155',
+    name: 'Pomnik Krowy',
+    type: 'Pomnik',
+    description: null,
+    imageUrl: null,
+    website: null,
+    address: {
+      id: 4,
+      street: 'Nowoursynowska 166',
+      postalCode: '02-787',
+      city: 'Warszawa',
+    },
+    guide: null,
+    eventCategory: null,
+    eventStart: null,
+    eventEnd: null,
+  },
+  {
+    latitude: '52.15928975854478',
+    longitude: '21.049575056750555',
+    name: 'Jezioro',
+    type: 'Przyroda',
+    description: null,
+    imageUrl: null,
+    website: null,
+    address: {
+      id: 4,
+      street: 'Nowoursynowska 166',
+      postalCode: '02-787',
+      city: 'Warszawa',
+    },
+    guide: null,
+    eventCategory: null,
+    eventStart: null,
+    eventEnd: null,
+  },
 ];
