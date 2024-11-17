@@ -50,7 +50,9 @@ export default function Confirmation() {
   return (
     <>
       <Drawer.Screen options={{ headerShown: false }} />
-      <ScrollView style={styles.container} contentContainerStyle={{ height: '100%', paddingBottom: 32, paddingTop: 32 }}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ height: '100%', paddingBottom: 32, paddingTop: 32 }}>
         <Logo />
 
         <View style={styles.content}>
