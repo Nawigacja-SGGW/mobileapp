@@ -1,14 +1,18 @@
-import { EvilIcons, Feather, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { Feather, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity, View, Text } from 'react-native';
 
+import Loading from './Loading';
+
 import { LanguageSwitch } from '~/components/LanguageSwitch';
+import useUserStore from '~/store/useUserStore';
 
 export function DrawerMenu() {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { logout, loading, error } = useUserStore();
 
   const menuOptions = [
     {
@@ -44,13 +48,18 @@ export function DrawerMenu() {
   const logoutOption = {
     label: t('menu.logout'),
     icon: <SimpleLineIcons name="logout" size={32} color="white" />,
-    onPress: () => {
-      navigation.navigate('index');
+    onPress: async () => {
+      await logout();
+      if (!loading && !error) {
+        navigation.navigate('index');
+      }
     },
   };
 
   return (
     <>
+      {loading && <Loading />}
+
       <View className="h-full p-4">
         <View className="mt-10 h-20 flex-row items-center">
           <TouchableOpacity
