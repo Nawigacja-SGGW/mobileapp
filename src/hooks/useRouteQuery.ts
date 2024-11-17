@@ -9,6 +9,7 @@ export function useRouteQuery(waypoints: [number, number][], routedBy: RoutedBy)
   });
 
   useEffect(() => {
+    console.log("useRouteQuery.ts waypoints")
     console.log(waypoints);
     if (waypoints.length < 2 || waypoints.filter(Boolean).length < waypoints.length) return;
     const wayString = waypoints.reduce((acc, c, i) => {
@@ -22,8 +23,8 @@ export function useRouteQuery(waypoints: [number, number][], routedBy: RoutedBy)
     )
       .then((n) => n.json())
       .then((n) => {
-        console.log(n);
-        console.log(n['routes'][0].geometry.coordinates);
+        //console.log(n);
+        //console.log(n['routes'][0].geometry.coordinates);
         setRouteData({
           route: n['routes'][0].geometry.coordinates,
           distance: n['distance'],

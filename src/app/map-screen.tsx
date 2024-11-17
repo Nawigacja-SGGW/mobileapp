@@ -217,14 +217,14 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: mapMarkerProps
         id="symbolLocationSource"
         hitbox={{ width: 20, height: 20 }}
         onPress={(e) => {
-          console.log(e);
           console.log(e.features.length);
+          //console.log(e);
           if (e.features.length > 0) {
-            console.log(e.features[0]);
+            //console.log(e.features[0]);
             onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
           }
 
-          e.features.forEach((f) => console.log(f));
+          //e.features.forEach((f) => console.log(f));
         }}
         shape={{
           type: 'FeatureCollection',
