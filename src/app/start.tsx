@@ -2,14 +2,14 @@ import React from 'react';
 import Drawer from 'expo-router/drawer';
 import { Link } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Image } from 'react-native';
 
 import { AppButton } from '~/components/AppButton';
 import Background from '../../assets/background.svg';
 
 export default function Start() {
   const { t } = useTranslation();
-  const logoSize = 70;
+  const logoSize = 100;
 
   const styles = StyleSheet.create({
     background: {
@@ -43,9 +43,7 @@ export default function Start() {
         <Background height="100%" width="100%" style={styles.background} />
         <View style={styles.content}>
           <View style={{ alignItems: 'center', marginBottom: '20%' }}>
-            <View style={styles.circle}>
-              <Text>Logo</Text>
-            </View>
+            <Image source={require('./../../assets/logo-nsggw.png')} style={styles.circle} />
           </View>
           <Link href={{ pathname: '/register' }} asChild>
             <AppButton title={t('login.signUpButton')} buttonStyle="!bg-black my-4" />
