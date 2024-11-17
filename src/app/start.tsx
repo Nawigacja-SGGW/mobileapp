@@ -1,13 +1,26 @@
-import React from 'react';
-import Drawer from 'expo-router/drawer';
 import { Link } from 'expo-router';
+import Drawer from 'expo-router/drawer';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 
-import { AppButton } from '~/components/AppButton';
 import Background from '../../assets/background.svg';
 
+import { AppButton } from '~/components/AppButton';
+import useFakeLocationStore from '~/store/useFakeLocationStore';
+
 export default function Start() {
+  const { pointObjects, areaObjects, fetchData } = useFakeLocationStore();
+
+  React.useEffect(() => {
+    fetchData();
+  }, []);
+
+  React.useEffect(() => {
+    console.log('pointObjects', pointObjects);
+    console.log('areaObjects', areaObjects);
+  }, [pointObjects, areaObjects]);
+
   const { t } = useTranslation();
   const logoSize = 100;
 
@@ -60,4 +73,3 @@ export default function Start() {
     </>
   );
 }
-
