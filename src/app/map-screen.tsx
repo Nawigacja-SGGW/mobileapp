@@ -427,7 +427,9 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                   console.log('press in list');
                   setSearchMode('idle');
                 }}>
-                <View>{item.icon}</View>
+                <View>
+                  <FontAwesome5 name={typeToIcon(item.type)} size={20} color="black" />
+                </View>
                 <Text className="ml-3 text-lg text-black">{item.name}</Text>
               </TouchableOpacity>
             ))}
@@ -442,3 +444,13 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     </>
   );
 }
+
+const tti = {
+  'Obiekt sportowy': 'basketball-ball',
+  Wydział: 'school',
+  Pomnik: 'place-of-worship',
+  Przyroda: 'canadian-maple-leaf',
+  'Dom Studencki': 'hotel',
+};
+
+const typeToIcon = (t: string) => tti[t] || 'building';

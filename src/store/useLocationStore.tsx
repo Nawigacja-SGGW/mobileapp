@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { create } from 'zustand';
 import BookIcon from '../../assets/book1.svg';
 import BuildingIcon from '../../assets/building3.svg';
+import { fakeAreaObjects, fakePointObjects } from '~/store/useFakeLocationStore';
 
 export interface MapLocation {
   id: number;
@@ -25,6 +26,20 @@ interface LocationStore {
   filterLocations: (query: string) => void;
   clearFilteredLocations: () => void;
 }
+
+const initialLocations2 = [
+  ...fakeAreaObjects.map((n, i) => ({
+    ...n,
+    coordinates: [Number(n.longitude), Number(n.latitude)],
+    id: i + 1000,
+  })),
+  ...fakePointObjects.map((n, i) => ({
+    ...n,
+    coordinates: [Number(n.longitude), Number(n.latitude)],
+    id: i + 2001,
+  })),
+];
+console.log('initialLocations2', initialLocations2);
 
 const initialLocations: MapLocation[] = [
   {
@@ -60,7 +75,7 @@ const initialLocations: MapLocation[] = [
 ];
 
 const useLocationStore = create<LocationStore>((set, get) => ({
-  locations: initialLocations,
+  locations: initialLocations2,
   locationFrom: undefined,
   locationTo: undefined,
   filteredLocations: [],
