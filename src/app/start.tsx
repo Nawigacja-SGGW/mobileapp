@@ -43,7 +43,7 @@ export default function Start() {
         <Background height="100%" width="100%" style={styles.background} />
         <View style={styles.content}>
           <View style={{ alignItems: 'center', marginBottom: '20%' }}>
-            <Image source={require('./../../assets/logo-nsggw.png')} style={styles.circle} />
+            <Image source={require('./../../assets/icon.png')} style={styles.circle} />
           </View>
           <Link href={{ pathname: '/register' }} asChild>
             <AppButton title={t('login.signUpButton')} buttonStyle="!bg-black my-4" />

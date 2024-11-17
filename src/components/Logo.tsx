@@ -11,7 +11,7 @@ export const Logo: React.FC<TouchableOpacityProps> = forwardRef<
     <View className="mt-10 flex-row">
       <View className="flex-1 items-end justify-center border-r border-black pr-9">
         <Image
-          source={require('./../../assets/logo-nsggw.png')}
+          source={require('./../../assets/icon.png')}
           className="h-[70px] w-[70px] items-center justify-center rounded-full"
         />
       </View>
