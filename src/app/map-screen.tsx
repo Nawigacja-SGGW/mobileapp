@@ -88,11 +88,17 @@ export default function MapScreen() {
     }
   };
 
-  function handleLocationSelect(locationName: string) {
+  const handleLocationSelect = (locationName: string, coordinates: [number, number]) => {
+    console.log('Selected location:', locationName, coordinates);
+  
     setSearchQuery(locationName);
     setIsExpanded(true);
+  
+    setlocationTo(coordinates);
+  
     clearFilteredLocations();
-  }
+  };
+  
 
   const handleMarkerPress = (id: number, location: [number, number]) => {
     const locationObject = locations.find((l) => l.id === id);
@@ -274,7 +280,9 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
   return (
     <>
       <View
-        className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${isExpanded ? 'min-h-28 py-4' : 'h-15'}`}>
+        className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${
+          isExpanded ? 'min-h-28 py-4' : 'h-15'
+        }`}>
         {isExpanded ? (
           <View className="flex-col">
             <View className="mb-2 ml-4 flex-row items-center">
@@ -293,6 +301,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                 placeholder={t('map.search.destination')}
                 placeholderTextColor="#000"
                 value={searchQuery}
+                onChangeText={handleSearch}
               />
             </View>
           </View>
@@ -325,7 +334,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
             <TouchableOpacity
               key={item.id}
               className="flex-row items-center bg-white p-2"
-              onPress={() => handleLocationSelect(item.name)}>
+              onPress={() => handleLocationSelect(item.name, item.coordinates)}>
               <View>{item.icon}</View>
               <Text className="ml-3 text-lg text-black">{item.name}</Text>
             </TouchableOpacity>
