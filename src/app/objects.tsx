@@ -1,6 +1,6 @@
 import Drawer from 'expo-router/drawer';
 import React from 'react';
-//import { useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import useLocationStore from '~/store/useLocationStore';
@@ -9,7 +9,7 @@ import SearchIcon1 from '../../assets/search1.svg';
 import TopHeaderOL from '~/components/TopHeaderObjectList';
 
 export default function Objects() {
-  //const navigation = useNavigation();
+  const navigation = useNavigation();
 
     // Zustand store
     const { setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
@@ -26,6 +26,8 @@ export default function Objects() {
   const handleLocationSelect = (locationName: string) => {
     setSearchQuery(locationName);
     clearFilteredLocations();
+    console.log("Go to ",locationName," detail");
+    //navigation.navigate('objectDetail',{locationName});
   };
 
   return (
