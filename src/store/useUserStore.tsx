@@ -26,8 +26,8 @@ const useUserStore = create<StoreState>((set) => ({
     set({ loading: true, error: null });
     try {
       // TODO fetch real token
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      set({ email: 'test_user@example.com', token: 'token123abc' });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ email: 'test_user@example.com', token: 'token123abc', loading: false, error: null });
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
     }
