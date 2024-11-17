@@ -16,7 +16,7 @@ export default function TopHeader({ isExpanded, toggleSearchBar }: TopBarProps) 
   const navigation = useNavigation();
   console.log('rerender', isExpanded);
   return (
-    <View className="absolute left-0 right-0 top-0 z-20 h-28 flex-row items-center justify-between bg-[#0F4530] px-4 pb-0 pt-8">
+    <View className="pointer-events-auto absolute left-0 right-0 top-0 z-20 h-28 flex-row items-center justify-between bg-green-main px-4 pb-0 pt-8">
       <TouchableOpacity
         className="p-2"
         onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
