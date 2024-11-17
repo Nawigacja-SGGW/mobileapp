@@ -29,8 +29,12 @@ const campusCenter = [21.04635389581634, 52.16357007158958];
 export default function MapScreen() {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(true);
-  const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(undefined);
-  const [locationTo, setlocationTo] = useState<undefined | [number, number] | MapLocation>(undefined);
+  const [locationFrom, setlocationFrom] = useState<undefined | [number, number] | MapLocation>(
+    undefined
+  );
+  const [locationTo, setlocationTo] = useState<undefined | [number, number] | MapLocation>(
+    undefined
+  );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [points, setPoints] = useState<[number, number][] | null>(null);
   const userLocation = useRef<Location.LocationObject>();
@@ -39,7 +43,14 @@ export default function MapScreen() {
   const { route } = useRouteQuery(waypoints ?? [], 'foot');
 
   // Zustand store
-  const { locations, setSearchQuery, filterLocations, clearFilteredLocations, searchQuery, filteredLocations } = useLocationStore();
+  const {
+    locations,
+    setSearchQuery,
+    filterLocations,
+    clearFilteredLocations,
+    searchQuery,
+    filteredLocations,
+  } = useLocationStore();
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -90,15 +101,14 @@ export default function MapScreen() {
 
   const handleLocationSelect = (locationName: string, coordinates: [number, number]) => {
     console.log('Selected location:', locationName, coordinates);
-  
+
     setSearchQuery(locationName);
     setIsExpanded(true);
-  
+
     setlocationTo(coordinates);
-  
+
     clearFilteredLocations();
   };
-  
 
   const handleMarkerPress = (id: number, location: [number, number]) => {
     const locationObject = locations.find((l) => l.id === id);
