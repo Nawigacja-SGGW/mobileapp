@@ -37,6 +37,10 @@
     "search.startingPoint": "Twoja lokacja",
     "search.destination": "Miejsce docelowe"
   },
+  "object":{
+    "moreInfo":"Więcej informacji",
+    "navigate":"Nawiguj"
+  },
   "login": { 
     "usernameOrEmail": {
       "label": "Nazwa użytkownika lub e-mail",
