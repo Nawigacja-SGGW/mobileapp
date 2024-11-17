@@ -19,7 +19,7 @@ import useLocationStore from '~/store/useLocationStore';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Touchable } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import LocationModal from '~/components/object_example';
+import LocationModal from '~/components/ObjectModal';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);

@@ -82,12 +82,12 @@ const LocationDetailsScreen = () => {
             <View style={styles.photoPlaceholder}>
               <Text style={styles.photoText}>photos</Text>
               <TouchableOpacity
-                onPress={() => router.back()}
+                onPress={() => {}}
                 style={[styles.photoButton, styles.Left, { transform: [{ scaleY: 1.5 }] }]}>
                 <FontAwesome5 name="chevron-left" size={30} color="#003228" />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => router.back()}
+                onPress={() => {}}
                 style={[styles.photoButton, styles.Right, { transform: [{ scaleY: 1.5 }] }]}>
                 <FontAwesome5 name="chevron-right" size={30} color="#003228" />
               </TouchableOpacity>

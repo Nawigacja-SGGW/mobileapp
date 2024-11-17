@@ -43,12 +43,6 @@ export function DrawerMenu() {
         console.log('Open Settings');
       },
     },
-
-    {
-      label: t('menu.object_example'),
-      icon: <FontAwesome5 name="box" size={20} color="black" />,
-      onPress: () => navigation.navigate('object_example'),
-    },
   ];
 
   const logoutOption = {
