@@ -205,7 +205,7 @@ const fakePointObjects: PointObject[] = [
   },
 ];
 
-export const useFakeLocationStore = create((set) => ({
+const useFakeLocationStore = create((set) => ({
   pointObjects: [],
   areaObjects: [],
   loading: false,
@@ -226,3 +226,5 @@ export const useFakeLocationStore = create((set) => ({
     }
   },
 }));
+
+export default useFakeLocationStore;
