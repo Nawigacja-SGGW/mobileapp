@@ -22,7 +22,7 @@ export function DrawerMenu() {
       label: t('menu.objects'),
       icon: <FontAwesome5 name="building" size={32} color="white" />,
       onPress: () => {
-        console.log('Open Objects');
+        navigation.navigate('objects');
       },
     },
     {
