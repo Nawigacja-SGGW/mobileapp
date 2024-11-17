@@ -22,7 +22,7 @@ export default function TopHeader({ isExpanded, toggleSearchBar }: TopBarProps) 
         onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
         <MenuIcon width={40} height={40} fill="#FFF" />
       </TouchableOpacity>
-      <Text className="text-lg font-bold text-white">logo/nazwa</Text>
+      <Text className="text-2xl font-bold text-white">Nawigacja SGGW</Text>
       <TouchableOpacity className="" onPress={toggleSearchBar}>
         {isExpanded ? (
           <NavigationIcon width={40} height={40} fill="#FFF" />

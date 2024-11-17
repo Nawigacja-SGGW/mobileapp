@@ -58,7 +58,9 @@ export function DrawerMenu() {
             onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
             <FontAwesome5 name="chevron-left" size={32} color="white" />
           </TouchableOpacity>
-          <Text className="absolute left-1/2 -translate-x-1/2 text-lg text-white">logo/nazwa</Text>
+          <Text className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold text-white">
+            Nawigacja SGGW
+          </Text>
         </View>
         <View className="flex-1 justify-center">
           {menuOptions.map((option, index) => (
