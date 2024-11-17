@@ -1,36 +1,18 @@
-import { Link, useNavigation } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import React, { useEffect, useMemo, useRef, useState  } from 'react';
-import TopHeaderOL from '~/components/TopHeaderObjectList';
-import { useForm, Controller } from 'react-hook-form';
+import React from 'react';
+//import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
-
-import { AppButton } from '~/components/AppButton';
-import { AppInput, AppSecureInput } from '~/components/AppInput';
-import { Logo } from '~/components/Logo';
-
+import { View, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import useLocationStore from '~/store/useLocationStore';
-import MapLibreGL from '@maplibre/maplibre-react-native';
-import * as Location from 'expo-location';
 
-import LightGreenDot from '../../assets/ellipse1.svg';
-import DarkGreenDot from '../../assets/ellipse2.svg';
-import MapPin from '../../assets/map-pin.png';
 import SearchIcon1 from '../../assets/search1.svg';
-
-import TopHeader from '~/components/TopHeader';
-import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
-import { useRouteQuery } from '~/hooks/useRouteQuery';
-import type { MapLocation } from '~/store/useLocationStore';
-
+import TopHeaderOL from '~/components/TopHeaderObjectList';
 
 export default function Objects() {
-  const { t } = useTranslation();
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
     // Zustand store
-    const { locations, setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
+    const { setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -48,11 +30,7 @@ export default function Objects() {
 
   return (
     <>
-        <Drawer.Screen
-            options={{
-            header: () => <TopHeaderOL/>,
-            }}
-        />
+        <Drawer.Screen options={{header: () => <TopHeaderOL/>,}}/>
         <SearchBar
           handleSearch={handleSearch}
           handleLocationSelect={handleLocationSelect}
@@ -67,8 +45,9 @@ interface searchBarProps {
   }
 
 function SearchBar({ handleSearch, handleLocationSelect }: searchBarProps) {
-    const { locations, searchQuery, filteredLocations } = useLocationStore();
     const { t } = useTranslation();
+    // Zustand store
+    const { locations, searchQuery, filteredLocations } = useLocationStore();
 
     return (
     <>
