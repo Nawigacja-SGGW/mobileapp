@@ -66,6 +66,8 @@
     "didntReceiveEmail" : "Didn't receive an email?"
   },
 
+  "loading": "Loading",
+
   "getStarted": "Open this display's code:",
   "changeCode": "Change any text, save the file and the app will update automatically."
 }

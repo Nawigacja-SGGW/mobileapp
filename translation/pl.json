@@ -67,6 +67,9 @@
       "label": "Potwierdź nowe hasło",
       "placeholder": "Wprowadź nowe hasło"
     },
+
+    "loading": "Ładowanie",
+
     "signInButton": "Zaloguj się",
     "signUpButton": "Zarejestruj się",
     "sendButton": "Wyślij",
