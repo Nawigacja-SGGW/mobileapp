@@ -72,7 +72,8 @@ export default function MapScreen() {
   };
 
   const toggleSearchBar = () => {
-    setSearchMode('idle');
+    if (searchMode === 'idle') setSearchMode('searchto');
+    else setSearchMode('idle');
   };
 
   useEffect(() => {
@@ -146,7 +147,9 @@ export default function MapScreen() {
     <>
       <Drawer.Screen
         options={{
-          header: () => <TopHeader isExpanded={isExpanded} toggleSearchBar={toggleSearchBar} />,
+          header: () => (
+            <TopHeader modeSearch={searchMode !== 'idle'} toggleSearchBar={toggleSearchBar} />
+          ),
         }}
       />
       <View className="flex-1">
@@ -159,7 +162,7 @@ export default function MapScreen() {
 
         <MapLibreGL.MapView
           ref={map}
-          style={{ flex: 1 }}
+          style={{ flex: 1, paddingTop: 90 }}
           logoEnabled={false}
           styleJSON={OSM_RASTER_STYLE}
           onPress={() => {
@@ -326,7 +329,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
   return (
     <>
       <View
-        className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${
+        className={`absolute left-4 right-4 top-16 z-10 mt-16 overflow-hidden rounded-3xl bg-white p-3 shadow-2xl ${
           showSearchbar ? 'min-h-28 py-4' : 'h-15'
         }`}>
         {!showSearchbar ? (
@@ -384,7 +387,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
       </View>
 
       {/* Lista wyników wyszukiwania */}
-      {showSearchbar && (filteredLocations.length > 0 || searchMode === 'searchfrom') && (
+      {showSearchbar && (
         <View
           className="absolute left-4 right-4 z-10 max-h-60 bg-white shadow"
           style={{
@@ -428,6 +431,11 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                 <Text className="ml-3 text-lg text-black">{item.name}</Text>
               </TouchableOpacity>
             ))}
+            {_locations.length === 0 && (
+              <View key={0} className="flex-row justify-center bg-white p-2 text-center">
+                <Text className="text-lg text-gray-600">No locations found</Text>
+              </View>
+            )}
           </View>
         </View>
       )}
