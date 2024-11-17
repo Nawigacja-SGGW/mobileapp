@@ -13,7 +13,6 @@ export default function Login() {
   const { control, handleSubmit } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { t } = useTranslation();
-  const externalIconsSize = 44;
   const navigation = useNavigation();
 
   const togglePasswordVisibility = () => {
@@ -25,48 +24,14 @@ export default function Login() {
     navigation.navigate('map-screen');
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      padding: 20,
-      backgroundColor: '#fff',
-    },
-    boldedText: {
-      color: '#003228',
-      fontSize: 12,
-      textAlign: 'right',
-      textDecorationLine: 'underline',
-      marginTop: 10,
-      fontWeight: 700,
-    },
-    text: {
-      color: '#003228',
-      fontSize: 13,
-      textAlign: 'center',
-      fontWeight: 500,
-    },
-    bottom: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginTop: 10,
-      marginBottom: 20,
-    },
-    circle: {
-      height: externalIconsSize,
-      width: externalIconsSize,
-      borderRadius: externalIconsSize,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#cccccc',
-      marginHorizontal: 5,
-    },
-  });
+  const circleStyleClass = "h-[44px] w-[44px] rounded-full justify-center items-center bg-[#cccccc] mx-1";
 
   return (
     <>
       <Drawer.Screen options={{ headerShown: false }} />
 
       <ScrollView
-        style={styles.container}
+        className="p-[20px] bg-white"
         contentContainerStyle={{
           height: '100%',
           justifyContent: 'space-between',
@@ -105,18 +70,18 @@ export default function Login() {
             )}
           />
           <Link href={{ pathname: '/forgotPassword' }} asChild>
-            <Text style={styles.boldedText}> {t('login.password.forgotPassword')}</Text>
+            <Text className="text-[#003228] text-[12px] text-right underline mt-[10px] font-bold"> {t('login.password.forgotPassword')}</Text>
           </Link>
           <View style={{ marginTop: 16 }} />
           <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)} />
         </View>
         <View>
-          <Text style={styles.text}> {t('login.continueWith')}</Text>
-          <View style={styles.bottom}>
-            <TouchableOpacity style={styles.circle}>
+          <Text className="text-[#003228] text-[13px] text-center font-medium"> {t('login.continueWith')}</Text>
+          <View className="flex-row justify-center mt-[10px] mb-[20px]">
+            <TouchableOpacity className={circleStyleClass}>
               <Image source={require('./../../assets/google.png')} alt="Google logo" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.circle}>
+            <TouchableOpacity className={circleStyleClass}>
               <Image source={require('./../../assets/apple.png')} alt="Apple logo" />
             </TouchableOpacity>
           </View>

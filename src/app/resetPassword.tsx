@@ -3,7 +3,7 @@ import Drawer from 'expo-router/drawer';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
 import { Logo } from '~/components/Logo';
@@ -33,38 +33,16 @@ export default function ResetPassword() {
     console.log(data); // logowanie danych formularza
     navigation.navigate('login')
   };
-
-  const styles = StyleSheet.create({
-    container: {
-      padding: 20,
-      backgroundColor: '#fff',
-    },
-    content: {
-      marginTop : '20%',
-    },
-    title:{
-      fontSize: 24,
-      fontWeight: 700,
-      color: '#000',
-      marginBottom:10,
-    },
-    text: {
-      fontSize: 13,
-      fontWeight: 300,
-      color: '#000',
-      marginBottom:10,
-    },
-  });
   
   return (
     <>
       <Drawer.Screen options={{ headerShown: false, }}/>
-      <ScrollView style={styles.container}>
+      <ScrollView className="p-[20px] bg-white">
         <Logo/>
 
-        <View style={styles.content}>
-          <Text style={styles.title}>{t('login.resetPassword')}</Text>
-          <Text style={styles.text}>{t('login.resetPasswordText')+email}</Text>
+        <View className="mt-[20%]">
+          <Text className="text-[24px] font-bold text-black mb-[10px]">{t('login.resetPassword')}</Text>
+          <Text className="text-[14px] font-light text-black mb-[10px]">{t('login.resetPasswordText')+email}</Text>
 
           <Controller
             control={control}

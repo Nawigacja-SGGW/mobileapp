@@ -20,13 +20,6 @@ export default function ForgotPassword() {
   };
 
   const styles = StyleSheet.create({
-    container: {
-      padding: 20,
-      backgroundColor: '#fff',
-    },
-    content: {
-      marginTop: '20%',
-    },
     title: {
       fontSize: 24,
       fontWeight: 700,
@@ -51,16 +44,16 @@ export default function ForgotPassword() {
     <>
       <Drawer.Screen options={{ headerShown: false }} />
       <ScrollView
-        style={styles.container}
+        className="p-5 bg-white"
         contentContainerStyle={{
           paddingTop: 32,
           paddingBottom: 32,
         }}>
         <Logo />
 
-        <View style={styles.content}>
-          <Text style={styles.title}>{t('login.forgotPassword')}</Text>
-          <Text style={styles.text}>{t('login.forgotPasswordText')}</Text>
+        <View className="mt-[20%]">
+          <Text className="text-[24px] font-bold text-black mb-[10px]">{t('login.forgotPassword')}</Text>
+          <Text className="text-[14px] font-light text-black mb-[10px]">{t('login.forgotPasswordText')}</Text>
           <Controller
             control={control}
             name="email"
@@ -80,7 +73,7 @@ export default function ForgotPassword() {
           <AppButton title={t('login.sendButton')} onPress={handleSubmit(onSubmit)} />
 
           <Link href={{ pathname: '/login' }} asChild>
-            <Text style={styles.bottomText}>{t('login.backToLogin')}</Text>
+            <Text className="text-[#003228] text-[14px] text-center font-bold">{t('login.backToLogin')}</Text>
           </Link>
         </View>
       </ScrollView>
