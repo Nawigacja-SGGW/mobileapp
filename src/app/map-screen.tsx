@@ -16,6 +16,10 @@ import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
 
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Touchable } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
 
@@ -49,11 +53,13 @@ export default function MapScreen() {
     clearFilteredLocations,
     searchQuery,
     filteredLocations,
+    searchMode,
     locationTo,
     locationFrom,
     setRoute,
+    setSearchMode,
   } = useLocationStore();
-  const { route } = useRouteQuery(locationFrom, locationTo, 'foot');
+  const { route } = useRouteQuery('foot');
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -66,7 +72,7 @@ export default function MapScreen() {
   };
 
   const toggleSearchBar = () => {
-    setIsExpanded((n) => !n);
+    setSearchMode('idle');
   };
 
   useEffect(() => {
@@ -89,6 +95,14 @@ export default function MapScreen() {
 
       const location = await Location.getCurrentPositionAsync({});
       userLocation.current = location;
+      if (userLocation.current !== undefined && locationFrom === undefined) {
+        setRoute({
+          locationFrom: [
+            userLocation.current.coords.longitude,
+            userLocation.current.coords.latitude,
+          ],
+        });
+      }
       console.log(userLocation.current);
     })();
   }, []);
@@ -102,27 +116,29 @@ export default function MapScreen() {
     }
   };
 
-  const handleLocationSelect = (item: MapLocation) => {
-    console.log('Selected location:', item);
-
-    setSearchQuery(item.name);
-    setIsExpanded(true);
-
-    setRoute({ locationTo: item });
-
-    clearFilteredLocations();
+  const handleLocationSelect = (location: string) => {
+    if (userLocation.current === undefined) setSearchMode('idle');
+    console.log('Selected location:', location);
+    setRoute({
+      locationFrom: [userLocation.current.coords.longitude, userLocation.current.coords.latitude],
+    });
   };
 
   const handleMarkerPress = (id: number, location: [number, number]) => {
-    const locationObject = locations.find((l) => l.id === id);
+    const locationObject = locations.find((l) => l.id == id);
     setIsExpanded(true);
-    console.log(locationObject);
-
-    if (userLocation.current !== undefined) {
-      setRoute({
-        locationFrom: [userLocation.current.coords.latitude, userLocation.current.coords.longitude],
-        locationTo: location,
-      });
+    console.log('location Object ', locationObject, id, locations);
+    switch (searchMode) {
+      case 'searchfrom':
+        setRoute({
+          locationFrom: locationObject,
+        });
+        break;
+      case 'searchto':
+        setRoute({
+          locationTo: locationObject,
+        });
+        break;
     }
   };
 
@@ -146,6 +162,10 @@ export default function MapScreen() {
           style={{ flex: 1 }}
           logoEnabled={false}
           styleJSON={OSM_RASTER_STYLE}
+          onPress={() => {
+            setSearchMode('idle');
+            setSearchQuery('');
+          }}
           compassEnabled={false}>
           <MapLibreGL.Camera
             ref={camera}
@@ -256,7 +276,7 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
 
             ...locations.map((n, i) => ({
               type: 'Feature',
-              id: i,
+              id: n.id,
               properties: {
                 icon: 'pin',
               },
@@ -288,36 +308,63 @@ interface SearchBarProps {
 
 function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBarProps) {
   const { t } = useTranslation();
-  const { searchQuery, filteredLocations, locationTo, locationFrom } = useLocationStore();
+  const {
+    setRoute,
+    searchQuery,
+    filteredLocations,
+    locations,
+    locationTo,
+    locationFrom,
+    setSearchMode,
+    searchMode,
+  } = useLocationStore();
+  const _locations =
+    searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
+  console.log('locations', _locations, searchQuery);
 
+  const showSearchbar = searchMode !== 'idle';
   return (
     <>
       <View
         className={`absolute left-4 right-4 top-16 z-10 mt-16 rounded-t-3xl bg-white p-3 ${
-          isExpanded ? 'min-h-28 py-4' : 'h-15'
+          showSearchbar ? 'min-h-28 py-4' : 'h-15'
         }`}>
-        {isExpanded ? (
+        {!showSearchbar ? (
           <View className="flex-col">
             <View className="mb-2 ml-4 flex-row items-center">
               <LightGreenDot width={20} height={20} className="ml-4 mr-2" />
               <TextInput
-                readOnly
                 className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
                 placeholder={t('map.search.startingPoint')}
                 placeholderTextColor="#000"
-                value={locationFrom ? 'dupa' : t('map.search.startingPoint')}
+                value={
+                  typeof locationFrom === 'object' && !Array.isArray(locationFrom)
+                    ? locationFrom.name
+                    : t('map.search.startingPoint')
+                }
+                onPressIn={() => {
+                  setSearchMode('searchfrom');
+                  console.log('press in top');
+                }}
               />
             </View>
             <View className="my-1 ml-16 h-px w-5/6 bg-gray-300" />
             <View className="ml-4 flex-row items-center">
               <DarkGreenDot width={20} height={20} className="ml-4 mr-2" />
               <TextInput
-                readOnly
                 className="ml-2 mt-1 flex-1 rounded-md bg-white px-4 text-lg"
                 placeholder={t('map.search.destination')}
-                placeholderTextColor="#000"
-                value={searchQuery}
+                placeholderTextColor={locationTo ? '#000' : '#888'}
+                value={
+                  typeof locationTo === 'object' && !Array.isArray(locationTo)
+                    ? locationTo.name
+                    : ''
+                }
                 onChangeText={handleSearch}
+                onPressIn={() => {
+                  setSearchMode('searchto');
+                  console.log('press bottom');
+                }}
               />
             </View>
           </View>
@@ -325,36 +372,63 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
           <View className="flex-row items-center">
             <SearchIcon1 width={28} height={28} className="mr-2" />
             <TextInput
-              className="ml-3 ml-8 flex-1 text-lg"
+              className="ml-3 flex-1 text-lg"
               placeholder="Search"
               placeholderTextColor="#000"
               value={searchQuery}
               onChangeText={handleSearch}
-              autoFocus={!isExpanded}
+              autoFocus={showSearchbar}
             />
           </View>
         )}
       </View>
 
       {/* Lista wyników wyszukiwania */}
-      {!isExpanded && filteredLocations.length > 0 && (
+      {showSearchbar && (filteredLocations.length > 0 || searchMode === 'searchfrom') && (
         <View
           className="absolute left-4 right-4 z-10 max-h-60 bg-white shadow"
           style={{
-            top: isExpanded ? 140 : 160,
+            top: !showSearchbar ? 140 : 160,
             borderBottomLeftRadius: 100,
             borderBottomRightRadius: 100,
           }}>
           <View className="h-px bg-gray-300" />
-          {filteredLocations.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              className="flex-row items-center bg-white p-2"
-              onPress={() => handleLocationSelect(item)}>
-              <View>{item.icon}</View>
-              <Text className="ml-3 text-lg text-black">{item.name}</Text>
-            </TouchableOpacity>
-          ))}
+          <View className="flex-col gap-5 overflow-hidden rounded-3xl bg-white ">
+            {searchMode === 'searchfrom' && searchQuery.length === 0 && (
+              <TouchableOpacity
+                key={0}
+                className="flex-row items-center bg-white p-2"
+                onPress={() => {
+                  handleLocationSelect('mylocation');
+                }}>
+                <View>
+                  <FontAwesome5 name="location-arrow" size={20} color="black" />
+                </View>
+                <Text className="ml-3 text-lg text-black">{t('map.search.startingPoint')}</Text>
+              </TouchableOpacity>
+            )}
+            {_locations.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                className="flex-row items-center bg-white p-2"
+                onPress={() => {
+                  if (searchMode === 'searchfrom') {
+                    setRoute({
+                      locationFrom: item,
+                    });
+                  } else if (searchMode === 'searchto') {
+                    setRoute({
+                      locationTo: item,
+                    });
+                  }
+                  console.log('press in list');
+                  setSearchMode('idle');
+                }}>
+                <View>{item.icon}</View>
+                <Text className="ml-3 text-lg text-black">{item.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       )}
     </>
