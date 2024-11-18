@@ -16,6 +16,8 @@ import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
+import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -48,7 +50,10 @@ export default function MapScreen() {
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
   const lastRoutePoint = route?.at(-1);
-  const [currentCameraRotation, setCurrentCameraRotation] = useState(60);
+
+  const [mapRotation, setMapRotation] = useState(60);
+  const [mapCenterLocation, setMapCenterLocation] = useState(campusCenter);
+  const [mapZoom, setMapZoom] = useState(14);
 
   const expandFullSearchBar = () => {
     setIsExpanded(true);
@@ -117,7 +122,7 @@ export default function MapScreen() {
 
   const handlePointNorth = () => {
       console.log("handlePointNorth");
-      setCurrentCameraRotation(0);
+      setMapRotation(0);
       if (camera.current) {
         camera.current.setCamera({
           heading: 0,
@@ -126,10 +131,19 @@ export default function MapScreen() {
       }
     }
 
-  const compassStyle = {
-    transform: `rotate(${(-currentCameraRotation - 45)}deg)`
+  const handleMapChanged = (event :any) => {
+    const { properties } = event;
+    if (properties != undefined) {
+      setMapRotation(properties.heading);
+      setMapCenterLocation(properties.centerCoordinate);
+      setMapZoom(properties.zoomLevel);
+    }
   };
-  console.log(-currentCameraRotation - 45);
+
+  const compassStyle = {
+    transform: `rotate(${(-mapRotation - 45)}deg)`
+  };
+  console.log(-mapRotation - 45);
 
   return (
     <>
@@ -150,12 +164,14 @@ export default function MapScreen() {
           style={{ flex: 1 }}
           logoEnabled={false}
           styleJSON={OSM_RASTER_STYLE}
-          compassEnabled={false}>
+          compassEnabled={false}
+          onRegionDidChange={handleMapChanged}
+          >
           <MapLibreGL.Camera
             ref={camera}
-            centerCoordinate={campusCenter}
-            zoomLevel={14}
-            heading={currentCameraRotation}
+            centerCoordinate={mapCenterLocation}
+            zoomLevel={mapZoom}
+            heading={mapRotation}
             maxBounds={campusBounds}
             minZoomLevel={12.5}
           />
