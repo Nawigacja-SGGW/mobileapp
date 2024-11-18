@@ -3,7 +3,7 @@ import Drawer from 'expo-router/drawer';
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput } from '~/components/AppInput';
@@ -19,32 +19,11 @@ export default function ForgotPassword() {
     navigation.navigate('confirmation');
   };
 
-  const styles = StyleSheet.create({
-    title: {
-      fontSize: 24,
-      fontWeight: 700,
-      color: '#000',
-      marginBottom: 10,
-    },
-    text: {
-      fontSize: 13,
-      fontWeight: 300,
-      color: '#000',
-      marginBottom: 10,
-    },
-    bottomText: {
-      color: '#003228',
-      fontSize: 14,
-      textAlign: 'center',
-      fontWeight: 700,
-    },
-  });
-
   return (
     <>
       <Drawer.Screen options={{ headerShown: false }} />
       <ScrollView
-        className="p-5 bg-white"
+        className="p-[20px] bg-white"
         contentContainerStyle={{
           paddingTop: 32,
           paddingBottom: 32,

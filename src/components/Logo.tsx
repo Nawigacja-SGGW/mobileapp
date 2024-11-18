@@ -1,8 +1,6 @@
 import { forwardRef } from 'react';
 import { Text, TouchableOpacity, TouchableOpacityProps, View, Image } from 'react-native';
 
-const logoSize = 70;
-
 export const Logo: React.FC<TouchableOpacityProps> = forwardRef<
   TouchableOpacity,
   TouchableOpacityProps
@@ -17,7 +15,7 @@ export const Logo: React.FC<TouchableOpacityProps> = forwardRef<
       </View>
 
       <View className="flex-1 items-start justify-center pl-9">
-        <View className="h-[70px] w-[70px] items-center justify-center rounded-full bg-white">
+        <View className="h-[70px] w-[70px] items-center justify-center rounded-full">
           <Image
             source={require('./../../assets/logoSGGW.png')}
             alt="SGGW logo"
