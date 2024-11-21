@@ -21,7 +21,8 @@ interface StoreState {
   loading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  extendSession: () => Promise<void>;
+  logout: () => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   resetPasswordRequest: (email: string) => Promise<void>;
   fetchUserHistory: () => Promise<void>;
@@ -44,6 +45,15 @@ const useUserStore = create<StoreState>((set) => ({
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       set({ id: 1, email, token: 'token123abc', loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  extendSession: async () => {
+    try {
+      set({ loading: true, error: null });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
     }
