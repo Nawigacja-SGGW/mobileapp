@@ -23,8 +23,8 @@ export const init18n = ({ resources, fallbackLng }: Init18n) => {
         escapeValue: false,
       },
     })
-    .then(() => {
-      useSettingsStore.persist.onHydrate(async () => {
+    .then(async () => {
+      useSettingsStore.persist.onFinishHydration(async () => {
         const savedLanguage = await useSettingsStore.getState().language;
         console.log('savedLanguage', savedLanguage);
         if (savedLanguage) {
