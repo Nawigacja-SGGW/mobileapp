@@ -1,4 +1,6 @@
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 enum RoutePreference {
   Walk,
@@ -6,16 +8,17 @@ enum RoutePreference {
   // Car,
 }
 
-interface StoreState {
-  routePreference: RoutePreference;
-  language: string;
-  setRoutePreference: (routePreference: RoutePreference) => void;
-  setLanguage: (language: string) => void;
-}
-
-export const useSettingsStore = create<StoreState>((set) => ({
-  routePreference: RoutePreference.Walk,
-  language: 'pl',
-  setRoutePreference: (routePreference) => set({ routePreference }),
-  setLanguage: (language) => set({ language }),
-}));
+export const useSettingsStore = create(
+  persist(
+    (set) => ({
+      routePreference: RoutePreference.Walk,
+      language: 'pl',
+      setRoutePreference: (routePreference: RoutePreference) => set({ routePreference }),
+      setLanguage: (language: string) => set({ language }),
+    }),
+    {
+      name: 'settings',
+      // getStorage: () => AsyncStorage,
+    }
+  )
+);
