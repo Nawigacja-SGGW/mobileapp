@@ -7,7 +7,7 @@ import { View, StyleSheet, Image } from 'react-native';
 import Background from '../../assets/background.svg';
 
 import { AppButton } from '~/components/AppButton';
-import useFakeLocationStore from '~/store/useFakeLocationStore';
+import useFakeLocationStore from '~/store/useFakeObjectsStore';
 
 export default function Start() {
   const { pointObjects, areaObjects, fetchData } = useFakeLocationStore();
