@@ -22,14 +22,16 @@ export const init18n = ({ resources, fallbackLng }: Init18n) => {
       interpolation: {
         escapeValue: false,
       },
+    })
+    .then(() => {
+      useSettingsStore.persist.onHydrate(async () => {
+        const savedLanguage = await useSettingsStore.getState().language;
+        console.log('savedLanguage', savedLanguage);
+        if (savedLanguage) {
+          await i18n.changeLanguage(savedLanguage);
+        }
+      });
     });
-
-  (async () => {
-    const savedLanguage = await useSettingsStore.getState().language;
-    if (savedLanguage) {
-      i18n.changeLanguage(savedLanguage);
-    }
-  })();
 
   return i18n;
 };
