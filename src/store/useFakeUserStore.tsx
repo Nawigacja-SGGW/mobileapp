@@ -25,7 +25,9 @@ interface StoreState {
   register: (email: string, password: string) => Promise<void>;
   resetPasswordRequest: (email: string) => Promise<void>;
   fetchUserHistory: () => Promise<void>;
+  updateUserHistory: (objectId: number) => Promise<void>;
   fetchUserStatistics: () => Promise<void>;
+  updateUserStatistics: () => Promise<void>;
 }
 
 const useUserStore = create<StoreState>((set) => ({
@@ -99,6 +101,15 @@ const useUserStore = create<StoreState>((set) => ({
       set({ error: (error as Error).message, loading: false });
     }
   },
+  updateUserHistory: async (objectId: number) => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
   fetchUserStatistics: async () => {
     set({ loading: true, error: null });
     try {
@@ -118,6 +129,15 @@ const useUserStore = create<StoreState>((set) => ({
         loading: false,
         error: null,
       });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  updateUserStatistics: async () => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
     }
