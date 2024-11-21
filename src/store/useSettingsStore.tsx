@@ -1,6 +1,6 @@
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 enum RoutePreference {
   Walk,
@@ -8,7 +8,16 @@ enum RoutePreference {
   // Car,
 }
 
-export const useSettingsStore = create(
+type StoreState = {
+  routePreference: RoutePreference;
+  language: string;
+  setRoutePreference: (routePreference: RoutePreference) => void;
+  setLanguage: (language: string) => void;
+};
+
+// TODO persist chyba nie działa (?)
+
+export const useSettingsStore = create<StoreState>()(
   persist(
     (set) => ({
       routePreference: RoutePreference.Walk,
@@ -18,7 +27,7 @@ export const useSettingsStore = create(
     }),
     {
       name: 'settings',
-      // getStorage: () => AsyncStorage,
+      storage: createJSONStorage(() => AsyncStorage),
     }
   )
 );
