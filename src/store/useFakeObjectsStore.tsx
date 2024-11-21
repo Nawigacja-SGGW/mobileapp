@@ -212,7 +212,7 @@ interface StoreState {
   fetchData: () => Promise<void>;
 }
 
-const useFakeLocationStore = create<StoreState>((set) => ({
+const useFakeObjectsStore = create<StoreState>((set) => ({
   pointObjects: [],
   areaObjects: [],
   loading: false,
@@ -240,4 +240,4 @@ const useFakeLocationStore = create<StoreState>((set) => ({
   },
 }));
 
-export default useFakeLocationStore;
+export default useFakeObjectsStore;
