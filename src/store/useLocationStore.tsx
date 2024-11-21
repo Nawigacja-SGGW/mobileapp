@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { create } from 'zustand';
 import BookIcon from '../../assets/book1.svg';
 import BuildingIcon from '../../assets/building3.svg';
-import { fakeAreaObjects, fakePointObjects } from '~/store/useFakeLocationStore';
+import { fakeAreaObjects, fakePointObjects } from '~/store/useFakeObjectsStore';
 
 export interface MapLocation {
   id: number;
