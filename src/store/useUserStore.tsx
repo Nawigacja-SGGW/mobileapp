@@ -31,7 +31,7 @@ interface StoreState {
   updateUserStatistics: () => Promise<void>;
 }
 
-// TODO implement caching user data
+// TODO implement persisting user data and refreshing token after integration with real API
 const useRealUserStore = create<StoreState>((set) => ({
   id: null,
   email: null,
