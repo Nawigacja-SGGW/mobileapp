@@ -36,5 +36,56 @@
   "map": {
     "search.startingPoint": "Twoja lokacja",
     "search.destination": "Miejsce docelowe"
+  },
+  "object":{
+    "moreInfo":"Więcej informacji",
+    "navigate":"Nawiguj"
+  },
+  "login": { 
+    "usernameOrEmail": {
+      "label": "Nazwa użytkownika lub e-mail",
+      "placeholder": "Wprowadź nazwę użytkownika lub e-mail"
+    },
+    "password": {
+      "label": "Hasło",
+      "placeholder": "Wprowadź swoje hasło",
+      "forgotPassword": "Zapomniałeś hasła?"
+    },
+    "username": {
+      "label": "Nazwa użytkownika",
+      "placeholder": "Wprowadź swoją nazwę użytkownika"
+    },
+    "email": {
+      "label": "E-mail",
+      "placeholder": "Wprowadź swój e-mail"
+    },
+    "confirmPassword": {
+      "label": "Potwierdź hasło",
+      "placeholder": "Wprowadź swoje hasło"
+    },
+    "newPassword": {
+      "label": "Nowe hasło",
+      "placeholder": "Wprowadź nowe hasło"
+    },
+    "confirmNewPassword": {
+      "label": "Potwierdź nowe hasło",
+      "placeholder": "Wprowadź nowe hasło"
+    },
+
+    "loading": "Ładowanie",
+
+    "signInButton": "Zaloguj się",
+    "signUpButton": "Zarejestruj się",
+    "sendButton": "Wyślij",
+    "resetButton": "Zresetuj hasło",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła",
+    "resetPassword": "Zresetuj hasło",
+    "resetPasswordText": "Wprowadź nowe hasło dla ",
+    "continueWith": "Lub kontynuuj z",
+    "backToLogin": "Wróć do logowania",
+    "confirmation" : "Sprawdź email w celu zresetowania hasła",
+    "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
+    "didntReceiveEmail" : "Nie otrzymałeś emaila?"
   }
 }

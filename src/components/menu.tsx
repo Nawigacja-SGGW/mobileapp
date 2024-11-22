@@ -1,40 +1,44 @@
-import { FontAwesome5 } from '@expo/vector-icons';
+import { Feather, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity, View, Text } from 'react-native';
 
+import Loading from './Loading';
+
 import { LanguageSwitch } from '~/components/LanguageSwitch';
+import useUserStore from '~/store/useUserStore';
 
 export function DrawerMenu() {
   const { t } = useTranslation();
   const navigation = useNavigation();
+  const { logout, loading, error } = useUserStore();
 
   const menuOptions = [
     {
       label: t('menu.map'),
-      icon: <FontAwesome5 name="map" size={20} color="black" />,
+      icon: <Ionicons name="location-outline" size={32} color="white" />,
       onPress: () => {
         navigation.navigate('map-screen');
       },
     },
     {
       label: t('menu.objects'),
-      icon: <FontAwesome5 name="box" size={20} color="black" />,
+      icon: <FontAwesome5 name="building" size={32} color="white" />,
       onPress: () => {
         console.log('Open Objects');
       },
     },
     {
       label: t('menu.profile'),
-      icon: <FontAwesome5 name="user" size={20} color="black" />,
+      icon: <FontAwesome5 name="user" size={32} color="white" />,
       onPress: () => {
         console.log('Open Profile');
       },
     },
     {
       label: t('menu.settings'),
-      icon: <FontAwesome5 name="cog" size={20} color="black" />,
+      icon: <Feather name="settings" size={32} color="white" />,
       onPress: () => {
         console.log('Open Settings');
       },
@@ -43,43 +47,51 @@ export function DrawerMenu() {
 
   const logoutOption = {
     label: t('menu.logout'),
-    icon: <FontAwesome5 name="sign-out-alt" size={20} color="black" />,
-    onPress: () => {
-      console.log('Log out');
+    icon: <SimpleLineIcons name="logout" size={32} color="white" />,
+    onPress: async () => {
+      await logout();
+      if (!loading && !error) {
+        navigation.navigate('index');
+      }
     },
   };
 
   return (
     <>
-      <View className="h-full w-7/12">
-        <View className="flex-1 px-4">
+      {loading && <Loading />}
+
+      <View className="h-full p-4">
+        <View className="mt-10 h-20 flex-row items-center">
           <TouchableOpacity
-            className="mt-10 w-20"
+            className="w-20"
             onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-            <FontAwesome5 name="angle-left" size={60} color="black" />
+            <FontAwesome5 name="chevron-left" size={32} color="white" />
           </TouchableOpacity>
-          <View className="my-auto">
-            {menuOptions.map((option, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={option.onPress}
-                className="mb-4 flex-row items-center p-4">
-                {option.icon}
-                <Text className="ml-2 text-black">{option.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <Text className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold text-white">
+            Nawigacja SGGW
+          </Text>
+        </View>
+        <View className="flex-1 justify-center">
+          {menuOptions.map((option, index) => (
+            <TouchableOpacity
+              key={index}
+              onPress={option.onPress}
+              className="mb-4 flex-row items-center pb-4">
+              {option.icon}
+              <Text className="ml-6 text-xl font-medium text-white">{option.label}</Text>
+            </TouchableOpacity>
+          ))}
 
           <TouchableOpacity
             onPress={logoutOption.onPress}
-            className="mb-10 mt-auto flex-row items-center p-4">
+            className="mt-32 flex-row items-center pb-4">
             {logoutOption.icon}
-            <Text className="ml-2 text-black">{logoutOption.label}</Text>
+            <Text className="ml-6 text-xl font-medium text-white">{logoutOption.label}</Text>
           </TouchableOpacity>
+        </View>
 
-          <View className="mb-4">
-            <LanguageSwitch />
-          </View>
+        <View className="mb-4">
+          <LanguageSwitch />
         </View>
       </View>
     </>

@@ -21,6 +21,56 @@
     "search.startingPoint": "Your location",
     "search.destination": "Destination"
   },
+  "object":{
+    "moreInfo":"More Information",
+    "navigate":"Navigate"
+  },
+  "login":{
+    "usernameOrEmail" : {
+      "label" : "Username or e-mail",
+      "placeholder" : "Enter your username or e-mail"
+    },
+    "password" : {
+      "label" : "Password",
+      "placeholder" : "Enter your password",
+      "forgotPassword" : "Forgot password?"
+    },
+    "username" : {
+      "label" : "Username",
+      "placeholder" : "Enter your username"
+    },
+    "email" : {
+      "label" : "E-mail",
+      "placeholder" : "Enter your e-mail"
+    },
+    "confirmPassword" : {
+      "label" : "Confirm password",
+      "placeholder" : "Enter your password"
+    },
+    "newPassword" : {
+      "label" : "New password",
+      "placeholder" : "Enter new password"
+    },
+    "confirmNewPassword" : {
+      "label" : "Confirm new password",
+      "placeholder" : "Enter new password"
+    },
+    "signInButton" : "sign in",
+    "signUpButton":"sign up",
+    "sendButton":"send",
+    "resetButton":"reset password",
+    "forgotPassword":"Forgot password",
+    "forgotPasswordText":"Please enter the e-mail address and we will send you instructions to reset your password",
+    "resetPassword":"Reset password",
+    "resetPasswordText":"Enter a new password for ",
+    "continueWith" : "Or continue with",
+    "backToLogin" : "Back to login",
+    "confirmation" : "Check email for reset link",
+    "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
+    "didntReceiveEmail" : "Didn't receive an email?"
+  },
+
+  "loading": "Loading",
 
   "getStarted": "Open this display's code:",
   "changeCode": "Change any text, save the file and the app will update automatically."

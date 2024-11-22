@@ -1,22 +1,15 @@
-import { useFocusEffect, useNavigation } from 'expo-router';
-import Drawer from 'expo-router/drawer';
-import React from 'react';
+import { useFocusEffect, useNavigation, useRouter } from 'expo-router';
+
+import { LogBox } from 'react-native';
 
 export default function Home() {
   const navigation = useNavigation();
 
   useFocusEffect(() => {
-    console.log('go to mpa-screen');
-    navigation.navigate('map-screen');
-  });
+    console.log('go to start');
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+    LogBox.ignoreAllLogs(); // Ignore all log notifications
 
-  return (
-    <>
-      <Drawer.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
-    </>
-  );
+    navigation.navigate({ name: 'start' });
+  });
 }
