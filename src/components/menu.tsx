@@ -2,12 +2,12 @@ import { Feather, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-i
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View, Text, ToastAndroid } from 'react-native';
 
 import Loading from './Loading';
 
 import { LanguageSwitch } from '~/components/LanguageSwitch';
-import useUserStore from '~/store/useUserStore';
+import { useUserStore } from '~/store/useUserStore';
 
 export function DrawerMenu() {
   const { t } = useTranslation();
@@ -52,6 +52,8 @@ export function DrawerMenu() {
       await logout();
       if (!loading && !error) {
         navigation.navigate('index');
+      } else {
+        ToastAndroid.show('Nie udało się wylogować', ToastAndroid.SHORT);
       }
     },
   };

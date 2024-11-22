@@ -1,47 +1,12 @@
-import { create } from 'zustand';
-
-interface Address {
-  id: number;
-  street: string;
-  postalCode: string;
-  city: string;
-}
+import { create, StoreApi, UseBoundStore } from 'zustand';
 
 interface Guide {
   id: number;
   description: string | null;
 }
 
-interface Entry {
-  latitude: string;
-  longitude: string;
-}
-
-interface ImportantPlace {
-  id: number;
-  floor: number;
-  room: string | null;
-}
-
-interface AreaObjectFaculty {
-  id: number;
-  faculty: Faculty;
-  floor: number | null;
-}
-
-// interface Institute {
-//   id: number;
-//   name: string;
-//   faculty: Faculty;
-// }
-
-interface Faculty {
-  id: number;
-  name: string;
-  deansOfficeNumber: string;
-}
-
 interface MapObject {
+  id: number;
   latitude: string;
   longitude: string;
   name: string;
@@ -53,6 +18,13 @@ interface MapObject {
   guide: Guide | null;
 }
 
+interface Address {
+  id: number;
+  street: string;
+  postalCode: string;
+  city: string;
+}
+
 interface PointObject extends MapObject {
   eventCategory: string | null;
   eventStart: Date | null;
@@ -62,13 +34,36 @@ interface PointObject extends MapObject {
 interface AreaObject extends MapObject {
   number: number | null;
   isPaid: boolean | null;
-  entries: Entry[];
-  importantPlaces: ImportantPlace[] | null;
   faculties: AreaObjectFaculty[] | null;
+  importantPlaces: ImportantPlace[] | null;
+  entries: Entry[] | null;
+}
+
+interface AreaObjectFaculty {
+  faculty: Faculty;
+  floor: number | null;
+}
+
+interface Faculty {
+  id: number;
+  name: string;
+  deansOfficeNumber: string;
+}
+
+interface Entry {
+  latitude: string;
+  longitude: string;
+}
+
+interface ImportantPlace {
+  id: number;
+  floor: number;
+  room: number;
 }
 
 export const fakeAreaObjects: AreaObject[] = [
   {
+    id: 1,
     latitude: '52.15751256140029',
     longitude: '21.04533087961154',
     name: 'Basen',
@@ -99,6 +94,7 @@ export const fakeAreaObjects: AreaObject[] = [
     faculties: null,
   },
   {
+    id: 2,
     latitude: '52.161963648191104',
     longitude: '21.046332383073644',
     name: 'Wydział Zastosowań Informatyki i Matematyki',
@@ -137,6 +133,7 @@ export const fakeAreaObjects: AreaObject[] = [
     faculties: null,
   },
   {
+    id: 3,
     latitude: '52.16313727334748',
     longitude: '21.03888543277215',
     name: 'Dom Studencki Limba',
@@ -166,6 +163,7 @@ export const fakeAreaObjects: AreaObject[] = [
 
 export const fakePointObjects: PointObject[] = [
   {
+    id: 4,
     latitude: '52.15957117010191',
     longitude: '21.046369211223155',
     name: 'Pomnik Krowy',
@@ -185,6 +183,7 @@ export const fakePointObjects: PointObject[] = [
     eventEnd: null,
   },
   {
+    id: 5,
     latitude: '52.15928975854478',
     longitude: '21.049575056750555',
     name: 'Jezioro',
@@ -213,7 +212,31 @@ interface StoreState {
   fetchData: () => Promise<void>;
 }
 
-const useFakeLocationStore = create<StoreState>((set) => ({
+const useRealObjectsStore = create<StoreState>((set, get) => ({
+  areaObjects: [],
+  pointObjects: [],
+  loading: false,
+  error: null,
+
+  fetchData: async () => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // TODO fetch real data
+      set({ loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
+    return [...get().areaObjects, ...get().pointObjects].sort(compareFn);
+  },
+  filteredBy: async (filterFn: (a: MapObject) => boolean): Promise<MapObject[]> => {
+    return [...get().areaObjects, ...get().pointObjects].filter(filterFn);
+  },
+}));
+
+const useFakeObjectsStore = create<StoreState>((set) => ({
   pointObjects: [],
   areaObjects: [],
   loading: false,
@@ -222,7 +245,7 @@ const useFakeLocationStore = create<StoreState>((set) => ({
   fetchData: async () => {
     set({ loading: true, error: null });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       set({
         pointObjects: fakePointObjects,
         areaObjects: fakeAreaObjects,
@@ -233,6 +256,18 @@ const useFakeLocationStore = create<StoreState>((set) => ({
       set({ error: (error as Error).message, loading: false });
     }
   },
+  sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
+    return [...fakeAreaObjects, ...fakePointObjects].sort(compareFn);
+  },
+  filteredBy: async (filterFn: (a: MapObject) => boolean): Promise<MapObject[]> => {
+    return [...fakeAreaObjects, ...fakePointObjects].filter(filterFn);
+  },
 }));
 
-export default useFakeLocationStore;
+export let useObjectsStore: UseBoundStore<StoreApi<StoreState>>;
+
+if (process.env.NODE_ENV === 'development') {
+  useObjectsStore = useFakeObjectsStore;
+} else {
+  useObjectsStore = useRealObjectsStore;
+}

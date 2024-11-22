@@ -3,13 +3,13 @@ import Drawer from 'expo-router/drawer';
 import React, { useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
 import Loading from '~/components/Loading';
 import { Logo } from '~/components/Logo';
-import useUserStore from '~/store/useUserStore';
+import { useUserStore } from '~/store/useUserStore';
 
 export default function Login() {
   const { control, handleSubmit } = useForm();
@@ -17,7 +17,7 @@ export default function Login() {
   const { t } = useTranslation();
   const externalIconsSize = 44;
   const navigation = useNavigation();
-  const { token, loading, error, login } = useUserStore();
+  const { loading, error, login } = useUserStore();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -25,13 +25,15 @@ export default function Login() {
 
   const onSubmit = async (data: FieldValues) => {
     if (!data.usernameOrEmail || !data.password) {
+      ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
       return;
     }
     await login(data.email, data.password);
 
     if (!loading && !error) {
-      console.log(token);
       navigation.navigate('map-screen');
+    } else {
+      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
     }
   };
 
