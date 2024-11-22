@@ -15,8 +15,6 @@ type StoreState = {
   setLanguage: (language: string) => void;
 };
 
-// TODO persist chyba nie działa (?)
-
 export const useSettingsStore = create<StoreState>()(
   persist(
     (set) => ({
