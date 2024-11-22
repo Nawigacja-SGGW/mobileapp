@@ -7,7 +7,7 @@ import { TouchableOpacity, View, Text } from 'react-native';
 import Loading from './Loading';
 
 import { LanguageSwitch } from '~/components/LanguageSwitch';
-import useUserStore from '~/store/useUserStore';
+import { useUserStore } from '~/store/useUserStore';
 
 export function DrawerMenu() {
   const { t } = useTranslation();

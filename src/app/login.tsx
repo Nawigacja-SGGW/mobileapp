@@ -9,7 +9,7 @@ import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
 import Loading from '~/components/Loading';
 import { Logo } from '~/components/Logo';
-import useUserStore from '~/store/useUserStore';
+import { useUserStore } from '~/store/useUserStore';
 
 export default function Login() {
   const { control, handleSubmit } = useForm();
