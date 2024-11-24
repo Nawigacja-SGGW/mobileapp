@@ -21,6 +21,10 @@
     "search.startingPoint": "Your location",
     "search.destination": "Destination"
   },
+  "object":{
+    "moreInfo":"More Information",
+    "navigate":"Navigate"
+  },
   "login":{
     "usernameOrEmail" : {
       "label" : "Username or e-mail",

@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import Drawer from 'expo-router/drawer';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,8 +11,10 @@ import useFakeLocationStore from '~/store/useFakeLocationStore';
 
 export default function Start() {
   const { pointObjects, areaObjects, fetchData } = useFakeLocationStore();
+  const params = useLocalSearchParams();
 
   React.useEffect(() => {
+    console.log('application start', params);
     fetchData();
   }, []);
 
@@ -53,7 +55,7 @@ export default function Start() {
     <>
       <Drawer.Screen options={{ headerShown: false }} />
       <View style={styles.container}>
-        <Background height="100%" width="100%" style={styles.background} />
+        <Background height="100%" width="100%" style={styles.background} className="absolute" />
         <View style={styles.content}>
           <View style={{ alignItems: 'center', marginBottom: '20%' }}>
             <Image source={require('./../../assets/nawigacja-SGGW.png')} style={styles.circle} />

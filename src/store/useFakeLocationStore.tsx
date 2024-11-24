@@ -67,7 +67,7 @@ interface AreaObject extends MapObject {
   faculties: AreaObjectFaculty[] | null;
 }
 
-const fakeAreaObjects: AreaObject[] = [
+export const fakeAreaObjects: AreaObject[] = [
   {
     latitude: '52.15751256140029',
     longitude: '21.04533087961154',
@@ -164,7 +164,7 @@ const fakeAreaObjects: AreaObject[] = [
   },
 ];
 
-const fakePointObjects: PointObject[] = [
+export const fakePointObjects: PointObject[] = [
   {
     latitude: '52.15957117010191',
     longitude: '21.046369211223155',
