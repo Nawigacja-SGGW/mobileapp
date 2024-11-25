@@ -3,11 +3,17 @@ import Drawer from 'expo-router/drawer';
 import { View, Text, TouchableOpacity } from 'react-native';
 import ProfilePicture from '../../assets/profile-picture.svg';
 import TopHeader from '~/components/TopHeader';
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 export default function ProfileView() {
+  const router = useRouter();
   const { t } = useTranslation();
+
+  const handleLogout = () => {
+    console.log("Wylogowanie");
+    router.replace('/start');
+  };
   return (
     <View className="flex-1 bg-[#003228] px-6">
       {/* Header */}
@@ -49,7 +55,7 @@ export default function ProfileView() {
       <View className="absolute bottom-6 left-6 right-6">
         <TouchableOpacity
           className="mx-auto w-3/4 items-center rounded-full bg-white py-4"
-          onPress={() => router.push('/start')}>
+          onPress={handleLogout}>
           <Text className="text-xl font-extrabold text-black">{t('profile.logOut')}</Text>
         </TouchableOpacity>
       </View>
