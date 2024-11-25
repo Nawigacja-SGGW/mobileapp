@@ -72,6 +72,13 @@
 
   "loading": "Loading",
 
+  "profile": {
+    "email": "Email",
+    "myKilometers": "My kilometers",
+    "myRoutes": "My routes",
+    "logOut": "Log out"
+  },
+
   "getStarted": "Open this display's code:",
   "changeCode": "Change any text, save the file and the app will update automatically."
 }
