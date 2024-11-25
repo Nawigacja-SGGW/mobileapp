@@ -47,8 +47,7 @@ export default function ProfileView() {
       <View className="absolute bottom-6 left-6 right-6">
         <TouchableOpacity
           className="mx-auto w-3/4 items-center rounded-full bg-white py-4"
-          onPress={() => router.push('/start')} // Funkcja do przejścia do widoku start.tsx
-        >
+          onPress={() => router.push('/start')}>
           <Text className="text-xl font-extrabold text-black">log out</Text>
         </TouchableOpacity>
       </View>
