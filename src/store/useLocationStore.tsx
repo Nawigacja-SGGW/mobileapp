@@ -12,7 +12,7 @@ export interface MapLocation {
 }
 
 export type SearchMode = 'searchto' | 'searchfrom' | 'idle';
-export type NavigationMode = 'routing' | 'navigating';
+export type NavigationMode = 'routing' | 'navigating'| 'arrived';
 
 interface LocationStore {
   locations: MapLocation[];
@@ -22,7 +22,7 @@ interface LocationStore {
   locationTo: undefined | MapLocation;
   searchMode: SearchMode;
   setNavigationMode: (mode: NavigationMode) => void;
-  navigationMode: 'routing' | 'navigating';
+  navigationMode: 'routing' | 'navigating' | 'arrived';
   setRoute: (options: { locationTo?: MapLocation; locationFrom?: MapLocation }) => void;
   setSearchMode: (mode: SearchMode) => void;
   setSearchQuery: (query: string) => void;

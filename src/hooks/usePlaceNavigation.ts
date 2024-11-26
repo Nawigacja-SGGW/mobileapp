@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
+
 import useLocationStore from '~/store/useLocationStore';
 
 type RoutedBy = 'car' | 'bike' | 'foot';
@@ -12,7 +13,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
   });
 
   const [userlocation, setUserLocation] = useState();
-  const { navigationMode, locationTo } = useLocationStore();
+  const { navigationMode, locationTo, setNavigationMode } = useLocationStore();
   const lastLocations = useRef([]);
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
           distanceInterval: 1,
         },
         (location) => {
+          if (navigationMode !== 'routing') return;
           const coords = [location.coords.longitude, location.coords.latitude];
           lastLocations.current.push(coords);
           if (lastLocations.current.length > 10) lastLocations.current.shift();
@@ -58,6 +60,10 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       acc += c[1].toString() + (1 === i ? '' : ';');
       return acc;
     }, '');
+    if (mapDistance(lastLocations.current[0], locationTo) < 0.02) {
+      console.log('ARRIVED');
+      setNavigationMode('arrived');
+    }
     if (mapDistance(lastLocations.current[0], userlocation) > 0.01)
       fetch(
         `https://routing.openstreetmap.de/routed-${routedBy}/route/v1/foot/${wayString}?overview=full&geometries=geojson`
@@ -93,6 +99,7 @@ const findClosestPointIndex = (route, location, previousLocations) => {
       closestIndex = index;
     }
   });
+
   if (
     previousLocations &&
     mapDistance(previousLocations.at(-1), route[closestIndex]) &&
@@ -105,10 +112,8 @@ const findClosestPointIndex = (route, location, previousLocations) => {
 };
 
 const getRemainingRoute = (fullRoute, currentLocation, previousLocations) => {
-  // 1. Znajdź najbliższy punkt na trasie
   const closestIndex = findClosestPointIndex(fullRoute, currentLocation);
 
-  // 2. Sprawdź kierunek ruchu użytkownika
   const isMovingForward = (() => {
     if (previousLocations.length < 2) return true; // Domyślnie idziemy naprzód
     const lastPoint = previousLocations[previousLocations.length - 1];
@@ -120,15 +125,10 @@ const getRemainingRoute = (fullRoute, currentLocation, previousLocations) => {
     return distanceToNext < distanceToPrev;
   })();
 
-  // 3. Wytnij trasę w zależności od kierunku ruchu
-  //
-  // if (isMovingForward) {
   console.log('forward');
+  // sort route, get best, sort route by previous path
+
   return [previousLocations.at(-1), ...fullRoute.slice(closestIndex)];
-  // } else {
-  //   console.log('backward');
-  //   return fullRoute.slice(0, closestIndex + 1);
-  // }
 };
 
 const mapDistance = (
