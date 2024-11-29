@@ -33,9 +33,9 @@ export function DrawerMenu() {
       label: t('menu.profile'),
       icon: <FontAwesome5 name="user" size={32} color="white" />,
       onPress: () => {
-        console.log('Open Profile');
+        navigation.navigate('profileView');
       },
-    },
+    },    
     {
       label: t('menu.settings'),
       icon: <Feather name="settings" size={32} color="white" />,
