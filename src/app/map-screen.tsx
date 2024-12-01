@@ -311,14 +311,7 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
         }}
       />
       <MapLibreGL.ShapeSource
-        id="symbolLocationSource"
-        hitbox={{ width: 20, height: 20 }}
-        onPress={(e) => {
-          console.log(e);
-          if (e.features.length > 0) {
-            onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
-          }
-        }}
+        id="symbolLocationSource123"
         shape={{
           type: 'FeatureCollection',
           features: [
@@ -333,7 +326,31 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
                 type: 'Point',
               },
             },
-
+          ].filter(Boolean),
+        }}>
+        <MapLibreGL.CircleLayer
+          id="3534"
+          style={{
+            circleRadius: 7,
+            circleStrokeWidth: 3,
+            circleStrokeColor: 'gray',
+            circleColor: 'white',
+            circleBlur: 0.1,
+          }}
+        />
+      </MapLibreGL.ShapeSource>
+      <MapLibreGL.ShapeSource
+        id="symbolLocationSource"
+        hitbox={{ width: 20, height: 20 }}
+        onPress={(e) => {
+          console.log(e);
+          if (e.features.length > 0) {
+            onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
+          }
+        }}
+        shape={{
+          type: 'FeatureCollection',
+          features: [
             ...locations.map((n, i) => ({
               type: 'Feature',
               id: n.id,
@@ -524,6 +541,7 @@ const mapDistance = (
     )
   );
 };
+
 const tti = {
   'Obiekt sportowy': 'basketball-ball',
   Wydział: 'school',
