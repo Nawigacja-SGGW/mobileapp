@@ -8,7 +8,8 @@
     "counter": "Counter",
     "location": "Location",
     "map": "Map",
-    "details": "Details"
+    "details": "Details",
+    "navigatingTo":"Navigating to:"
   },
   "menu": {
     "map": "Map",
@@ -73,5 +74,6 @@
   "loading": "Loading",
 
   "getStarted": "Open this display's code:",
-  "changeCode": "Change any text, save the file and the app will update automatically."
+  "changeCode": "Change any text, save the file and the app will update automatically.",
+  "cancel":"Cancel"
 }

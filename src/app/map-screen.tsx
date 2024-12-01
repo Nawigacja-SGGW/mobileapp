@@ -21,6 +21,7 @@ import { Touchable } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import LocationModal from '~/components/ObjectModal';
 import { usePlaceNavigation } from '~/hooks/usePlaceNavigation';
+import NavigationModal from '~/components/NavigationModal';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -53,7 +54,7 @@ export default function MapScreen() {
     navigationMode,
   } = useLocationStore();
   const { route } = useRouteQuery('foot');
-  const { route: navRoute } = usePlaceNavigation('foot');
+  const { route: navRoute, distance } = usePlaceNavigation('foot');
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -180,10 +181,7 @@ export default function MapScreen() {
             followUserMode={UserTrackingMode.FollowWithHeading}
           />
           {/* linia trasy */}
-          <MapLine
-            route={navigationMode === 'navigating' ? navRoute : route}
-            locationFrom={navigationMode === 'routing' && locationFrom}
-          />
+          <MapLine route={navigationMode === 'navigating' ? navRoute : route} />
           <MapMarkers
             lastRoutePoint={lastRoutePoint}
             locations={locations}
@@ -196,6 +194,13 @@ export default function MapScreen() {
           setIsVisible={setIsExpanded}
           objectId={selectedObject}
         />
+        <NavigationModal
+          onCancel={() => {
+            setNavigationMode('routing');
+          }}
+          distanceLeft={0.01111}
+          visible={navigationMode === 'navigating'}
+        />
       </View>
     </>
   );
@@ -207,29 +212,30 @@ interface MapLineProps {
   locationTo?: [number, number];
 }
 
-function MapLine({ route, locationFrom, locationTo }: MapLineProps) {
-  console.log('map line stuff', locationFrom, locationTo);
-  const drawLocationFrom =
-    locationFrom && route && route.length > 0 && mapDistance(locationFrom, route[0]) > 0.005;
+function MapLine({ route }: MapLineProps) {
+  console.log('map line route', route);
+
+  const mapLineShape = {
+    type: 'FeatureCollection',
+    features: [
+      route &&
+        route.length >= 2 && {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'LineString',
+            coordinates: route,
+          },
+        },
+    ].filter(Boolean),
+  };
+
   return (
     <>
       <MapLibreGL.ShapeSource
         id="symbolLocationSource1"
         hitbox={{ width: 20, height: 20 }}
-        shape={{
-          type: 'FeatureCollection',
-          features: [
-            route &&
-              route.length >= 2 && {
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                  type: 'LineString',
-                  coordinates: route,
-                },
-              },
-          ].filter(Boolean),
-        }}>
+        shape={mapLineShape}>
         <MapLibreGL.LineLayer
           id="layer1"
           style={{
@@ -251,47 +257,6 @@ function MapLine({ route, locationFrom, locationTo }: MapLineProps) {
           }}
         />
       </MapLibreGL.ShapeSource>
-      {drawLocationFrom && (
-        <MapLibreGL.ShapeSource
-          id="symbolLocationSource2"
-          hitbox={{ width: 20, height: 20 }}
-          shape={{
-            type: 'FeatureCollection',
-            features: [
-              route &&
-                route.length >= 2 &&
-                locationFrom && {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                    type: 'LineString',
-                    coordinates: [locationFrom, route[0]],
-                  },
-                },
-            ].filter(Boolean),
-          }}>
-          <MapLibreGL.LineLayer
-            id="layer3"
-            style={{
-              lineColor: '#fff',
-              lineCap: 'round',
-              lineJoin: 'round',
-              lineWidth: 10,
-              lineSortKey: -2,
-            }}
-          />
-          <MapLibreGL.LineLayer
-            id="layer4"
-            style={{
-              lineColor: '#777',
-              lineCap: 'round',
-              lineJoin: 'round',
-              lineWidth: 6,
-              lineSortKey: -1,
-            }}
-          />
-        </MapLibreGL.ShapeSource>
-      )}
     </>
   );
 }

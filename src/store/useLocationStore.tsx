@@ -12,7 +12,7 @@ export interface MapLocation {
 }
 
 export type SearchMode = 'searchto' | 'searchfrom' | 'idle';
-export type NavigationMode = 'routing' | 'navigating'| 'arrived';
+export type NavigationMode = 'routing' | 'navigating' | 'arrived';
 
 interface LocationStore {
   locations: MapLocation[];

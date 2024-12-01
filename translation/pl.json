@@ -8,7 +8,8 @@
     "counter": "Licznik",
     "location": "Lokalizacja",
     "map": "Mapa",
-    "details": "Szczegóły"
+    "details": "Szczegóły",
+    "navigatingTo":"Nawiguję do:"
   },
   "getStarted": "Otwórz kod dla tego ekranu:",
   "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.",
@@ -24,7 +25,8 @@
     "title": "Lokalizacja",
     "permissionStatus": "Status uprawnień",
     "granted": "przyznane",
-    "yourLocation": "Twoja lokalizacja"
+    "yourLocation": "Twoja lokalizacja",
+    "navigatingTo":"Nawiguję do:"
   },
   "menu": {
     "map": "Mapa",
@@ -87,5 +89,6 @@
     "confirmation" : "Sprawdź email w celu zresetowania hasła",
     "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
     "didntReceiveEmail" : "Nie otrzymałeś emaila?"
-  }
+  },
+  "cancel":"Anuluj"
 }

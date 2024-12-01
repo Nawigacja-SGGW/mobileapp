@@ -1,20 +1,20 @@
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
 
-import useLocationStore from '~/store/useLocationStore';
+import useLocationStore, { MapLocation } from '~/store/useLocationStore';
 
 type RoutedBy = 'car' | 'bike' | 'foot';
 
 export function usePlaceNavigation(routedBy: RoutedBy) {
   const [routeData, setRouteData] = useState({
-    route: [],
+    route: [] as [number, number][],
     distance: 0,
     duration: 0,
   });
 
-  const [userlocation, setUserLocation] = useState();
+  const [userlocation, setUserLocation] = useState<[number, number] | undefined>(undefined);
   const { navigationMode, locationTo, setNavigationMode } = useLocationStore();
-  const lastLocations = useRef([]);
+  const lastLocations = useRef<[number, number][]>([]);
 
   useEffect(() => {
     (async () => {
@@ -27,11 +27,11 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
         {
           accuracy: Location.Accuracy.High,
           timeInterval: 100,
-          distanceInterval: 1,
+          distanceInterval: 30,
         },
         (location) => {
-          if (navigationMode !== 'routing') return;
-          const coords = [location.coords.longitude, location.coords.latitude];
+          // if (navigationMode !== 'routing') return;
+          const coords = [location.coords.longitude, location.coords.latitude] as [number, number];
           lastLocations.current.push(coords);
           if (lastLocations.current.length > 10) lastLocations.current.shift();
           setUserLocation(coords);
@@ -40,7 +40,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       );
 
       const location = await Location.getCurrentPositionAsync({});
-      const coords = [location.coords.longitude, location.coords.latitude];
+      const coords = [location.coords.longitude, location.coords.latitude] as [number, number];
       setUserLocation(coords);
       console.log(userlocation);
     })();
@@ -48,23 +48,24 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
 
   useEffect(() => {
     console.log('uloc, toloc', userlocation, locationTo);
-
     let locfrom = userlocation;
     let locto = locationTo;
     if (!userlocation || !locationTo) return;
-    if (!Array.isArray(userlocation)) locfrom = userlocation.coordinates;
-    if (!Array.isArray(locationTo)) locto = locationTo.coordinates;
+    if (!Array.isArray(locto)) locto = locationTo.coordinates;
     const waypoints = [locfrom, locto];
     const wayString = [locfrom, locto].reduce((acc, c, i) => {
       acc += c[0].toString() + ',';
       acc += c[1].toString() + (1 === i ? '' : ';');
       return acc;
     }, '');
-    if (mapDistance(lastLocations.current[0], locationTo) < 0.02) {
+    if (mapDistance(userlocation, locationTo) < 0.02) {
       console.log('ARRIVED');
       setNavigationMode('arrived');
     }
-    if (mapDistance(lastLocations.current[0], userlocation) > 0.01)
+    if (
+      lastLocations.current.length === 0 ||
+      mapDistance(lastLocations.current[0], userlocation) > 0.01
+    )
       fetch(
         `https://routing.openstreetmap.de/routed-${routedBy}/route/v1/foot/${wayString}?overview=full&geometries=geojson`
       )
@@ -79,10 +80,19 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
             duration: n['duration'],
           });
         });
+    else {
+      let r = getRemainingRoute(routeData.route, userlocation, lastLocations.current ?? []);
+      setRouteData({
+        ...routeData,
+        route: r,
+        distance: calculateDistance(r),
+      });
+    }
+    console.log('routedata', routeData, lastLocations, userlocation);
   }, [locationTo, userlocation]);
 
   return {
-    route: getRemainingRoute(routeData.route, userlocation, lastLocations.current),
+    route: getRemainingRoute(routeData.route, userlocation, lastLocations.current ?? []),
     distance: routeData.distance,
     duration: routeData.duration,
   } as const;
@@ -99,6 +109,7 @@ const findClosestPointIndex = (route, location, previousLocations) => {
       closestIndex = index;
     }
   });
+  if (minDistance > 0.1) return route;
 
   if (
     previousLocations &&
@@ -111,31 +122,45 @@ const findClosestPointIndex = (route, location, previousLocations) => {
   return closestIndex;
 };
 
-const getRemainingRoute = (fullRoute, currentLocation, previousLocations) => {
-  const closestIndex = findClosestPointIndex(fullRoute, currentLocation);
+const getRemainingRoute = (
+  fullRoute: [number, number][],
+  previousLocations: [number, number][],
+  currentLocation?: [number, number]
+): [number, number][] => {
+  if (true) return fullRoute;
+  const closestIndex = findClosestPointIndex(fullRoute, currentLocation, previousLocations ?? []);
 
   const isMovingForward = (() => {
-    if (previousLocations.length < 2) return true; // Domyślnie idziemy naprzód
+    if (!previousLocations || previousLocations.length < 2) return true; // Domyślnie idziemy naprzód
     const lastPoint = previousLocations[previousLocations.length - 1];
     const secondLastPoint = previousLocations[previousLocations.length - 2];
 
-    const distanceToNext = mapDistance(lastPoint, fullRoute[closestIndex + 1] || []);
-    const distanceToPrev = mapDistance(lastPoint, fullRoute[closestIndex - 1] || []);
+    const distanceToNext = mapDistance(lastPoint, fullRoute[closestIndex + 1] ?? []);
+    const distanceToPrev = mapDistance(lastPoint, fullRoute[closestIndex - 1] ?? []);
 
     return distanceToNext < distanceToPrev;
   })();
 
   console.log('forward');
   // sort route, get best, sort route by previous path
-
-  return [previousLocations.at(-1), ...fullRoute.slice(closestIndex)];
+  const prevLocation = previousLocations?.at(-1);
+  if (prevLocation) return [prevLocation, ...fullRoute.slice(closestIndex)];
+  else return [...fullRoute.slice(closestIndex)].filter(Boolean);
 };
 
 const mapDistance = (
-  location1: [number, number] | MapLocation,
-  location2: [number, number] | MapLocation
+  location1: [number, number] | MapLocation | undefined,
+  location2: [number, number] | MapLocation | undefined
 ): number => {
+  console.log(location1, location2);
   if (!location1 || !location2) return 0;
+  if (
+    [location2, location1].filter(
+      (n) => (Array.isArray(n) && n.length === 2) || typeof n === 'object'
+    ).length !== 2
+  ) {
+    return 0;
+  }
   const [lat1, lon1] = Array.isArray(location1) ? location1 : location1.coordinates;
   const [lat2, lon2] = Array.isArray(location2) ? location2 : location2.coordinates;
 
@@ -153,3 +178,11 @@ const mapDistance = (
     )
   );
 };
+
+function calculateDistance(points: [number, number][]) {
+  let distance: number = 0;
+  for (let i = 0; i < points.length - 1; i++) {
+    distance += mapDistance(points[i], points[i + 1]);
+  }
+  return distance;
+}
