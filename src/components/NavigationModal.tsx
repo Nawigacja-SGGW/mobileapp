@@ -44,7 +44,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
 //stuff that probably should be replaced by some lib but no time : (
 function formatDistance(distance: number) {
   if (distance > 2) return `${Math.round(distance * 10) / 10} km`;
-  return `${Math.round(distance * 1000)} m`;
+  return `${Math.round((distance * 1000) / 5) * 5} m`;
 }
 
 function getFormattedTime(distance: number) {

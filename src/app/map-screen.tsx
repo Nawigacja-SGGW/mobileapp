@@ -181,7 +181,11 @@ export default function MapScreen() {
             followUserMode={UserTrackingMode.FollowWithHeading}
           />
           {/* linia trasy */}
-          <MapLine route={navigationMode === 'navigating' ? navRoute : route} />
+          <MapLine
+            route={
+              navigationMode === 'navigating' ? navRoute : navigationMode === 'routing' ? route : []
+            }
+          />
           <MapMarkers
             lastRoutePoint={lastRoutePoint}
             locations={locations}
@@ -198,7 +202,7 @@ export default function MapScreen() {
           onCancel={() => {
             setNavigationMode('routing');
           }}
-          distanceLeft={0.01111}
+          distanceLeft={distance / 1000}
           visible={navigationMode === 'navigating'}
         />
       </View>

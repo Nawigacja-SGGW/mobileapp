@@ -26,8 +26,8 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 100,
-          distanceInterval: 30,
+          timeInterval: 10,
+          distanceInterval: 1,
         },
         (location) => {
           // if (navigationMode !== 'routing') return;
@@ -76,7 +76,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
           if (navigationMode !== 'navigating') return;
           setRouteData({
             route: n['routes'][0].geometry.coordinates,
-            distance: n['distance'],
+            distance: n['routes'][0].distance,
             duration: n['duration'],
           });
         });
