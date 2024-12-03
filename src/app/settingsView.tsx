@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, useWindowDimensions } from 'react-native';
-import { FontAwesome5, Ionicons, Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import Drawer from 'expo-router/drawer';
@@ -17,7 +16,7 @@ export default function SettingsView() {
   const settingsOptions = [
     {
       label: t('settings.language'),
-      icon: <LanguageIcon width={28} height={28} color="white" />,
+      icon: <LanguageIcon width={28} height={28} fill="white" />,
       onPress: () => console.log('Language Settings'),
     },
     {
@@ -49,9 +48,13 @@ export default function SettingsView() {
               marginBottom: height * 0.04,
               flexDirection: 'row',
               alignItems: 'center',
+              justifyContent: 'space-between',
             }}>
-            {option.icon}
-            <Text className="ml-4 text-lg font-medium text-white">{option.label}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {option.icon}
+              <Text className="ml-4 text-lg font-medium text-white">{option.label}</Text>
+            </View>
+            <ArrowIcon width={20} height={20} fill="white" />
           </TouchableOpacity>
         ))}
       </View>
