@@ -7,6 +7,7 @@ import TopHeader from '~/components/TopHeader';
 import LanguageIcon from '../../assets/language.svg';
 import ChangePassIcon from '../../assets/changepass.svg';
 import ArrowIcon from '../../assets/arrow.svg';
+import { router } from 'expo-router';
 
 export default function SettingsView() {
   const { t } = useTranslation();
@@ -17,12 +18,12 @@ export default function SettingsView() {
     {
       label: t('settings.language'),
       icon: <LanguageIcon width={28} height={28} fill="white" />,
-      onPress: () => console.log('Language Settings'),
+      onPress: () => router.push('/changeLanguageView'),
     },
     {
       label: t('settings.changePassword'),
       icon: <ChangePassIcon width={28} height={28} fill="white" />,
-      onPress: () => console.log('Change Password'),
+      onPress: () => router.push('/changePasswordView'),
     },
   ];
 
