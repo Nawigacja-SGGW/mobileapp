@@ -1,4 +1,4 @@
-import MapLibreGL from '@maplibre/maplibre-react-native';
+import MapLibreGL, { CameraRef } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
 import { Drawer } from 'expo-router/drawer';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -15,6 +15,9 @@ import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
+import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Touchable } from 'react-native';
@@ -55,6 +58,10 @@ export default function MapScreen() {
   const map = useRef(null);
   const lastRoutePoint = route?.at(-1);
 
+  const [mapRotation, setMapRotation] = useState(60);
+  const [mapCenterLocation, setMapCenterLocation] = useState(campusCenter);
+  const [mapZoom, setMapZoom] = useState(14);
+
   const expandFullSearchBar = () => {
     setIsExpanded(true);
     clearFilteredLocations();
@@ -80,6 +87,7 @@ export default function MapScreen() {
         },
         (location) => {
           userLocation.current = location;
+          console.log("map-screen.tsx location");
           console.log(location);
         }
       );
@@ -94,6 +102,7 @@ export default function MapScreen() {
           ],
         });
       }
+      console.log("map-screen.tsx userLocation.current");
       console.log(userLocation.current);
     })();
   }, []);
@@ -135,7 +144,25 @@ export default function MapScreen() {
         setIsExpanded(true);
         break;
     }
+    
+  const handlePointNorth = () => {
+      console.log("handlePointNorth");
+      setMapRotation(0);
+     }
+
+  const handleMapChanged = (event :any) => {
+    const { properties } = event;
+    if (properties != undefined) {
+      setMapRotation(properties.heading);
+      setMapCenterLocation(properties.centerCoordinate);
+      setMapZoom(properties.zoomLevel);
+    }
   };
+
+  const compassStyle = {
+    transform: `rotate(${(-mapRotation - 45)}deg)`
+  };
+  console.log(-mapRotation - 45);
 
   return (
     <>
@@ -164,11 +191,12 @@ export default function MapScreen() {
             setSearchQuery('');
           }}
           compassEnabled={false}>
+          onRegionDidChange={handleMapChanged}
           <MapLibreGL.Camera
             ref={camera}
-            centerCoordinate={campusCenter}
-            zoomLevel={14}
-            heading={60}
+            centerCoordinate={mapCenterLocation}
+            zoomLevel={mapZoom}
+            heading={mapRotation}
             maxBounds={campusBounds}
             minZoomLevel={12.5}
           />
@@ -181,6 +209,10 @@ export default function MapScreen() {
           />
           <MapLibreGL.UserLocation renderMode="native" androidRenderMode="compass" />
         </MapLibreGL.MapView>
+        {/* compass */}
+        <TouchableOpacity onPress={handlePointNorth} className='absolute bottom-5 right-5 z-10'>
+          <Ionicons name="compass-sharp" size={50} color="#003228" style={compassStyle}/>
+        </TouchableOpacity>
         <LocationModal
           isVisible={isExpanded}
           setIsVisible={setIsExpanded}

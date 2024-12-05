@@ -76,8 +76,8 @@ export function useRouteQuery(
     )
       .then((n) => n.json())
       .then((n) => {
-        console.log(n);
-        console.log(n['routes'][0].geometry.coordinates);
+        //console.log(n);
+        //console.log(n['routes'][0].geometry.coordinates);
         setRouteData({
           route: n['routes'][0].geometry.coordinates,
           distance: n['distance'],
