@@ -21,6 +21,10 @@
     "search.startingPoint": "Your location",
     "search.destination": "Destination"
   },
+  "object":{
+    "moreInfo":"More Information",
+    "navigate":"Navigate"
+  },
   "login":{
     "usernameOrEmail" : {
       "label" : "Username or e-mail",
@@ -64,6 +68,15 @@
     "confirmation" : "Check email for reset link",
     "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
     "didntReceiveEmail" : "Didn't receive an email?"
+  },
+
+  "loading": "Loading",
+
+  "profile": {
+    "email": "Email",
+    "myKilometers": "My kilometers",
+    "myRoutes": "My routes",
+    "logOut": "Log out"
   },
 
   "getStarted": "Open this display's code:",

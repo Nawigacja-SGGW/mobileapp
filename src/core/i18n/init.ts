@@ -4,13 +4,15 @@ import { initReactI18next } from 'react-i18next';
 import { fallbackChecker } from './fallbackChecker';
 import { languageDetector } from './languageDetector';
 
+import { useSettingsStore } from '~/store/useSettingsStore';
+
 type Init18n = {
   resources: Resource;
   fallbackLng: string;
 };
 
 export const init18n = ({ resources, fallbackLng }: Init18n) => {
-  return i18n
+  i18n
     .use(languageDetector)
     .use(initReactI18next)
     .init({
@@ -20,5 +22,16 @@ export const init18n = ({ resources, fallbackLng }: Init18n) => {
       interpolation: {
         escapeValue: false,
       },
+    })
+    .then(async () => {
+      useSettingsStore.persist.onFinishHydration(async () => {
+        const savedLanguage = await useSettingsStore.getState().language;
+        console.log('savedLanguage', savedLanguage);
+        if (savedLanguage) {
+          await i18n.changeLanguage(savedLanguage);
+        }
+      });
     });
+
+  return i18n;
 };
