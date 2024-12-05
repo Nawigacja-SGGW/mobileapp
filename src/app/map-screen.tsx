@@ -123,12 +123,6 @@ export default function MapScreen() {
   const handlePointNorth = () => {
       console.log("handlePointNorth");
       setMapRotation(0);
-      if (camera.current) {
-        camera.current.setCamera({
-          heading: 0,
-          animationDuration: 1000,
-        });
-      }
     }
 
   const handleMapChanged = (event :any) => {
