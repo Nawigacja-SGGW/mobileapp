@@ -32,7 +32,7 @@ export default function Start() {
         <Background height="100%" width="100%" style={{position: 'absolute', top: 0, left: 0}} />
         <View className="flex-1 justify-center p-[20px]">
           <View style={{ alignItems: 'center', marginBottom: '20%' }}>
-            <Image source={require('./../../assets/icon.png')} className="h-[100px] w-[100px] rounded-full bg-[#cccccc] justify-center items-center" />
+            <Image source={require('./../../assets/nawigacja-SGGW.png')} className="h-[100px] w-[100px] rounded-full bg-[#cccccc] justify-center items-center" />
           </View>
           <Link href={{ pathname: '/register' }} asChild>
             <AppButton title={t('login.signUpButton')} buttonStyle="!bg-black my-4" />
