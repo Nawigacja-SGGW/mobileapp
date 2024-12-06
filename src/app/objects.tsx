@@ -1,18 +1,59 @@
 import Drawer from 'expo-router/drawer';
-import React from 'react';
+import React,  { useRef, useState } from 'react';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions, StyleSheet } from 'react-native';
 import useLocationStore from '~/store/useLocationStore';
 
 import SearchIcon1 from '../../assets/search1.svg';
+//@styled-icons/fluentui-system-filled/Search
 import TopHeaderOL from '~/components/TopHeaderObjectList';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  button: {
+    padding: 15,
+    backgroundColor: '#6200ea',
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  bottomSheet: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: 300,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  sheetText: {
+    marginTop: 20,
+    textAlign: 'center',
+    fontSize: 16,
+  },
+});
+
 
 export default function Objects() {
   const navigation = useNavigation();
 
-    // Zustand store
-    const { setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
+  const { setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
+  const screenHeight = Dimensions.get('window').height;
+  const slideAnim = useRef(new Animated.Value(screenHeight)).current;
+  const [isVisible, setIsVisible] = useState(false);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -30,13 +71,25 @@ export default function Objects() {
     //navigation.navigate('objectDetail',{locationName});
   };
 
+  const toggleBottomSheet = () => {
+    Animated.timing(slideAnim, {
+      toValue: isVisible ? screenHeight : screenHeight - 300, // Wysokość paska, np. 300px
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+    setIsVisible(!isVisible);
+  };
+
   return (
     <>
-        <Drawer.Screen options={{header: () => <TopHeaderOL/>,}}/>
+        <Drawer.Screen options={{header: () => <TopHeaderOL onClick={toggleBottomSheet}/>,}}/>
         <SearchBar
           handleSearch={handleSearch}
           handleLocationSelect={handleLocationSelect}
         />
+        <Animated.View style={[styles.bottomSheet, { top: slideAnim }]}>
+          <Text style={styles.sheetText}>To jest wysuwany pasek!</Text>
+        </Animated.View>
     </>
   );
 }

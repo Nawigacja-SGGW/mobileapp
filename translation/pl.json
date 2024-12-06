@@ -88,9 +88,8 @@
     "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
     "didntReceiveEmail" : "Nie otrzymałeś emaila?"
   },
-  "noResults" : "nie znaleziono wyników"
-},
-
+  "noResults" : "nie znaleziono wyników",
+  
   "profile": {
     "email": "Email",
     "myKilometers": "Moje kilometry",
