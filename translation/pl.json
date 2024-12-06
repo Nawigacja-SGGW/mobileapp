@@ -88,8 +88,12 @@
     "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
     "didntReceiveEmail" : "Nie otrzymałeś emaila?"
   },
-  "noResults" : "nie znaleziono wyników",
-  
+  "objects":{
+    "noResults" : "nie znaleziono wyników",
+    "sortBy": "SORTUJ PO",
+    "number": "numerze",
+    "name": "nazwie: od A do Z"
+  },
   "profile": {
     "email": "Email",
     "myKilometers": "Moje kilometry",

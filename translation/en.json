@@ -69,7 +69,12 @@
     "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
     "didntReceiveEmail" : "Didn't receive an email?"
   },
-  "noResults" : "no results found",
+  "objects":{
+    "noResults" : "no results found",
+    "sortBy": "SORT BY",
+    "number": "number",
+    "name": "name: from A to Z"
+  },
 
   "loading": "Loading",
 

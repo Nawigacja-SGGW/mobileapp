@@ -11,6 +11,7 @@ import SearchIcon1 from '../../assets/search1.svg';
 import TopHeaderOL from '~/components/TopHeaderObjectList';
 
 export default function Objects() {
+  const { t } = useTranslation();
   const navigation = useNavigation();
 
   const { setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
@@ -47,8 +48,8 @@ export default function Objects() {
   const [selectedOption, setSelectedOption] = useState<string>('number');
 
   const options = [
-    { id: 'number', label: 'number' },
-    { id: 'name', label: 'name: from A to Z' },
+    { id: 'number', label: 'objects.number' },
+    { id: 'name', label: 'objects.name' },
   ];
 
   const handleSelectSortOption = (optionId: string) => {setSelectedOption(optionId);};
@@ -75,14 +76,14 @@ export default function Objects() {
           </TouchableOpacity>
         )}
         <Animated.View className = 'absolute left-0 right-0 bg-white shadow-lg p-5 h-48' style={{ top: slideAnim }}>
-          <Text className='text-xs text-gray-400 font-extrabold mb-2'>SORT BY</Text>
+          <Text className='text-xs text-gray-400 font-extrabold mb-2'>{t('objects.sortBy')}</Text>
           {options.map((option) => (
             <TouchableOpacity
               key={option.id}
               className='flex-row justify-between py-2'
               onPress={() => handleSelectSortOption(option.id)}
             >
-              <Text className='text-lg text-black font-semibold'>{option.label}</Text>
+              <Text className='text-lg text-black font-semibold'>{t(option.label)}</Text>
               {selectedOption === option.id && <FontAwesome6 name="circle-dot" size={20} color="[#0F9D58]" />}
             </TouchableOpacity>
           ))}
@@ -136,7 +137,7 @@ function SearchBar({ handleSearch, handleLocationSelect }: searchBarProps) {
                 <View>{item.icon}</View>
                 <Text className="ml-3 text-lg text-black">{item.name}</Text>
                 </TouchableOpacity>
-            ))) : (<Text className="text-center font-normal mt-5 text-[16px] text-[#8B8B8B]">{t('noResults')}</Text> ))
+            ))) : (<Text className="text-center font-normal mt-5 text-[16px] text-[#8B8B8B]">{t('objects.noResults')}</Text> ))
         }
         </ScrollView>
     </View>
