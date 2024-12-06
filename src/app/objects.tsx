@@ -4,45 +4,52 @@ import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions, StyleSheet } from 'react-native';
 import useLocationStore from '~/store/useLocationStore';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 import SearchIcon1 from '../../assets/search1.svg';
-//@styled-icons/fluentui-system-filled/Search
 import TopHeaderOL from '~/components/TopHeaderObjectList';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  button: {
-    padding: 15,
-    backgroundColor: '#6200ea',
-    borderRadius: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
   bottomSheet: {
     position: 'absolute',
     left: 0,
     right: 0,
-    height: 300,
+    height: 200,
     backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+    padding: 20,
   },
-  sheetText: {
-    marginTop: 20,
-    textAlign: 'center',
+  overlay: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  header: {
+    fontSize: 12,
+    color: '#B0B0B0',
+    marginBottom: 10,
+    fontWeight: 900,
+  },
+  option: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+  optionText: {
     fontSize: 16,
+    color: '#000',
+    fontWeight: 600,
+  },
+  checkmark: {
+    fontSize: 18,
+    color: '#0F9D58',
   },
 });
 
@@ -51,9 +58,6 @@ export default function Objects() {
   const navigation = useNavigation();
 
   const { setSearchQuery, filterLocations, clearFilteredLocations } = useLocationStore();
-  const screenHeight = Dimensions.get('window').height;
-  const slideAnim = useRef(new Animated.Value(screenHeight)).current;
-  const [isVisible, setIsVisible] = useState(false);
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -71,14 +75,27 @@ export default function Objects() {
     //navigation.navigate('objectDetail',{locationName});
   };
 
+  const screenHeight = Dimensions.get('window').height;
+  const slideAnim = useRef(new Animated.Value(screenHeight)).current;
+  const [isVisible, setIsVisible] = useState(false);
+
   const toggleBottomSheet = () => {
     Animated.timing(slideAnim, {
-      toValue: isVisible ? screenHeight : screenHeight - 300, // Wysokość paska, np. 300px
-      duration: 300,
+      toValue: isVisible ? screenHeight : screenHeight - 200, // Wysokość paska, np. 300px
+      duration: 200,
       useNativeDriver: false,
     }).start();
     setIsVisible(!isVisible);
   };
+
+  const [selectedOption, setSelectedOption] = useState<string>('number');
+
+  const options = [
+    { id: 'number', label: 'number' },
+    { id: 'name', label: 'name: from A to Z' },
+  ];
+
+  const handleSelectSortOption = (optionId: string) => {setSelectedOption(optionId);};
 
   return (
     <>
@@ -87,8 +104,30 @@ export default function Objects() {
           handleSearch={handleSearch}
           handleLocationSelect={handleLocationSelect}
         />
+        {isVisible && (
+          <TouchableOpacity 
+          onPress={() => toggleBottomSheet()}
+          style={[styles.overlay, {
+            opacity: slideAnim.interpolate({
+              inputRange: [screenHeight - 300, screenHeight],
+              outputRange: [1, 0],
+            }),
+          }]}
+          >
+          </TouchableOpacity>
+        )}
         <Animated.View style={[styles.bottomSheet, { top: slideAnim }]}>
-          <Text style={styles.sheetText}>To jest wysuwany pasek!</Text>
+          <Text style={styles.header}>SORT BY</Text>
+          {options.map((option) => (
+            <TouchableOpacity
+              key={option.id}
+              style={styles.option}
+              onPress={() => handleSelectSortOption(option.id)}
+            >
+              <Text style={styles.optionText}>{option.label}</Text>
+              {selectedOption === option.id && <FontAwesome6 name="circle-dot" size={20} color="[#0F9D58]" />}
+            </TouchableOpacity>
+          ))}
         </Animated.View>
     </>
   );
@@ -116,7 +155,7 @@ function SearchBar({ handleSearch, handleLocationSelect }: searchBarProps) {
                     placeholderTextColor="#000"
                     value={searchQuery}
                     onChangeText={handleSearch}
-                    //autoFocus=
+                    //autoFocus = {true}
                 />
             </View>
         </View>
