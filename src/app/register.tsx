@@ -26,25 +26,18 @@ export default function Register() {
     setIsPassword2Visible(!isPassword2Visible);
   };
 
-  useUserStore.subscribe(
-    (state) => state.error,
-    (currentValue) => {
-      if (state.error) {
-        ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
-      }
-      if (!state.loading && !state.error) {
-        ToastAndroid.show('Rejestracja przebiegła pomyślnie', ToastAndroid.SHORT);
-        navigation.navigate('start');
-      }
-    }
-  );
-
   const onSubmit = async (data: FieldValues) => {
     if (!data.email || !data.password || !data.confirmPassword) {
       ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
       return;
     }
-    await register(data.email, data.password);
+    try {
+      await register(data.email, data.password);
+      ToastAndroid.show('Zarejestrowano pomyślnie', ToastAndroid.SHORT);
+      navigation.navigate('login');
+    } catch {
+      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
+    }
   };
 
   const styles = StyleSheet.create({
