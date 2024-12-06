@@ -1,18 +1,20 @@
 import { useNavigation } from 'expo-router';
 import Drawer from 'expo-router/drawer';
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, ToastAndroid } from 'react-native';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
 import { Logo } from '~/components/Logo';
+import { useUserStore } from '~/store/useUserStore';
 
 export default function Register() {
   const { control, handleSubmit } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPassword2Visible, setIsPassword2Visible] = useState(false);
+  const { loading, error, register } = useUserStore();
   const { t } = useTranslation();
   const navigation = useNavigation();
 
@@ -24,9 +26,20 @@ export default function Register() {
     setIsPassword2Visible(!isPassword2Visible);
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data); // logowanie danych formularza
-    navigation.navigate('map-screen');
+  const onSubmit = async (data: FieldValues) => {
+    if (!data.email || !data.password || !data.confirmPassword) {
+      ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
+      return;
+    }
+
+    await register(data.email, data.password);
+
+    if (!loading && !error) {
+      ToastAndroid.show('Rejestracja przebiegła pomyślnie', ToastAndroid.SHORT);
+      navigation.navigate('start');
+    } else {
+      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
+    }
   };
 
   return (
@@ -53,19 +66,6 @@ export default function Register() {
                 value={value}
                 onChangeText={onChange}
                 keyboardType="email-address"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="username"
-            render={({ field: { onChange, value } }) => (
-              <AppInput
-                label={t('login.username.label')}
-                placeholder={t('login.username.placeholder')}
-                value={value}
-                onChangeText={onChange}
-                keyboardType="default"
               />
             )}
           />

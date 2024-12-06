@@ -7,21 +7,16 @@ import { View, Text, Image } from 'react-native';
 import Background from '../../assets/background.svg';
 
 import { AppButton } from '~/components/AppButton';
-import useFakeLocationStore from '~/store/useFakeLocationStore';
+import { useObjectsStore } from '~/store/useObjectsStore';
 
 export default function Start() {
-  const { pointObjects, areaObjects, fetchData } = useFakeLocationStore();
+  const { fetchData } = useObjectsStore();
   const params = useLocalSearchParams();
 
   React.useEffect(() => {
-    console.log('application start', params);
+    console.log('Application start', params);
     fetchData();
   }, []);
-
-  React.useEffect(() => {
-    console.log('pointObjects', pointObjects);
-    console.log('areaObjects', areaObjects);
-  }, [pointObjects, areaObjects]);
 
   const { t } = useTranslation();
 
