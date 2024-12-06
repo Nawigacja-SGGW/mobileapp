@@ -21,9 +21,8 @@ interface StoreState {
   statistics: UserStatistics | null;
   searchHistory: SearchHistoryEntry[] | null;
   loading: boolean;
-  error: string | null;
+  error: any;
   login: (email: string, password: string) => Promise<void>;
-  extendSession: () => Promise<void>;
   logout: () => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   resetPasswordRequest: (email: string) => Promise<void>;
@@ -48,17 +47,11 @@ const useRealUserStore = create<StoreState>((set, get) => ({
     try {
       const response = await api.post('/auth/login', { email, password });
       set({ id: response.data.id, token: response.data.token, email, loading: false, error: null });
+      return Promise.resolve();
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
-    }
-  },
-  extendSession: async () => {
-    try {
-      set({ loading: true, error: null });
-      const response = await api.post('/auth/extend-session', { token: get().token });
-      set({ token: response.data.token, loading: false, error: null });
-    } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      console.log('Error logging in', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
   logout: async () => {
@@ -66,8 +59,11 @@ const useRealUserStore = create<StoreState>((set, get) => ({
       set({ loading: true, error: null });
       await api.post('/auth/logout', { token: get().token });
       set({ id: null, email: null, token: null, loading: false, error: null });
+      return Promise.resolve();
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      console.log('Error logging out', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
   register: async (email: string, password: string) => {
@@ -75,8 +71,11 @@ const useRealUserStore = create<StoreState>((set, get) => ({
     try {
       await api.post('/auth/register', { email, password });
       set({ loading: false, error: null });
+      return Promise.resolve();
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      console.log('Error registering', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
   resetPasswordRequest: async (email: string) => {
@@ -84,8 +83,11 @@ const useRealUserStore = create<StoreState>((set, get) => ({
     try {
       await api.patch('/auth/reset-password-request', { email });
       set({ loading: false, error: null });
+      return Promise.resolve();
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      console.log('Error requesting password reset', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
   fetchUserHistory: async () => {
@@ -93,8 +95,11 @@ const useRealUserStore = create<StoreState>((set, get) => ({
     try {
       const response = await api.get('/user-history', { data: { user: get().id } });
       set({ searchHistory: response.data.history, loading: false, error: null });
+      return Promise.resolve();
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      console.log('Error fetching user history', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
   updateUserHistory: async (objectId: number, routeCreatedCount: number) => {
@@ -105,8 +110,11 @@ const useRealUserStore = create<StoreState>((set, get) => ({
       });
       // TODO alter only one entry
       set({ searchHistory: response.data.history, loading: false, error: null });
+      return Promise.resolve();
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      console.log('Error updating user history', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
   fetchUserStatistics: async () => {
@@ -114,8 +122,11 @@ const useRealUserStore = create<StoreState>((set, get) => ({
     try {
       const response = await api.get('/user-statistics', { data: { user: get().id } });
       set({ statistics: response.data.statistics, loading: false, error: null });
+      return Promise.resolve();
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      console.log('Error fetching user statistics', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
   updateUserStatistics: async () => {
@@ -125,8 +136,11 @@ const useRealUserStore = create<StoreState>((set, get) => ({
         data: { user: get().id, timestamp: Date.now() },
       });
       set({ statistics: response.data.statistics, loading: false, error: null });
+      return Promise.resolve();
     } catch (error) {
-      set({ error: (error as Error).message, loading: false });
+      console.log('Error updating user statistics', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
 }));
@@ -256,8 +270,8 @@ const useFakeUserStore = create<StoreState>((set) => ({
 
 export let useUserStore: UseBoundStore<StoreApi<StoreState>>;
 
-if (process.env.NODE_ENV === 'development') {
-  useUserStore = useFakeUserStore;
-} else {
-  useUserStore = useRealUserStore;
-}
+//if (process.env.NODE_ENV === 'development') {
+//  useUserStore = useFakeUserStore;
+//} else {
+useUserStore = useRealUserStore;
+//}

@@ -14,7 +14,7 @@ export default function Register() {
   const { control, handleSubmit } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPassword2Visible, setIsPassword2Visible] = useState(false);
-  const { loading, error, register } = useUserStore();
+  const { loading, register } = useUserStore();
   const { t } = useTranslation();
   const navigation = useNavigation();
 
@@ -26,20 +26,25 @@ export default function Register() {
     setIsPassword2Visible(!isPassword2Visible);
   };
 
+  useUserStore.subscribe(
+    (state) => state.error,
+    (currentValue) => {
+      if (state.error) {
+        ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
+      }
+      if (!state.loading && !state.error) {
+        ToastAndroid.show('Rejestracja przebiegła pomyślnie', ToastAndroid.SHORT);
+        navigation.navigate('start');
+      }
+    }
+  );
+
   const onSubmit = async (data: FieldValues) => {
     if (!data.email || !data.password || !data.confirmPassword) {
       ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
       return;
     }
-
     await register(data.email, data.password);
-
-    if (!loading && !error) {
-      ToastAndroid.show('Rejestracja przebiegła pomyślnie', ToastAndroid.SHORT);
-      navigation.navigate('start');
-    } else {
-      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
-    }
   };
 
   const styles = StyleSheet.create({

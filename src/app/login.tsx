@@ -3,7 +3,15 @@ import Drawer from 'expo-router/drawer';
 import React, { useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  ToastAndroid,
+} from 'react-native';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
@@ -17,7 +25,7 @@ export default function Login() {
   const { t } = useTranslation();
   const externalIconsSize = 44;
   const navigation = useNavigation();
-  const { loading, error, login } = useUserStore();
+  const { loading, login } = useUserStore();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -28,11 +36,10 @@ export default function Login() {
       ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
       return;
     }
-    await login(data.email, data.password);
-
-    if (!loading && !error) {
+    try {
+      await login(data.usernameOrEmail, data.password);
       navigation.navigate('map-screen');
-    } else {
+    } catch (error) {
       ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
     }
   };
