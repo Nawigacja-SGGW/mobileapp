@@ -37,6 +37,10 @@
     "search.startingPoint": "Twoja lokacja",
     "search.destination": "Miejsce docelowe"
   },
+  "object":{
+    "moreInfo":"Więcej informacji",
+    "navigate":"Nawiguj"
+  },
   "login": { 
     "usernameOrEmail": {
       "label": "Nazwa użytkownika lub e-mail",
@@ -67,6 +71,9 @@
       "label": "Potwierdź nowe hasło",
       "placeholder": "Wprowadź nowe hasło"
     },
+
+    "loading": "Ładowanie",
+
     "signInButton": "Zaloguj się",
     "signUpButton": "Zarejestruj się",
     "sendButton": "Wyślij",
@@ -82,4 +89,12 @@
     "didntReceiveEmail" : "Nie otrzymałeś emaila?"
   },
   "noResults" : "nie znaleziono wyników"
+},
+
+  "profile": {
+    "email": "Email",
+    "myKilometers": "Moje kilometry",
+    "myRoutes": "Moje trasy",
+    "logOut": "Wyloguj się"
+  }
 }

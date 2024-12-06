@@ -21,6 +21,10 @@
     "search.startingPoint": "Your location",
     "search.destination": "Destination"
   },
+  "object":{
+    "moreInfo":"More Information",
+    "navigate":"Navigate"
+  },
   "login":{
     "usernameOrEmail" : {
       "label" : "Username or e-mail",
@@ -66,6 +70,15 @@
     "didntReceiveEmail" : "Didn't receive an email?"
   },
   "noResults" : "no results found",
+
+  "loading": "Loading",
+
+  "profile": {
+    "email": "Email",
+    "myKilometers": "My kilometers",
+    "myRoutes": "My routes",
+    "logOut": "Log out"
+  },
   "getStarted": "Open this display's code:",
   "changeCode": "Change any text, save the file and the app will update automatically."
 }

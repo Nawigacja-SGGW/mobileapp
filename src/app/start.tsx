@@ -1,13 +1,23 @@
-import React from 'react';
+import { Link, useLocalSearchParams } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import { Link } from 'expo-router';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 
-import { AppButton } from '~/components/AppButton';
 import Background from '../../assets/background.svg';
 
+import { AppButton } from '~/components/AppButton';
+import { useObjectsStore } from '~/store/useObjectsStore';
+
 export default function Start() {
+  const { fetchData } = useObjectsStore();
+  const params = useLocalSearchParams();
+
+  React.useEffect(() => {
+    console.log('Application start', params);
+    fetchData();
+  }, []);
+
   const { t } = useTranslation();
   const logoSize = 100;
 
@@ -40,7 +50,7 @@ export default function Start() {
     <>
       <Drawer.Screen options={{ headerShown: false }} />
       <View style={styles.container}>
-        <Background height="100%" width="100%" style={styles.background} />
+        <Background height="100%" width="100%" style={styles.background} className="absolute" />
         <View style={styles.content}>
           <View style={{ alignItems: 'center', marginBottom: '20%' }}>
             <Image source={require('./../../assets/nawigacja-SGGW.png')} style={styles.circle} />
@@ -60,4 +70,3 @@ export default function Start() {
     </>
   );
 }
-
