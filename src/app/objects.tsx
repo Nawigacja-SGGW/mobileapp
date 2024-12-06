@@ -2,57 +2,13 @@ import Drawer from 'expo-router/drawer';
 import React,  { useRef, useState } from 'react';
 import { useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions } from 'react-native';
 import useLocationStore from '~/store/useLocationStore';
+
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 import SearchIcon1 from '../../assets/search1.svg';
 import TopHeaderOL from '~/components/TopHeaderObjectList';
-
-const styles = StyleSheet.create({
-  bottomSheet: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    height: 200,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-    padding: 20,
-  },
-  overlay: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  header: {
-    fontSize: 12,
-    color: '#B0B0B0',
-    marginBottom: 10,
-    fontWeight: 900,
-  },
-  option: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-  },
-  optionText: {
-    fontSize: 16,
-    color: '#000',
-    fontWeight: 600,
-  },
-  checkmark: {
-    fontSize: 18,
-    color: '#0F9D58',
-  },
-});
-
 
 export default function Objects() {
   const navigation = useNavigation();
@@ -107,24 +63,26 @@ export default function Objects() {
         {isVisible && (
           <TouchableOpacity 
           onPress={() => toggleBottomSheet()}
-          style={[styles.overlay, {
+          className = 'absolute left-0 right-0 top-0 bottom-0'
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             opacity: slideAnim.interpolate({
               inputRange: [screenHeight - 300, screenHeight],
               outputRange: [1, 0],
             }),
-          }]}
+          }}
           >
           </TouchableOpacity>
         )}
-        <Animated.View style={[styles.bottomSheet, { top: slideAnim }]}>
-          <Text style={styles.header}>SORT BY</Text>
+        <Animated.View className = 'absolute left-0 right-0 bg-white shadow-lg p-5 h-48' style={{ top: slideAnim }}>
+          <Text className='text-xs text-gray-400 font-extrabold mb-2'>SORT BY</Text>
           {options.map((option) => (
             <TouchableOpacity
               key={option.id}
-              style={styles.option}
+              className='flex-row justify-between py-2'
               onPress={() => handleSelectSortOption(option.id)}
             >
-              <Text style={styles.optionText}>{option.label}</Text>
+              <Text className='text-lg text-black font-semibold'>{option.label}</Text>
               {selectedOption === option.id && <FontAwesome6 name="circle-dot" size={20} color="[#0F9D58]" />}
             </TouchableOpacity>
           ))}
