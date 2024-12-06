@@ -45,7 +45,7 @@ export default function Objects() {
     setIsVisible(!isVisible);
   };
 
-  const [selectedOption, setSelectedOption] = useState<string>('number');
+  const [selectedOption, setSelectedOption] = useState<string>('name');
 
   const options = [
     { id: 'number', label: 'objects.number' },
@@ -80,7 +80,7 @@ export default function Objects() {
           {options.map((option) => (
             <TouchableOpacity
               key={option.id}
-              className='flex-row justify-between py-2'
+              className='flex-row justify-between py-3'
               onPress={() => handleSelectSortOption(option.id)}
             >
               <Text className='text-lg text-black font-semibold'>{t(option.label)}</Text>
