@@ -4,12 +4,13 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { Logo } from '~/components/Logo';
 
 export default function Confirmation() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { handleSubmit } = useForm();
 
   const onSubmit = () => {

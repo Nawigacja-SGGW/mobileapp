@@ -49,7 +49,11 @@ export function DrawerMenu() {
     label: t('menu.logout'),
     icon: <SimpleLineIcons name="logout" size={32} color="white" />,
     onPress: async () => {
-      await logout();
+      try {
+        await logout();
+      } catch {
+        ToastAndroid.show('Nie udało się wylogować', ToastAndroid.SHORT);
+      }
       if (!loading && !error) {
         navigation.navigate('index');
       } else {
