@@ -4,9 +4,11 @@ import React, { useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, ScrollView, View, ToastAndroid } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
+import Loading from '~/components/Loading';
 import { Logo } from '~/components/Logo';
 import { useUserStore } from '~/store/useUserStore';
 
@@ -16,7 +18,7 @@ export default function Register() {
   const [isPassword2Visible, setIsPassword2Visible] = useState(false);
   const { loading, register } = useUserStore();
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -34,7 +36,7 @@ export default function Register() {
     try {
       await register(data.email, data.password);
       ToastAndroid.show('Zarejestrowano pomyślnie', ToastAndroid.SHORT);
-      navigation.navigate('login');
+      navigation.navigate('l ogin');
     } catch {
       ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
     }
@@ -63,6 +65,8 @@ export default function Register() {
 
   return (
     <>
+      {loading && <Loading />}
+
       <Drawer.Screen options={{ headerShown: false }} />
 
       <ScrollView

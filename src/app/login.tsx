@@ -12,6 +12,7 @@ import {
   ScrollView,
   ToastAndroid,
 } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
@@ -24,7 +25,7 @@ export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { t } = useTranslation();
   const externalIconsSize = 44;
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { loading, login } = useUserStore();
 
   const togglePasswordVisibility = () => {
@@ -39,7 +40,7 @@ export default function Login() {
     try {
       await login(data.usernameOrEmail, data.password);
       navigation.navigate('map-screen');
-    } catch (error) {
+    } catch {
       ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
     }
   };
