@@ -3,7 +3,7 @@ import Drawer from 'expo-router/drawer';
 import React, { useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, ScrollView, View, ToastAndroid } from 'react-native';
+import { ScrollView, View, ToastAndroid } from 'react-native';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
@@ -42,33 +42,12 @@ export default function Register() {
     }
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      padding: 20,
-      backgroundColor: '#fff',
-    },
-    boldedText: {
-      color: '#003228',
-      fontSize: 12,
-      textAlign: 'right',
-      textDecorationLine: 'underline',
-      marginTop: 10,
-      fontWeight: 700,
-    },
-    text: {
-      color: '#003228',
-      fontSize: 13,
-      textAlign: 'center',
-      fontWeight: 500,
-    },
-  });
-
   return (
     <>
       <Drawer.Screen options={{ headerShown: false }} />
 
       <ScrollView
-        style={styles.container}
+        className="p-[20px] bg-white"
         contentContainerStyle={{
           height: '100%',
           justifyContent: 'space-between',
