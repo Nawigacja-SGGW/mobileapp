@@ -1,7 +1,8 @@
+import { FontAwesome5 } from '@expo/vector-icons';
 import MapLibreGL from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
 import { Drawer } from 'expo-router/drawer';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
@@ -10,16 +11,12 @@ import DarkGreenDot from '../../assets/ellipse2.svg';
 import MapPin from '../../assets/map-pin.png';
 import SearchIcon1 from '../../assets/search1.svg';
 
+import LocationModal from '~/components/ObjectModal';
 import TopHeader from '~/components/TopHeader';
 import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
-
-import { FontAwesome5 } from '@expo/vector-icons';
-import { Touchable } from 'react-native';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import LocationModal from '~/components/ObjectModal';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
