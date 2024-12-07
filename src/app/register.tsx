@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, ScrollView, View, ToastAndroid } from 'react-native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
+
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
 import Loading from '~/components/Loading';
@@ -42,27 +43,6 @@ export default function Register() {
     }
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      padding: 20,
-      backgroundColor: '#fff',
-    },
-    boldedText: {
-      color: '#003228',
-      fontSize: 12,
-      textAlign: 'right',
-      textDecorationLine: 'underline',
-      marginTop: 10,
-      fontWeight: 700,
-    },
-    text: {
-      color: '#003228',
-      fontSize: 13,
-      textAlign: 'center',
-      fontWeight: 500,
-    },
-  });
-
   return (
     <>
       {loading && <Loading />}
@@ -70,7 +50,7 @@ export default function Register() {
       <Drawer.Screen options={{ headerShown: false }} />
 
       <ScrollView
-        style={styles.container}
+        className="p-[20px] bg-white"
         contentContainerStyle={{
           height: '100%',
           justifyContent: 'space-between',
