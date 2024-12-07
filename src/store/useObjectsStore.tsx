@@ -1,3 +1,4 @@
+import api from 'api';
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
 interface Guide {
@@ -61,7 +62,7 @@ interface ImportantPlace {
   room: number;
 }
 
-export const fakeAreaObjects: AreaObject[] = [
+const fakeAreaObjects: AreaObject[] = [
   {
     id: 1,
     latitude: '52.15751256140029',
@@ -161,7 +162,7 @@ export const fakeAreaObjects: AreaObject[] = [
   },
 ];
 
-export const fakePointObjects: PointObject[] = [
+const fakePointObjects: PointObject[] = [
   {
     id: 4,
     latitude: '52.15957117010191',
@@ -221,11 +222,17 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
   fetchData: async () => {
     set({ loading: true, error: null });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // TODO fetch real data
-      set({ loading: false, error: null });
+      const response = await api.get('/objects');
+      set({
+        areaObjects: response.data.areaObjects,
+        pointObjects: response.data.pointObjects,
+        loading: false,
+        error: null,
+      });
+      return Promise.resolve();
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
+      return Promise.reject(error);
     }
   },
   sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
@@ -252,8 +259,10 @@ const useFakeObjectsStore = create<StoreState>((set) => ({
         loading: false,
         error: null,
       });
+      return Promise.resolve();
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
+      return Promise.reject(error);
     }
   },
   sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
@@ -266,7 +275,7 @@ const useFakeObjectsStore = create<StoreState>((set) => ({
 
 export let useObjectsStore: UseBoundStore<StoreApi<StoreState>>;
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.EXPO_PUBLIC_MODE === 'development') {
   useObjectsStore = useFakeObjectsStore;
 } else {
   useObjectsStore = useRealObjectsStore;
