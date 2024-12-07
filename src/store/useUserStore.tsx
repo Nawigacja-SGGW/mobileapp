@@ -81,7 +81,7 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   resetPasswordRequest: async (email: string) => {
     set({ loading: true, error: null });
     try {
-      await api.patch('/auth/reset-password-request', { email });
+      await api.put('/auth/reset-password-request', { email });
       set({ loading: false, error: null });
       return Promise.resolve();
     } catch (error) {
@@ -105,7 +105,7 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   updateUserHistory: async (objectId: number, routeCreatedCount: number) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.patch('/user-history', {
+      const response = await api.put('/user-history', {
         data: { objectId, user: get().id, timestamp: Date.now(), routeCreatedCount },
       });
       // TODO alter only one entry

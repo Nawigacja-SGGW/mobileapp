@@ -4,30 +4,30 @@ import React from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, ScrollView, ToastAndroid } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput } from '~/components/AppInput';
+import Loading from '~/components/Loading';
 import { Logo } from '~/components/Logo';
 import { useUserStore } from '~/store/useUserStore';
 
 export default function ForgotPassword() {
   const { control, handleSubmit } = useForm();
   const { t } = useTranslation();
-  const navigation = useNavigation();
-  const { loading, error, resetPasswordRequest } = useUserStore();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { loading, resetPasswordRequest } = useUserStore();
 
   const onSubmit = async (data: FieldValues) => {
     if (!data.email) {
       ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
       return;
     }
-
-    await resetPasswordRequest(data.email);
-
-    if (!loading && !error) {
+    try {
+      await resetPasswordRequest(data.email);
       ToastAndroid.show('Email wysłany pomyślnie', ToastAndroid.SHORT);
       navigation.navigate('confirmation');
-    } else {
+    } catch {
       ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
     }
   };
@@ -62,6 +62,8 @@ export default function ForgotPassword() {
 
   return (
     <>
+      {loading && <Loading />}
+
       <Drawer.Screen options={{ headerShown: false }} />
       <ScrollView
         style={styles.container}
