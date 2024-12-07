@@ -4,7 +4,6 @@
   "main": "expo-router/entry",
   "scripts": {
     "android:go": "expo start --android",
-    "android:release": "npx expo start --no-dev --minify",
     "ios:go": "expo start --ios",
     "android": "expo run:android",
     "ios": "expo run:ios",

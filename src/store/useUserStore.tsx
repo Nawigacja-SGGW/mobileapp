@@ -270,8 +270,8 @@ const useFakeUserStore = create<StoreState>((set) => ({
 
 export let useUserStore: UseBoundStore<StoreApi<StoreState>>;
 
-//if (process.env.NODE_ENV === 'development') {
-//  useUserStore = useFakeUserStore;
-//} else {
-useUserStore = useRealUserStore;
-//}
+if (process.env.EXPO_PUBLIC_MODE === 'development') {
+  useUserStore = useFakeUserStore;
+} else {
+  useUserStore = useRealUserStore;
+}
