@@ -1,16 +1,20 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import useLocationStore from '~/store/useLocationStore';
+import React from 'react';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
+
 import TopHeader from '~/components/TopHeader';
+import useLocationStore from '~/store/useLocationStore';
+import { useObjectsStore } from '~/store/useObjectsStore';
 
 const LocationDetailsScreen = () => {
   const router = useRouter();
   const { objectId } = useLocalSearchParams();
 
-  const { locations, setRoute } = useLocationStore();
+  const { setRoute } = useLocationStore();
+  const locations = useObjectsStore().sortedBy((a, b) => a.name.localeCompare(b.name));
+
   const object = locations.find((n) => n.id === Number(objectId));
   console.log('objectId', objectId, object, locations);
   if (!object) return null;
@@ -33,7 +37,7 @@ const LocationDetailsScreen = () => {
       <Drawer.Screen
         options={{
           headerShown: true,
-          header: () => <TopHeader onlyBack={true} modeSearch={''} toggleSearchBar={() => {}} />,
+          header: () => <TopHeader onlyBack modeSearch="" toggleSearchBar={() => {}} />,
         }}
       />
       <View style={styles.container}>

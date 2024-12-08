@@ -21,7 +21,6 @@ import { useObjectsStore } from '~/store/useObjectsStore';
 
 export default function Objects() {
   const { t } = useTranslation();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   const screenHeight = Dimensions.get('window').height;
   const slideAnim = useRef(new Animated.Value(screenHeight)).current;
@@ -75,12 +74,17 @@ export default function Objects() {
 
 function SearchSection() {
   const { t } = useTranslation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [searchQuery, setSearchQuery] = useState('');
   const locations = useObjectsStore().sortedBy((a, b) => a.name.localeCompare(b.name));
 
   const filteredLocations = locations.filter((location) =>
     location.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleLocationSelect = (objectId: number) => {
+    navigation.navigate('LocationDetailsScreen', { objectId });
+  };
 
   return (
     <>
@@ -99,27 +103,14 @@ function SearchSection() {
           </View>
         </View>
         <ScrollView>
-          {searchQuery === '' ? (
+          {filteredLocations.length > 0 ? (
             filteredLocations.map((item, index) => (
               <TouchableOpacity
                 activeOpacity={1}
                 key={item.id}
-                className={`flex-row items-center p-2 active:bg-[#EDEDED] ${index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}
+                className={`flex-row items-center p-5 active:bg-[#EDEDED] ${index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}
                 onPress={() => {
-                  //handleLocationSelect(item.name);
-                }}>
-                {/* <View>{item.icon}</View> */}
-                <Text className="ml-3 text-lg text-black">{item.name}</Text>
-              </TouchableOpacity>
-            ))
-          ) : filteredLocations.length > 0 ? (
-            filteredLocations.map((item, index) => (
-              <TouchableOpacity
-                activeOpacity={1}
-                key={item.id}
-                className={`flex-row items-center p-2 active:bg-[#EDEDED] ${index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}
-                onPress={() => {
-                  //handleLocationSelect(item.name);
+                  handleLocationSelect(item.id);
                 }}>
                 {/* //<View>{item.icon}</View> */}
                 <Text className="ml-3 text-lg text-black">{item.name}</Text>
