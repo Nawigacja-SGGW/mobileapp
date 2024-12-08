@@ -89,7 +89,7 @@
     "didntReceiveEmail" : "Nie otrzymałeś emaila?"
   },
   "objects":{
-    "noResults" : "nie znaleziono wyników",
+    "noResults" : "Nie znaleziono wyników",
     "sortBy": "SORTUJ PO",
     "number": "numerze",
     "name": "nazwie: od A do Z",

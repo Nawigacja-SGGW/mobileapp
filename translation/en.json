@@ -70,7 +70,7 @@
     "didntReceiveEmail" : "Didn't receive an email?"
   },
   "objects":{
-    "noResults" : "no results found",
+    "noResults" : "No results found",
     "sortBy": "SORT BY",
     "number": "number",
     "name": "name: from A to Z",
