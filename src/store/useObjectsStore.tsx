@@ -211,6 +211,8 @@ interface StoreState {
   loading: boolean;
   error: string | null;
   fetchData: () => Promise<void>;
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number) => MapObject[];
+  filteredBy: (filterFn: (a: MapObject) => boolean) => MapObject[];
 }
 
 const useRealObjectsStore = create<StoreState>((set, get) => ({
@@ -235,10 +237,10 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
       return Promise.reject(error);
     }
   },
-  sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].sort(compareFn);
   },
-  filteredBy: async (filterFn: (a: MapObject) => boolean): Promise<MapObject[]> => {
+  filteredBy: (filterFn: (a: MapObject) => boolean): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].filter(filterFn);
   },
 }));
@@ -265,10 +267,10 @@ const useFakeObjectsStore = create<StoreState>((set) => ({
       return Promise.reject(error);
     }
   },
-  sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].sort(compareFn);
   },
-  filteredBy: async (filterFn: (a: MapObject) => boolean): Promise<MapObject[]> => {
+  filteredBy: (filterFn: (a: MapObject) => boolean): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].filter(filterFn);
   },
 }));
