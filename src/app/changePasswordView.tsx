@@ -1,25 +1,32 @@
 import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  useWindowDimensions,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import TopHeader from '~/components/TopHeader';
-import Drawer from 'expo-router/drawer';
+import { SafeAreaView, View, Text, useWindowDimensions, ScrollView } from 'react-native';
+import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import Drawer from 'expo-router/drawer';
+
+import TopHeader from '~/components/TopHeader';
+import { AppSecureInput } from '~/components/AppInput';
+import { AppButton } from '~/components/AppButton';
 
 export default function ChangePasswordView() {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const { control, handleSubmit } = useForm();
+  const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setter((prev) => !prev);
+  };
+
+  const onSubmit = async (data: FieldValues) => {
+    console.log('Submitted data:', data);
+    // TODO: dodać obsługę zmiany hasła poprzez API
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white px-6">
@@ -30,69 +37,77 @@ export default function ChangePasswordView() {
         }}
       />
 
-      {/* Tytuł */}
-      <View
-        style={{
-          marginTop: height * 0.2,
-          marginBottom: height * 0.05,
-        }}>
-        <Text className="text-2xl font-bold text-black">{t('resetPassword.title')}</Text>
-      </View>
+      <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+        {/* Title */}
+        <View
+          style={{
+            marginTop: height * 0.2,
+            marginBottom: height * 0.05,
+          }}>
+          <Text className="text-2xl font-bold text-black">{t('resetPassword.title')}</Text>
+        </View>
 
-      {/* Pola tekstowe */}
-      <View style={{ marginBottom: height * 0.1 }} className="space-y-6">
-        {/* Current Password */}
-        <View className="mt-16">
-          <Text className="mb-2 text-sm text-black">{t('resetPassword.currentPassword')}</Text>
-          <TextInput
-            value={currentPassword}
-            onChangeText={setCurrentPassword}
-            secureTextEntry
-            className="h-14 rounded-lg border border-black bg-white px-4 text-base text-black"
-            style={{ fontSize: 36 }}
+        <View style={{ marginBottom: height * 0.1 }} className="space-y-6">
+          {/* Current Password */}
+          <Controller
+            control={control}
+            name="currentPassword"
+            render={({ field: { onChange, value } }) => (
+              <AppSecureInput
+                label={t('resetPassword.currentPassword')}
+                placeholder={t('resetPassword.currentPassword')}
+                value={value}
+                onChangeText={onChange}
+                isPasswordVisible={isCurrentPasswordVisible}
+                togglePasswordVisibility={() => togglePasswordVisibility(setIsCurrentPasswordVisible)}
+              />
+            )}
+          />
+
+          {/* New Password */}
+          <Controller
+            control={control}
+            name="newPassword"
+            render={({ field: { onChange, value } }) => (
+              <AppSecureInput
+                label={t('resetPassword.newPassword')}
+                placeholder={t('resetPassword.newPassword')}
+                value={value}
+                onChangeText={onChange}
+                isPasswordVisible={isNewPasswordVisible}
+                togglePasswordVisibility={() => togglePasswordVisibility(setIsNewPasswordVisible)}
+              />
+            )}
+          />
+
+          {/* Confirm New Password */}
+          <Controller
+            control={control}
+            name="confirmNewPassword"
+            render={({ field: { onChange, value } }) => (
+              <AppSecureInput
+                label={t('resetPassword.confirmNewPassword')}
+                placeholder={t('resetPassword.confirmNewPassword')}
+                value={value}
+                onChangeText={onChange}
+                isPasswordVisible={isConfirmPasswordVisible}
+                togglePasswordVisibility={() => togglePasswordVisibility(setIsConfirmPasswordVisible)}
+              />
+            )}
           />
         </View>
 
-        {/* New Password */}
-        <View className="mt-4">
-          <Text className="mb-1 mt-2 text-sm text-black">{t('resetPassword.newPassword')}</Text>
-          <TextInput
-            value={newPassword}
-            onChangeText={setNewPassword}
-            secureTextEntry
-            className="h-14 rounded-lg border border-black bg-white px-4 text-2xl text-base text-black"
-            style={{ fontSize: 36 }}
-          />
-        </View>
-
-        {/* Confirm New Password */}
-        <View className="mt-4">
-          <Text className="mb-1 mt-2 text-sm text-black">
-            {t('resetPassword.confirmNewPassword')}
-          </Text>
-          <TextInput
-            value={confirmNewPassword}
-            onChangeText={setConfirmNewPassword}
-            secureTextEntry
-            className="h-14 rounded-lg border border-black bg-white px-4 text-base text-black"
-            style={{ fontSize: 36 }}
-          />
-        </View>
-      </View>
-
-      {/* Przycisk resetowania */}
-      <TouchableOpacity
-        onPress={() => console.log('Reset Password')}
-        className="h-14 items-center justify-center rounded-full bg-[#003228]"
-        style={{
-          width: width > 400 ? '80%' : '100%',
-          alignSelf: 'center',
-          marginTop: height * 0.05,
-        }}>
-        <Text className="text-base text-xl font-bold text-white">
-          {t('resetPassword.resetButton')}
-        </Text>
-      </TouchableOpacity>
+        {/* Reset button */}
+        <AppButton
+          title={t('resetPassword.resetButton')}
+          onPress={handleSubmit(onSubmit)}
+          style={{
+            width: width > 400 ? '80%' : '100%',
+            alignSelf: 'center',
+            marginTop: height * 0.01,
+          }}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 }
