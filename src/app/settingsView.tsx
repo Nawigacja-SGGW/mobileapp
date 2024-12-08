@@ -37,7 +37,7 @@ export default function SettingsView() {
       />
 
       <View style={{ marginTop: height * 0.2 }}>
-        <Text className="text-2xl font-bold text-white">Settings</Text>
+        <Text className="text-2xl font-bold text-white">{t('menu.settings')}</Text>
       </View>
 
       <View style={{ marginTop: height * 0.1 }}>

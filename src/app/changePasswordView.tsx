@@ -35,8 +35,7 @@ export default function ChangePasswordView() {
         style={{
           marginTop: height * 0.2,
           marginBottom: height * 0.05,
-        }}
-      >
+        }}>
         <Text className="text-2xl font-bold text-black">{t('resetPassword.title')}</Text>
       </View>
 
@@ -44,36 +43,38 @@ export default function ChangePasswordView() {
       <View style={{ marginBottom: height * 0.1 }} className="space-y-6">
         {/* Current Password */}
         <View className="mt-16">
-          <Text className="text-black text-sm mb-2">{t('resetPassword.currentPassword')}</Text>
+          <Text className="mb-2 text-sm text-black">{t('resetPassword.currentPassword')}</Text>
           <TextInput
             value={currentPassword}
             onChangeText={setCurrentPassword}
             secureTextEntry
-            className="h-14 border border-black rounded-lg px-4 bg-white text-black text-base"
+            className="h-14 rounded-lg border border-black bg-white px-4 text-base text-black"
             style={{ fontSize: 36 }}
           />
         </View>
 
         {/* New Password */}
         <View className="mt-4">
-          <Text className="text-black text-sm mt-2 mb-1">{t('resetPassword.newPassword')}</Text>
+          <Text className="mb-1 mt-2 text-sm text-black">{t('resetPassword.newPassword')}</Text>
           <TextInput
             value={newPassword}
             onChangeText={setNewPassword}
             secureTextEntry
-            className="h-14 border border-black rounded-lg px-4 bg-white text-black text-base text-2xl"
+            className="h-14 rounded-lg border border-black bg-white px-4 text-2xl text-base text-black"
             style={{ fontSize: 36 }}
           />
         </View>
 
         {/* Confirm New Password */}
         <View className="mt-4">
-          <Text className="text-black text-sm mt-2 mb-1">{t('resetPassword.confirmNewPassword')}</Text>
+          <Text className="mb-1 mt-2 text-sm text-black">
+            {t('resetPassword.confirmNewPassword')}
+          </Text>
           <TextInput
             value={confirmNewPassword}
             onChangeText={setConfirmNewPassword}
             secureTextEntry
-            className="h-14 border border-black rounded-lg px-4 bg-white text-black text-base"
+            className="h-14 rounded-lg border border-black bg-white px-4 text-base text-black"
             style={{ fontSize: 36 }}
           />
         </View>
@@ -82,14 +83,15 @@ export default function ChangePasswordView() {
       {/* Przycisk resetowania */}
       <TouchableOpacity
         onPress={() => console.log('Reset Password')}
-        className="bg-[#003228] rounded-full h-14 justify-center items-center"
+        className="h-14 items-center justify-center rounded-full bg-[#003228]"
         style={{
           width: width > 400 ? '80%' : '100%',
           alignSelf: 'center',
           marginTop: height * 0.05,
-        }}
-      >
-        <Text className="text-white text-base font-bold text-xl">{t('resetPassword.resetButton')}</Text>
+        }}>
+        <Text className="text-base text-xl font-bold text-white">
+          {t('resetPassword.resetButton')}
+        </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
