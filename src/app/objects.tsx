@@ -1,6 +1,7 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation } from 'expo-router';
 import Drawer from 'expo-router/drawer';
+import { use } from 'i18next';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -17,14 +18,21 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 import SearchIcon1 from '../../assets/search1.svg';
 
 import TopHeaderOL from '~/components/TopHeaderObjectList';
-import { useObjectsStore } from '~/store/useObjectsStore';
+import { MapObject, useObjectsStore } from '~/store/useObjectsStore';
 
 export default function Objects() {
-  const { t } = useTranslation();
-
   const screenHeight = Dimensions.get('window').height;
   const slideAnim = useRef(new Animated.Value(screenHeight)).current;
   const [isVisible, setIsVisible] = useState(false);
+
+  const [sortedBy, setSortedBy] = useState('name');
+
+  const objectsStore = useObjectsStore();
+
+  const locations: MapObject[] =
+    sortedBy === 'number'
+      ? objectsStore.sortedByNumber()
+      : objectsStore.sortedBy((a, b) => a.name.localeCompare(b.name));
 
   const toggleBottomSheet = () => {
     Animated.timing(slideAnim, {
@@ -36,49 +44,31 @@ export default function Objects() {
   };
 
   return (
-    <>
+    <View className="absolute h-full w-full">
       <Drawer.Screen options={{ header: () => <TopHeaderOL onClick={toggleBottomSheet} /> }} />
-      <SearchSection />
-      {/* {isVisible && (
-        <TouchableOpacity
-          onPress={() => toggleBottomSheet()}
-          className="absolute bottom-0 left-0 right-0 top-0"
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            opacity: slideAnim.interpolate({
-              inputRange: [screenHeight - 300, screenHeight],
-              outputRange: [1, 0],
-            }),
-          }}
+      <SearchSection locations={locations} />
+      {isVisible && (
+        <SortBottomSheet
+          slideAnim={slideAnim}
+          toggleBottomSheet={toggleBottomSheet}
+          sortedBy={sortedBy}
+          setSortedBy={setSortedBy}
         />
       )}
-      <Animated.View
-        className="absolute left-0 right-0 h-48 bg-white p-5 shadow-lg"
-        style={{ top: slideAnim }}>
-        <Text className="mb-2 text-xs font-extrabold text-gray-400">{t('objects.sortBy')}</Text>
-        {options.map((option) => (
-          <TouchableOpacity
-            key={option.id}
-            className="flex-row justify-between py-3"
-            onPress={() => handleSelectSortOption(option.id)}>
-            <Text className="text-lg font-semibold text-black">{t(option.label)}</Text>
-            {selectedOption === option.id && (
-              <FontAwesome6 name="circle-dot" size={20} color="[#0F9D58]" />
-            )}
-          </TouchableOpacity>
-        ))}
-      </Animated.View> */}
-    </>
+    </View>
   );
 }
 
-function SearchSection() {
+type SearchSectionProps = {
+  locations: MapObject[];
+};
+
+function SearchSection(props: SearchSectionProps) {
   const { t } = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [searchQuery, setSearchQuery] = useState('');
-  const locations = useObjectsStore().sortedBy((a, b) => a.name.localeCompare(b.name));
 
-  const filteredLocations = locations.filter((location) =>
+  const filteredLocations = props.locations.filter((location: MapObject) =>
     location.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -123,6 +113,58 @@ function SearchSection() {
           )}
         </ScrollView>
       </View>
+    </>
+  );
+}
+
+type SortBottomSheetProps = {
+  slideAnim: Animated.Value;
+  toggleBottomSheet: () => void;
+  sortedBy: string;
+  setSortedBy: React.Dispatch<React.SetStateAction<string>>;
+};
+
+function SortBottomSheet({
+  slideAnim,
+  toggleBottomSheet,
+  sortedBy,
+  setSortedBy,
+}: SortBottomSheetProps) {
+  const { t } = useTranslation();
+
+  const handleSelectSortOption = (optionId: string) => {
+    setSortedBy(optionId);
+    toggleBottomSheet();
+  };
+
+  const options = [
+    { id: 'number', label: 'objects.number' },
+    { id: 'name', label: 'objects.name' },
+  ];
+
+  return (
+    <>
+      <TouchableOpacity
+        onPress={() => toggleBottomSheet()}
+        className="absolute bottom-0 left-0 right-0 top-0"
+        style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+      />
+      <Animated.View
+        className="absolute left-0 right-0 h-48 bg-white p-5 shadow-lg"
+        style={{ top: slideAnim }}>
+        <Text className="mb-2 text-xs font-extrabold text-gray-400">{t('objects.sortBy')}</Text>
+        {options.map((option) => (
+          <TouchableOpacity
+            key={option.id}
+            className="flex-row justify-between py-3"
+            onPress={() => handleSelectSortOption(option.id)}>
+            <Text className="text-lg font-semibold text-black">{t(option.label)}</Text>
+            {sortedBy === option.id && (
+              <FontAwesome6 name="circle-dot" size={20} color="[#0F9D58]" />
+            )}
+          </TouchableOpacity>
+        ))}
+      </Animated.View>
     </>
   );
 }

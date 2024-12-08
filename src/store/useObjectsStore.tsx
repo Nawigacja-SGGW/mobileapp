@@ -6,7 +6,7 @@ interface Guide {
   description: string | null;
 }
 
-interface MapObject {
+export interface MapObject {
   id: number;
   latitude: string;
   longitude: string;
@@ -32,7 +32,7 @@ interface PointObject extends MapObject {
   eventEnd: Date | null;
 }
 
-interface AreaObject extends MapObject {
+export interface AreaObject extends MapObject {
   number: number | null;
   isPaid: boolean | null;
   faculties: AreaObjectFaculty[] | null;
@@ -212,6 +212,7 @@ interface StoreState {
   error: string | null;
   fetchData: () => Promise<void>;
   sortedBy: (compareFn: (a: MapObject, b: MapObject) => number) => MapObject[];
+  sortedByNumber: () => MapObject[];
   filteredBy: (filterFn: (a: MapObject) => boolean) => MapObject[];
 }
 
@@ -240,12 +241,18 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
   sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].sort(compareFn);
   },
+  sortedByNumber: (): MapObject[] => {
+    const areaObjs = get().areaObjects.sort(
+      (a: AreaObject, b: AreaObject) => a.number ?? Number.MAX_VALUE - (b.number ?? 0)
+    );
+    return [...areaObjs, ...get().pointObjects];
+  },
   filteredBy: (filterFn: (a: MapObject) => boolean): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].filter(filterFn);
   },
 }));
 
-const useFakeObjectsStore = create<StoreState>((set) => ({
+const useFakeObjectsStore = create<StoreState>((set, get) => ({
   pointObjects: [],
   areaObjects: [],
   loading: false,
@@ -269,6 +276,12 @@ const useFakeObjectsStore = create<StoreState>((set) => ({
   },
   sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].sort(compareFn);
+  },
+  sortedByNumber: (): MapObject[] => {
+    const areaObjs = get().areaObjects.sort(
+      (a: AreaObject, b: AreaObject) => a.number ?? Number.MAX_VALUE - (b.number ?? 0)
+    );
+    return [...areaObjs, ...get().pointObjects];
   },
   filteredBy: (filterFn: (a: MapObject) => boolean): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].filter(filterFn);

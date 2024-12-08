@@ -1,12 +1,12 @@
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link, useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import Drawer from 'expo-router/drawer';
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 
 import TopHeader from '~/components/TopHeader';
 import useLocationStore from '~/store/useLocationStore';
-import { useObjectsStore } from '~/store/useObjectsStore';
+import { useObjectsStore, AreaObject } from '~/store/useObjectsStore';
 
 const LocationDetailsScreen = () => {
   const router = useRouter();
@@ -21,8 +21,7 @@ const LocationDetailsScreen = () => {
 
   const locationData = {
     title: object.name ?? 'title',
-    buildingNo: 'Budynek nr 49',
-
+    buildingNo: 'number' in object ? 'Budynek nr ' + (object as AreaObject).number : '',
     address: `${object?.address.city} ${object?.address.street} ${object?.address.postalCode}`,
     website: object?.website,
     coordinates: object?.coordinates,
@@ -50,8 +49,12 @@ const LocationDetailsScreen = () => {
           {/* Location Details */}
           <View style={styles.detailsContainer}>
             <View style={styles.detailRow}>
-              <FontAwesome5 name="building" size={16} color="white" />
-              <Text style={styles.detailText}>{locationData.buildingNo}</Text>
+              {'number' in object && (
+                <>
+                  <FontAwesome5 name="building" size={16} color="white" />
+                  <Text style={styles.detailText}>{locationData.buildingNo}</Text>
+                </>
+              )}
             </View>
 
             <View style={styles.detailRow}>
