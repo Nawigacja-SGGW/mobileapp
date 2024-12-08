@@ -69,6 +69,13 @@
     "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
     "didntReceiveEmail" : "Didn't receive an email?"
   },
+  "objects":{
+    "noResults" : "No results found",
+    "sortBy": "SORT BY",
+    "number": "number",
+    "name": "name: from A to Z",
+    "search": "Search"
+  },
 
   "loading": "Loading",
 
@@ -78,7 +85,6 @@
     "myRoutes": "My routes",
     "logOut": "Log out"
   },
-
   "getStarted": "Open this display's code:",
   "changeCode": "Change any text, save the file and the app will update automatically."
 }
