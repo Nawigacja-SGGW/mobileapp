@@ -149,7 +149,7 @@ function SortBottomSheet({
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
       />
       <Animated.View
-        className="absolute left-0 right-0 h-48 bg-white p-5 shadow-lg"
+        className="absolute left-0 right-0 h-64 bg-white p-5 shadow-lg"
         style={{ top: slideAnim }}>
         <Text className="mb-2 text-xs font-extrabold text-gray-400">{t('objects.sortBy')}</Text>
         {options.map((option) => (
