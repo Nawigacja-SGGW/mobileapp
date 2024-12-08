@@ -73,7 +73,8 @@
     "noResults" : "no results found",
     "sortBy": "SORT BY",
     "number": "number",
-    "name": "name: from A to Z"
+    "name": "name: from A to Z",
+    "search": "Search"
   },
 
   "loading": "Loading",

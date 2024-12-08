@@ -1,13 +1,15 @@
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 
-import Ionicons from '@expo/vector-icons/Ionicons';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-
-export default function TopHeader({ onClick = () => {} }: { onClick?: () => void }): React.ReactNode {
-
+export default function TopHeader({
+  onClick = () => {},
+}: {
+  onClick?: () => void;
+}): React.ReactNode {
   const navigation = useNavigation();
 
   return (
@@ -17,11 +19,9 @@ export default function TopHeader({ onClick = () => {} }: { onClick?: () => void
         onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
         <Ionicons name="menu" size={40} color="#fff" />
       </TouchableOpacity>
-      <Text className="text-lg font-bold text-white">logo/nazwa</Text>
-      <TouchableOpacity
-      className="p-2"
-      onPress={onClick}>
-      <FontAwesome6 name="arrow-right-arrow-left" size={28} color="#fff" classname={'rotate-90'}/>
+      <Text className="text-lg font-bold text-white">Nawigacja SGGW</Text>
+      <TouchableOpacity className="p-2" onPress={onClick}>
+        <FontAwesome6 name="arrow-right-arrow-left" size={28} color="#fff" classname="rotate-90" />
       </TouchableOpacity>
     </View>
   );

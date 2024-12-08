@@ -92,7 +92,8 @@
     "noResults" : "nie znaleziono wyników",
     "sortBy": "SORTUJ PO",
     "number": "numerze",
-    "name": "nazwie: od A do Z"
+    "name": "nazwie: od A do Z",
+    "search": "Szukaj"
   },
   "profile": {
     "email": "Email",
