@@ -211,6 +211,7 @@ interface StoreState {
   loading: boolean;
   error: string | null;
   fetchData: () => Promise<void>;
+  allObjects: () => MapObject[];
   sortedBy: (compareFn: (a: MapObject, b: MapObject) => number) => MapObject[];
   sortedByNumber: () => MapObject[];
   filteredBy: (filterFn: (a: MapObject) => boolean) => MapObject[];
@@ -237,6 +238,10 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
       set({ error: (error as Error).message, loading: false });
       return Promise.reject(error);
     }
+  },
+
+  allObjects: (): MapObject[] => {
+    return [...get().areaObjects, ...get().pointObjects];
   },
   sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].sort(compareFn);
@@ -273,6 +278,9 @@ const useFakeObjectsStore = create<StoreState>((set, get) => ({
       set({ error: (error as Error).message, loading: false });
       return Promise.reject(error);
     }
+  },
+  allObjects: (): MapObject[] => {
+    return [...get().areaObjects, ...get().pointObjects];
   },
   sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].sort(compareFn);

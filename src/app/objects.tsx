@@ -1,7 +1,6 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useNavigation } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import { use } from 'i18next';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
