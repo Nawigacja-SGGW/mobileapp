@@ -86,5 +86,21 @@
     "logOut": "Log out"
   },
   "getStarted": "Open this display's code:",
-  "changeCode": "Change any text, save the file and the app will update automatically."
+  "changeCode": "Change any text, save the file and the app will update automatically.",
+
+  "settings": {
+    "routePreferences": "Route Preferences",
+    "language": "Language",
+    "changePassword": "Change a Password",
+    "informations": "Informations",
+    "save": "Save"
+},
+"resetPassword": {
+    "title": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "resetButton": "Reset Password"
+  }
+
 }

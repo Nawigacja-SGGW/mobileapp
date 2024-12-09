@@ -100,5 +100,21 @@
     "myKilometers": "Moje kilometry",
     "myRoutes": "Moje trasy",
     "logOut": "Wyloguj się"
-  }
+  },
+
+  "settings": {
+    "routePreferences": "Preferencje trasy",
+    "language": "Język",
+    "changePassword": "Zmień hasło",
+    "informations": "Informacje",
+    "save": "Zapisz"
+},
+"resetPassword": {
+  "title": "Zmień hasło",
+  "currentPassword": "Aktualne hasło",
+  "newPassword": "Nowe hasło",
+  "confirmNewPassword": "Potwierdź nowe hasło",
+  "resetButton": "Zresetuj hasło"
 }
+}
+
