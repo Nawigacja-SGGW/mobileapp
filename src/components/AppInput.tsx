@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react'; 
 import { KeyboardTypeOptions, TextInput, TextInputProps, Text, View, TouchableOpacity, Image, GestureResponderEvent } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 type InputProps = {
   label: string;
@@ -49,7 +50,7 @@ export const AppSecureInput: React.FC<InputProps> = forwardRef<TextInput, InputP
             secureTextEntry={!isPasswordVisible}
           />
           <TouchableOpacity onPress={togglePasswordVisibility} className={`px-4`}>
-            <Image source={require("./../../assets/hide.png")} alt="Hide icon" />
+            <Ionicons name={isPasswordVisible ? "eye-outline" : "eye-off-outline"} size={36} color="black" />
           </TouchableOpacity>
         </View>
       </View>

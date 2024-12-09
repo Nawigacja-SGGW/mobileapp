@@ -1,8 +1,6 @@
-import { ReactNode } from 'react';
 import { create } from 'zustand';
-import BookIcon from '../../assets/book1.svg';
-import BuildingIcon from '../../assets/building3.svg';
-import { fakeAreaObjects, fakePointObjects } from '~/store/useFakeLocationStore';
+
+import { useObjectsStore } from '~/store/useObjectsStore';
 
 export interface MapLocation {
   id: number;
@@ -27,55 +25,24 @@ interface LocationStore {
   clearFilteredLocations: () => void;
 }
 
-const initialLocations2 = [
-  ...fakeAreaObjects.map((n, i) => ({
-    ...n,
-    coordinates: [Number(n.longitude), Number(n.latitude)],
-    id: i + 1000,
-  })),
-  ...fakePointObjects.map((n, i) => ({
-    ...n,
-    coordinates: [Number(n.longitude), Number(n.latitude)],
-    id: i + 2001,
-  })),
-];
-console.log('initialLocations2', initialLocations2);
-
-const initialLocations: MapLocation[] = [
-  {
-    id: 1,
-    name: 'Basen',
-    icon: <BuildingIcon width={24} height={24} />,
-    coordinates: [21.0465, 52.1674],
-  },
-  {
-    id: 2,
-    name: 'Biblioteka Główna',
-    icon: <BookIcon width={24} height={24} />,
-    coordinates: [21.0487, 52.1643],
-  },
-  {
-    id: 3,
-    name: 'Biblioteka przy Instytucie Inżynierii',
-    icon: <BookIcon width={24} height={24} />,
-    coordinates: [21.0458, 52.1658],
-  },
-  {
-    id: 4,
-    name: 'Biblioteka przy Instytucie Medycyny',
-    icon: <BookIcon width={24} height={24} />,
-    coordinates: [21.0436, 52.1627],
-  },
-  {
-    id: 5,
-    name: 'Biblioteka przy Instytucie Nauk o Zdrowiu',
-    icon: <BookIcon width={24} height={24} />,
-    coordinates: [21.0419, 52.1612],
-  },
-];
+useObjectsStore.subscribe((state) => {
+  // Aktualizowanie listy lokalizacji na podstawie obiektów w useObjectsStore
+  useLocationStore.setState({
+    locations: [
+      ...useObjectsStore.getState().areaObjects.map((n, i) => ({
+        ...n,
+        coordinates: [Number(n.longitude), Number(n.latitude)],
+      })),
+      ...useObjectsStore.getState().pointObjects.map((n, i) => ({
+        ...n,
+        coordinates: [Number(n.longitude), Number(n.latitude)],
+      })),
+    ],
+  });
+});
 
 const useLocationStore = create<LocationStore>((set, get) => ({
-  locations: initialLocations2,
+  locations: [],
   locationFrom: undefined,
   locationTo: undefined,
   filteredLocations: [],
