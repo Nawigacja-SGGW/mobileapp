@@ -7,6 +7,7 @@ import { View, Text, TouchableOpacity, SafeAreaView, useWindowDimensions } from 
 import ArrowIcon from '../../assets/arrow.svg';
 import ChangePassIcon from '../../assets/changepass.svg';
 import LanguageIcon from '../../assets/language.svg';
+import WalkIcon from '../../assets/walk.svg';
 
 import TopHeader from '~/components/TopHeader';
 
@@ -15,6 +16,11 @@ export default function SettingsView() {
   const { height } = useWindowDimensions();
 
   const settingsOptions = [
+    {
+      label: t('settings.routePreferences'),
+      icon: <WalkIcon width={28} height={28} fill="white" />,
+      onPress: () => router.push('/changeRoutePreferencesView'),
+    },
     {
       label: t('settings.language'),
       icon: <LanguageIcon width={28} height={28} fill="white" />,

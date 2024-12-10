@@ -94,7 +94,9 @@
     "changePassword": "Change a Password",
     "informations": "Informations",
     "save": "Save",
-    "saved": "Saved"
+    "saved": "Saved",
+    "walk": "By foot",
+    "bike": "By bike"
 },
 "resetPassword": {
     "title": "Change Password",
