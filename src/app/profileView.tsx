@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ProfilePicture from '../../assets/profile-picture.svg';
 
+import Loading from '~/components/Loading';
 import TopHeader from '~/components/TopHeader';
 import { useUserStore } from '~/store/useUserStore';
 
@@ -15,14 +16,21 @@ const { height } = Dimensions.get('window');
 export default function ProfileView() {
   const router = useRouter();
   const { t } = useTranslation();
-  const {email, statistics} = useUserStore();
+  const { email, statistics, loading, logout } = useUserStore();
 
-  const handleLogout = () => {
-    router.push('/start');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/login');
+    } catch (error) {
+      console.log('Error logging out', error);
+    }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-[#003228] px-4">
+      {loading && <Loading />}
+
       {/* Header */}
       <Drawer.Screen
         options={{
