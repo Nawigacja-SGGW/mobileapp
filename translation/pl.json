@@ -107,7 +107,10 @@
     "language": "Język",
     "changePassword": "Zmień hasło",
     "informations": "Informacje",
-    "save": "Zapisz"
+    "save": "Zapisz",
+    "saved": "Zapisano",
+    "walk": "Piesza",
+    "bike": "Rowerowa"
 },
 "resetPassword": {
   "title": "Zmień hasło",
