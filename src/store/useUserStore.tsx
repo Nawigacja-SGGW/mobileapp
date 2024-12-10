@@ -94,7 +94,7 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   resetPassword: async (newPassword: string) => {
     set({ loading: true, error: null });
     try {
-      await api.put('/auth/reset-password', { token: get().token, password: newPassword });
+      await api.patch('/auth/reset-password', { token: get().token, password: newPassword });
       set({ loading: false, error: null });
       return Promise.resolve();
     } catch (error) {
