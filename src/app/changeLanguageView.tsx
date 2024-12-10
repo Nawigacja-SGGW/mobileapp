@@ -1,3 +1,4 @@
+import Drawer from 'expo-router/drawer';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -7,10 +8,11 @@ import {
   TouchableOpacity,
   FlatList,
   useWindowDimensions,
+  ToastAndroid,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+
 import TopHeader from '~/components/TopHeader';
-import Drawer from 'expo-router/drawer';
+import { useSettingsStore } from '~/store/useSettingsStore';
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -21,14 +23,13 @@ export default function ChangeLanguageView() {
   const { t } = useTranslation();
   const { i18n } = useTranslation();
   const { height, width } = useWindowDimensions();
-  const navigation = useNavigation();
 
   return (
     <SafeAreaView className="flex-1 bg-white px-6">
       <Drawer.Screen
         options={{
           headerShown: true,
-          header: () => <TopHeader onlyBack={true} modeSearch={''} toggleSearchBar={() => {}} />,
+          header: () => <TopHeader onlyBack modeSearch="" toggleSearchBar={() => {}} />,
         }}
       />
 
@@ -61,7 +62,10 @@ export default function ChangeLanguageView() {
 
       {/* Przycisk zapisz */}
       <TouchableOpacity
-        onPress={() => console.log('Save Language')}
+        onPress={() => {
+          useSettingsStore.getState().setLanguage(i18n.language);
+          ToastAndroid.show(t('settings.saved'), ToastAndroid.SHORT);
+        }}
         className="mt-8 h-14 items-center justify-center rounded-full bg-[#004D40]"
         style={{
           width: width > 400 ? '80%' : '100%',

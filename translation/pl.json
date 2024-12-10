@@ -107,7 +107,9 @@
     "language": "Język",
     "changePassword": "Zmień hasło",
     "informations": "Informacje",
-    "save": "Zapisz"
+    "save": "Zapisz",
+    "saved": "Zapisano"
+
 },
 "resetPassword": {
   "title": "Zmień hasło",

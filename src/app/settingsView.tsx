@@ -1,17 +1,17 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, useWindowDimensions } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
-import Drawer from 'expo-router/drawer';
-import TopHeader from '~/components/TopHeader';
-import LanguageIcon from '../../assets/language.svg';
-import ChangePassIcon from '../../assets/changepass.svg';
-import ArrowIcon from '../../assets/arrow.svg';
 import { router } from 'expo-router';
+import Drawer from 'expo-router/drawer';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { View, Text, TouchableOpacity, SafeAreaView, useWindowDimensions } from 'react-native';
+
+import ArrowIcon from '../../assets/arrow.svg';
+import ChangePassIcon from '../../assets/changepass.svg';
+import LanguageIcon from '../../assets/language.svg';
+
+import TopHeader from '~/components/TopHeader';
 
 export default function SettingsView() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
   const { height } = useWindowDimensions();
 
   const settingsOptions = [
@@ -32,7 +32,7 @@ export default function SettingsView() {
       <Drawer.Screen
         options={{
           headerShown: true,
-          header: () => <TopHeader onlyBack={true} modeSearch={''} toggleSearchBar={() => {}} />,
+          header: () => <TopHeader onlyBack modeSearch="" toggleSearchBar={() => {}} />,
         }}
       />
 
