@@ -1,17 +1,21 @@
-import React from 'react';
-import Drawer from 'expo-router/drawer';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import ProfilePicture from '../../assets/profile-picture.svg';
-import TopHeader from '~/components/TopHeader';
 import { useRouter } from 'expo-router';
+import Drawer from 'expo-router/drawer';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+import ProfilePicture from '../../assets/profile-picture.svg';
+
+import TopHeader from '~/components/TopHeader';
+import { useUserStore } from '~/store/useUserStore';
 
 const { height } = Dimensions.get('window');
 
 export default function ProfileView() {
   const router = useRouter();
   const { t } = useTranslation();
+  const {email, statistics} = useUserStore();
 
   const handleLogout = () => {
     router.push('/start');
@@ -23,7 +27,7 @@ export default function ProfileView() {
       <Drawer.Screen
         options={{
           headerShown: true,
-          header: () => <TopHeader onlyBack={true} modeSearch={''} toggleSearchBar={() => {}} />,
+          header: () => <TopHeader onlyBack modeSearch="" toggleSearchBar={() => {}} />,
         }}
       />
 
@@ -39,19 +43,21 @@ export default function ProfileView() {
         {/* Email */}
         <View className="mb-8 w-full max-w-lg">
           <Text className="mb-1 text-lg text-[#D3D3D3]">{t('profile.email')}</Text>
-          <Text className="mt-2 text-2xl font-bold text-white">random@gmail.com</Text>
+          <Text className="mt-2 text-2xl font-bold text-white">{email ?? ''}</Text>
         </View>
 
         {/* My Kilometers */}
         <View className="mb-8 w-full max-w-lg">
           <Text className="mb-1 text-lg text-[#D3D3D3]">{t('profile.myKilometers')}</Text>
-          <Text className="mt-2 text-2xl font-bold text-white">1,2</Text>
+          <Text className="mt-2 text-2xl font-bold text-white">{statistics?.distanceSum ?? 0}</Text>
         </View>
 
         {/* My Routes */}
         <View className="mb-8 w-full max-w-lg">
           <Text className="mb-1 text-lg text-[#D3D3D3]">{t('profile.myRoutes')}</Text>
-          <Text className="mt-2 text-2xl font-bold text-white">5</Text>
+          <Text className="mt-2 text-2xl font-bold text-white">
+            {statistics?.uniquePlacesVisitedCount ?? 0}
+          </Text>
         </View>
       </View>
 
