@@ -4,62 +4,32 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { Logo } from '~/components/Logo';
 
 export default function Confirmation() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { handleSubmit } = useForm();
 
   const onSubmit = () => {
     navigation.navigate('forgotPassword');
   };
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding: 20,
-      backgroundColor: '#fff',
-    },
-    content: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    title: {
-      fontSize: 20,
-      fontWeight: 400,
-      color: '#000',
-      marginBottom: 10,
-    },
-    text: {
-      fontSize: 13,
-      fontWeight: 300,
-      color: '#000',
-      marginBottom: '10%',
-    },
-    bottomText: {
-      color: '#003228',
-      textDecorationLine: 'underline',
-      fontSize: 14,
-      fontWeight: 700,
-    },
-  });
-
   return (
     <>
       <Drawer.Screen options={{ headerShown: false }} />
       <ScrollView
-        style={styles.container}
+        className="flex-1 p-[20px] bg-[#fff]"
         contentContainerStyle={{ height: '100%', paddingBottom: 32, paddingTop: 32 }}>
         <Logo />
 
-        <View style={styles.content}>
-          <Text style={styles.title}>{t('login.confirmation')}</Text>
-          <Text style={styles.text}>{t('login.confirmationText')}</Text>
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-[20px] font-normal text-black mb-[10px]">{t('login.confirmation')}</Text>
+          <Text className="text-[13px] font-light text-black mb-[10%]">{t('login.confirmationText')}</Text>
           <TouchableOpacity onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.bottomText}>{t('login.didntReceiveEmail')}</Text>
+            <Text className="text-[14px] font-bold text-[#003228] underline">{t('login.didntReceiveEmail')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
