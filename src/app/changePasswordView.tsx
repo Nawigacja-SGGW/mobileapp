@@ -1,21 +1,28 @@
+import Drawer from 'expo-router/drawer';
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, useWindowDimensions, ScrollView } from 'react-native';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigation } from '@react-navigation/native';
-import Drawer from 'expo-router/drawer';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  useWindowDimensions,
+  ScrollView,
+  ToastAndroid,
+} from 'react-native';
 
-import TopHeader from '~/components/TopHeader';
-import { AppSecureInput } from '~/components/AppInput';
 import { AppButton } from '~/components/AppButton';
+import { AppSecureInput } from '~/components/AppInput';
+import TopHeader from '~/components/TopHeader';
+import { useUserStore } from '~/store/useUserStore';
 
 export default function ChangePasswordView() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
 
+  const { resetPassword } = useUserStore();
+
   const { control, handleSubmit } = useForm();
-  const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] = useState(false);
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
@@ -24,8 +31,22 @@ export default function ChangePasswordView() {
   };
 
   const onSubmit = async (data: FieldValues) => {
-    console.log('Submitted data:', data);
-    // TODO: dodać obsługę zmiany hasła poprzez API
+    if (!data.newPassword || !data.confirmNewPassword) {
+      ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
+      return;
+    }
+
+    if (data.newPassword !== data.confirmNewPassword) {
+      ToastAndroid.show('Hasła nie są identyczne', ToastAndroid.SHORT);
+      return;
+    }
+
+    try {
+      await resetPassword(data.newPassword);
+      ToastAndroid.show('Zmieniono hasło pomyślnie', ToastAndroid.SHORT);
+    } catch {
+      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
+    }
   };
 
   return (
@@ -33,7 +54,7 @@ export default function ChangePasswordView() {
       <Drawer.Screen
         options={{
           headerShown: true,
-          header: () => <TopHeader onlyBack={true} modeSearch={''} toggleSearchBar={() => {}} />,
+          header: () => <TopHeader onlyBack modeSearch="" toggleSearchBar={() => {}} />,
         }}
       />
 
@@ -48,22 +69,6 @@ export default function ChangePasswordView() {
         </View>
 
         <View style={{ marginBottom: height * 0.1 }} className="space-y-6">
-          {/* Current Password */}
-          <Controller
-            control={control}
-            name="currentPassword"
-            render={({ field: { onChange, value } }) => (
-              <AppSecureInput
-                label={t('resetPassword.currentPassword')}
-                placeholder={t('resetPassword.currentPassword')}
-                value={value}
-                onChangeText={onChange}
-                isPasswordVisible={isCurrentPasswordVisible}
-                togglePasswordVisibility={() => togglePasswordVisibility(setIsCurrentPasswordVisible)}
-              />
-            )}
-          />
-
           {/* New Password */}
           <Controller
             control={control}
@@ -76,6 +81,7 @@ export default function ChangePasswordView() {
                 onChangeText={onChange}
                 isPasswordVisible={isNewPasswordVisible}
                 togglePasswordVisibility={() => togglePasswordVisibility(setIsNewPasswordVisible)}
+                keyboardType={undefined}
               />
             )}
           />
@@ -91,7 +97,10 @@ export default function ChangePasswordView() {
                 value={value}
                 onChangeText={onChange}
                 isPasswordVisible={isConfirmPasswordVisible}
-                togglePasswordVisibility={() => togglePasswordVisibility(setIsConfirmPasswordVisible)}
+                togglePasswordVisibility={() =>
+                  togglePasswordVisibility(setIsConfirmPasswordVisible)
+                }
+                keyboardType={undefined}
               />
             )}
           />

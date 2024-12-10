@@ -26,6 +26,7 @@ interface StoreState {
   logout: () => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   resetPasswordRequest: (email: string) => Promise<void>;
+  resetPassword: (newPassword: string) => Promise<void>;
   fetchUserHistory: () => Promise<void>;
   updateUserHistory: (objectId: number, routeCreatedCount: number) => Promise<void>;
   fetchUserStatistics: () => Promise<void>;
@@ -86,6 +87,18 @@ const useRealUserStore = create<StoreState>((set, get) => ({
       return Promise.resolve();
     } catch (error) {
       console.log('Error requesting password reset', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
+    }
+  },
+  resetPassword: async (newPassword: string) => {
+    set({ loading: true, error: null });
+    try {
+      await api.put('/auth/reset-password', { token: get().token, password: newPassword });
+      set({ loading: false, error: null });
+      return Promise.resolve();
+    } catch (error) {
+      console.log('Error resetting password', error);
       set({ error, loading: false });
       return Promise.reject(error);
     }
@@ -204,6 +217,18 @@ const useFakeUserStore = create<StoreState>((set) => ({
       set({ loading: false, error: null });
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
+    }
+  },
+  resetPassword: async (newPassword: string) => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
+      return Promise.resolve();
+    } catch (error) {
+      console.log('Error resetting password', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
     }
   },
   fetchUserHistory: async () => {
