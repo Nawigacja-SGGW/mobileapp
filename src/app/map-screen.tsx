@@ -144,6 +144,7 @@ export default function MapScreen() {
         setIsExpanded(true);
         break;
     }
+  }
     
   const handlePointNorth = () => {
       console.log("handlePointNorth");
@@ -190,8 +191,8 @@ export default function MapScreen() {
             setSearchMode('idle');
             setSearchQuery('');
           }}
-          compassEnabled={false}>
           onRegionDidChange={handleMapChanged}
+          compassEnabled={false}>
           <MapLibreGL.Camera
             ref={camera}
             centerCoordinate={mapCenterLocation}
