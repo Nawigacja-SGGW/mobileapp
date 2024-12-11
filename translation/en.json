@@ -69,6 +69,13 @@
     "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
     "didntReceiveEmail" : "Didn't receive an email?"
   },
+  "objects":{
+    "noResults" : "No results found",
+    "sortBy": "SORT BY",
+    "number": "number",
+    "name": "name: from A to Z",
+    "search": "Search"
+  },
 
   "loading": "Loading",
 
@@ -78,7 +85,22 @@
     "myRoutes": "My routes",
     "logOut": "Log out"
   },
-
   "getStarted": "Open this display's code:",
-  "changeCode": "Change any text, save the file and the app will update automatically."
+  "changeCode": "Change any text, save the file and the app will update automatically.",
+
+  "settings": {
+    "routePreferences": "Route Preferences",
+    "language": "Language",
+    "changePassword": "Change a Password",
+    "informations": "Informations",
+    "save": "Save"
+},
+"resetPassword": {
+    "title": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "resetButton": "Reset Password"
+  }
+
 }

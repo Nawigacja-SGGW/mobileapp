@@ -88,11 +88,33 @@
     "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
     "didntReceiveEmail" : "Nie otrzymałeś emaila?"
   },
-
+  "objects":{
+    "noResults" : "Nie znaleziono wyników",
+    "sortBy": "SORTUJ PO",
+    "number": "numerze",
+    "name": "nazwie: od A do Z",
+    "search": "Szukaj"
+  },
   "profile": {
     "email": "Email",
     "myKilometers": "Moje kilometry",
     "myRoutes": "Moje trasy",
     "logOut": "Wyloguj się"
-  }
+  },
+
+  "settings": {
+    "routePreferences": "Preferencje trasy",
+    "language": "Język",
+    "changePassword": "Zmień hasło",
+    "informations": "Informacje",
+    "save": "Zapisz"
+},
+"resetPassword": {
+  "title": "Zmień hasło",
+  "currentPassword": "Aktualne hasło",
+  "newPassword": "Nowe hasło",
+  "confirmNewPassword": "Potwierdź nowe hasło",
+  "resetButton": "Zresetuj hasło"
 }
+}
+

@@ -3,7 +3,16 @@ import Drawer from 'expo-router/drawer';
 import React, { useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  ToastAndroid,
+} from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
@@ -16,8 +25,10 @@ export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { t } = useTranslation();
   const externalIconsSize = 44;
-  const navigation = useNavigation();
-  const { loading, error, login } = useUserStore();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { loading, login } = useUserStore();
+
+  const circleStyleClass = "h-[44px] w-[44px] rounded-full justify-center items-center bg-[#cccccc] mx-1";
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -28,50 +39,13 @@ export default function Login() {
       ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
       return;
     }
-    await login(data.email, data.password);
-
-    if (!loading && !error) {
+    try {
+      await login(data.usernameOrEmail, data.password);
       navigation.navigate('map-screen');
-    } else {
+    } catch {
       ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
     }
   };
-
-  const styles = StyleSheet.create({
-    container: {
-      padding: 20,
-      backgroundColor: '#fff',
-    },
-    boldedText: {
-      color: '#003228',
-      fontSize: 12,
-      textAlign: 'right',
-      textDecorationLine: 'underline',
-      marginTop: 10,
-      fontWeight: 700,
-    },
-    text: {
-      color: '#003228',
-      fontSize: 13,
-      textAlign: 'center',
-      fontWeight: 500,
-    },
-    bottom: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginTop: 10,
-      marginBottom: 20,
-    },
-    circle: {
-      height: externalIconsSize,
-      width: externalIconsSize,
-      borderRadius: externalIconsSize,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#cccccc',
-      marginHorizontal: 5,
-    },
-  });
 
   return (
     <>
@@ -80,7 +54,7 @@ export default function Login() {
       <Drawer.Screen options={{ headerShown: false }} />
 
       <ScrollView
-        style={styles.container}
+        className="p-[20px] bg-white"
         contentContainerStyle={{
           height: '100%',
           justifyContent: 'space-between',
@@ -119,18 +93,18 @@ export default function Login() {
             )}
           />
           <Link href={{ pathname: '/forgotPassword' }} asChild>
-            <Text style={styles.boldedText}> {t('login.password.forgotPassword')}</Text>
+            <Text className="text-[#003228] text-[12px] text-right underline mt-[10px] font-bold"> {t('login.password.forgotPassword')}</Text>
           </Link>
           <View style={{ marginTop: 16 }} />
           <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)} />
         </View>
         <View>
-          <Text style={styles.text}> {t('login.continueWith')}</Text>
-          <View style={styles.bottom}>
-            <TouchableOpacity style={styles.circle}>
+          <Text className="text-[#003228] text-[13px] text-center font-medium"> {t('login.continueWith')}</Text>
+          <View className="flex-row justify-center mt-[10px] mb-[20px]">
+            <TouchableOpacity className={circleStyleClass}>
               <Image source={require('./../../assets/google.png')} alt="Google logo" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.circle}>
+            <TouchableOpacity className={circleStyleClass}>
               <Image source={require('./../../assets/apple.png')} alt="Apple logo" />
             </TouchableOpacity>
           </View>

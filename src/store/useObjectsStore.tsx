@@ -1,3 +1,4 @@
+import api from 'api';
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
 interface Guide {
@@ -5,7 +6,7 @@ interface Guide {
   description: string | null;
 }
 
-interface MapObject {
+export interface MapObject {
   id: number;
   latitude: string;
   longitude: string;
@@ -31,7 +32,7 @@ interface PointObject extends MapObject {
   eventEnd: Date | null;
 }
 
-interface AreaObject extends MapObject {
+export interface AreaObject extends MapObject {
   number: number | null;
   isPaid: boolean | null;
   faculties: AreaObjectFaculty[] | null;
@@ -61,7 +62,7 @@ interface ImportantPlace {
   room: number;
 }
 
-export const fakeAreaObjects: AreaObject[] = [
+const fakeAreaObjects: AreaObject[] = [
   {
     id: 1,
     latitude: '52.15751256140029',
@@ -161,7 +162,7 @@ export const fakeAreaObjects: AreaObject[] = [
   },
 ];
 
-export const fakePointObjects: PointObject[] = [
+const fakePointObjects: PointObject[] = [
   {
     id: 4,
     latitude: '52.15957117010191',
@@ -210,6 +211,10 @@ interface StoreState {
   loading: boolean;
   error: string | null;
   fetchData: () => Promise<void>;
+  allObjects: () => MapObject[];
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number) => MapObject[];
+  sortedByNumber: () => MapObject[];
+  filteredBy: (filterFn: (a: MapObject) => boolean) => MapObject[];
 }
 
 const useRealObjectsStore = create<StoreState>((set, get) => ({
@@ -221,22 +226,38 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
   fetchData: async () => {
     set({ loading: true, error: null });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // TODO fetch real data
-      set({ loading: false, error: null });
+      const response = await api.get('/objects');
+      set({
+        areaObjects: response.data.areaObjects,
+        pointObjects: response.data.pointObjects,
+        loading: false,
+        error: null,
+      });
+      return Promise.resolve();
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
+      return Promise.reject(error);
     }
   },
-  sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
+
+  allObjects: (): MapObject[] => {
+    return [...get().areaObjects, ...get().pointObjects];
+  },
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].sort(compareFn);
   },
-  filteredBy: async (filterFn: (a: MapObject) => boolean): Promise<MapObject[]> => {
+  sortedByNumber: (): MapObject[] => {
+    const areaObjs = get().areaObjects.sort(
+      (a: AreaObject, b: AreaObject) => a.number ?? Number.MAX_VALUE - (b.number ?? 0)
+    );
+    return [...areaObjs, ...get().pointObjects];
+  },
+  filteredBy: (filterFn: (a: MapObject) => boolean): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].filter(filterFn);
   },
 }));
 
-const useFakeObjectsStore = create<StoreState>((set) => ({
+const useFakeObjectsStore = create<StoreState>((set, get) => ({
   pointObjects: [],
   areaObjects: [],
   loading: false,
@@ -252,21 +273,32 @@ const useFakeObjectsStore = create<StoreState>((set) => ({
         loading: false,
         error: null,
       });
+      return Promise.resolve();
     } catch (error) {
       set({ error: (error as Error).message, loading: false });
+      return Promise.reject(error);
     }
   },
-  sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
+  allObjects: (): MapObject[] => {
+    return [...get().areaObjects, ...get().pointObjects];
+  },
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].sort(compareFn);
   },
-  filteredBy: async (filterFn: (a: MapObject) => boolean): Promise<MapObject[]> => {
+  sortedByNumber: (): MapObject[] => {
+    const areaObjs = get().areaObjects.sort(
+      (a: AreaObject, b: AreaObject) => a.number ?? Number.MAX_VALUE - (b.number ?? 0)
+    );
+    return [...areaObjs, ...get().pointObjects];
+  },
+  filteredBy: (filterFn: (a: MapObject) => boolean): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].filter(filterFn);
   },
 }));
 
 export let useObjectsStore: UseBoundStore<StoreApi<StoreState>>;
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.EXPO_PUBLIC_MODE === 'development') {
   useObjectsStore = useFakeObjectsStore;
 } else {
   useObjectsStore = useRealObjectsStore;

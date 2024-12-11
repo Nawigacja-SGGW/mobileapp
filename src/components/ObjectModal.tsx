@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { LocationButton } from './LocationDetailsScreen';
-import useLocationStore from '~/store/useLocationStore';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
+
+import { LocationButton } from './LocationDetailsScreen';
+
+import useLocationStore from '~/store/useLocationStore';
+import { useObjectsStore } from '~/store/useObjectsStore';
 
 type LocationModalProps = {
   isVisible: boolean;
@@ -17,6 +20,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId }: LocationModalProps
   const { t } = useTranslation();
 
   const { locations, setRoute } = useLocationStore();
+
   const object = locations.find((n) => n.id === objectId);
   if (!object) return null;
 
@@ -31,7 +35,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId }: LocationModalProps
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      transparent
       visible={isVisible}
       onRequestClose={() => setIsVisible(false)}>
       <Pressable className="flex-1 justify-end bg-black/50" onPress={() => setIsVisible(false)}>
