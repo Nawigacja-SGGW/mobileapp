@@ -26,11 +26,11 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
-          timeInterval: 10,
-          distanceInterval: 1,
+          timeInterval: 500,
+          distanceInterval: 5,
         },
         (location) => {
-          // if (navigationMode !== 'routing') return;
+          // if (navigationMode !== 'navigating') return;
           const coords = [location.coords.longitude, location.coords.latitude] as [number, number];
           lastLocations.current.push(coords);
           if (lastLocations.current.length > 10) lastLocations.current.shift();
@@ -47,6 +47,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
   }, []);
 
   useEffect(() => {
+    if (navigationMode !== 'navigating') return;
     console.log('uloc, toloc', userlocation, locationTo);
     let locfrom = userlocation;
     let locto = locationTo;
@@ -65,23 +66,32 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
     if (
       lastLocations.current.length === 0 ||
       mapDistance(lastLocations.current[0], userlocation) > 0.01
-    )
+    ) {
+      console.log(
+        'fetching',
+        lastLocations.current,
+        mapDistance(lastLocations.current[0], userlocation)
+      );
       fetch(
         `https://routing.openstreetmap.de/routed-${routedBy}/route/v1/foot/${wayString}?overview=full&geometries=geojson`
       )
         .then((n) => n.json())
         .then((n) => {
-          console.log(n);
+          console.log(n, lastLocations.current);
           console.log(n['routes'][0].geometry.coordinates);
-          if (navigationMode !== 'navigating') return;
           setRouteData({
             route: n['routes'][0].geometry.coordinates,
             distance: n['routes'][0].distance,
             duration: n['duration'],
           });
         });
-    else {
-      let r = getRemainingRoute(routeData.route, userlocation, lastLocations.current ?? []);
+    } else {
+      let r = getRemainingRoute({
+        fullRoute: routeData.route,
+        currentLocation: userlocation,
+        previousLocations: lastLocations.current ?? [],
+      });
+      console.log('getRemainingRoute', r);
       setRouteData({
         ...routeData,
         route: r,
@@ -89,16 +99,21 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       });
     }
     console.log('routedata', routeData, lastLocations, userlocation);
-  }, [locationTo, userlocation]);
+  }, [locationTo, userlocation, navigationMode]);
 
   return {
-    route: getRemainingRoute(routeData.route, userlocation, lastLocations.current ?? []),
+    route: getRemainingRoute({
+      fullRoute: routeData.route,
+      currentLocation: userlocation,
+      previousLocations: lastLocations.current ?? [],
+    }),
     distance: routeData.distance,
     duration: routeData.duration,
+    userLocation: userlocation,
   } as const;
 }
 
-const findClosestPointIndex = (route, location, previousLocations) => {
+const findClosestPointIndex = (route: [number, number][], location, previousLocations) => {
   let closestIndex = 0;
   let minDistance = Infinity;
 
@@ -122,12 +137,18 @@ const findClosestPointIndex = (route, location, previousLocations) => {
   return closestIndex;
 };
 
-const getRemainingRoute = (
-  fullRoute: [number, number][],
-  previousLocations: [number, number][],
-  currentLocation?: [number, number]
-): [number, number][] => {
-  if (true) return fullRoute;
+const getRemainingRoute = ({
+  fullRoute,
+  previousLocations,
+  currentLocation,
+}: {
+  fullRoute: [number, number][];
+  previousLocations: [number, number][];
+  currentLocation?: [number, number];
+}): [number, number][] => {
+  console.log({ fullRoute, previousLocations, currentLocation });
+  if (!fullRoute || fullRoute.length === 0) return [];
+  // if (true) return fullRoute;
   const closestIndex = findClosestPointIndex(fullRoute, currentLocation, previousLocations ?? []);
 
   const isMovingForward = (() => {
@@ -143,16 +164,16 @@ const getRemainingRoute = (
 
   console.log('forward');
   // sort route, get best, sort route by previous path
+
   const prevLocation = previousLocations?.at(-1);
   if (prevLocation) return [prevLocation, ...fullRoute.slice(closestIndex)];
-  else return [...fullRoute.slice(closestIndex)].filter(Boolean);
+  return [...fullRoute.slice(closestIndex)].filter(Boolean);
 };
 
 const mapDistance = (
   location1: [number, number] | MapLocation | undefined,
   location2: [number, number] | MapLocation | undefined
 ): number => {
-  console.log(location1, location2);
   if (!location1 || !location2) return 0;
   if (
     [location2, location1].filter(

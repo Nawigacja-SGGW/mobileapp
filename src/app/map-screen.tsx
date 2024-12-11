@@ -51,7 +51,7 @@ export default function MapScreen() {
     navigationMode,
   } = useLocationStore();
   const { route } = useRouteQuery('foot');
-  const { route: navRoute, distance } = usePlaceNavigation('foot');
+  const { route: navRoute, distance, userLocation: uLocation } = usePlaceNavigation('foot');
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -182,22 +182,28 @@ export default function MapScreen() {
             route={
               navigationMode === 'navigating' ? navRoute : navigationMode === 'routing' ? route : []
             }
+            locationFrom={uLocation}
           />
           <MapMarkers
             lastRoutePoint={lastRoutePoint}
             locations={locations}
             onMarkerPress={handleMarkerPress}
           />
-          <MapLibreGL.UserLocation renderMode="native" androidRenderMode="compass" />
+          <MapLibreGL.UserLocation
+            animated={false}
+            renderMode="native"
+            androidRenderMode="compass"
+          />
         </MapLibreGL.MapView>
         <LocationModal
           isVisible={isExpanded}
           setIsVisible={setIsExpanded}
           objectId={selectedObject}
+          userLocation={userLocation}
         />
         <NavigationModal
           onCancel={() => {
-            setNavigationMode('routing');
+            setNavigationMode(undefined);
           }}
           distanceLeft={distance / 1000}
           visible={navigationMode === 'navigating'}
@@ -213,7 +219,7 @@ interface MapLineProps {
   locationTo?: [number, number];
 }
 
-function MapLine({ route }: MapLineProps) {
+function MapLine({ route, locationFrom }: MapLineProps) {
   console.log('map line route', route);
 
   const mapLineShape = {
@@ -255,6 +261,43 @@ function MapLine({ route }: MapLineProps) {
             lineJoin: 'round',
             lineWidth: 6,
             lineSortKey: -1,
+          }}
+        />
+      </MapLibreGL.ShapeSource>
+      <MapLibreGL.ShapeSource
+        id="symbolLocationSource123"
+        shape={{
+          type: 'FeatureCollection',
+          features: [
+            locationFrom && {
+              type: 'Feature',
+              id: 'endpoint',
+              properties: {
+                icon: 'pin',
+              },
+              geometry: {
+                coordinates: locationFrom,
+                type: 'Point',
+              },
+            },
+            ...route.map((point) => ({
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'Point',
+                coordinates: point,
+              },
+            })),
+          ].filter(Boolean),
+        }}>
+        <MapLibreGL.CircleLayer
+          id="3534"
+          style={{
+            circleRadius: 3,
+            circleStrokeWidth: 3,
+            circleStrokeColor: 'gray',
+            circleColor: 'white',
+            circleBlur: 0.1,
           }}
         />
       </MapLibreGL.ShapeSource>

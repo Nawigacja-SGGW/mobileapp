@@ -12,7 +12,7 @@ interface NavigationModalProps {
 }
 
 export default function NavigationModal({ onCancel, visible, distanceLeft }: NavigationModalProps) {
-  const { locationTo } = useLocationStore();
+  const { locationTo, navigationMode } = useLocationStore();
   const { t } = useTranslation();
 
   if (!locationTo || !visible) return <></>;
