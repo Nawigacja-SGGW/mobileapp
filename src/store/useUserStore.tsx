@@ -19,7 +19,7 @@ interface StoreState {
   email: string | null;
   token: string | null;
   statistics: UserStatistics | null;
-  searchHistory: SearchHistoryEntry[] | null;
+  searchHistory: SearchHistoryEntry[];
   loading: boolean;
   error: any;
   login: (email: string, password: string) => Promise<void>;
@@ -38,7 +38,7 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   email: null,
   token: null,
   statistics: null,
-  searchHistory: null,
+  searchHistory: [],
   loading: false,
   error: null,
 
@@ -150,7 +150,7 @@ const useFakeUserStore = create<StoreState>((set) => ({
   email: null,
   token: null,
   statistics: null,
-  searchHistory: null,
+  searchHistory: [],
   loading: false,
   error: null,
 
@@ -180,7 +180,7 @@ const useFakeUserStore = create<StoreState>((set) => ({
         email: null,
         token: null,
         statistics: null,
-        searchHistory: null,
+        searchHistory: [],
         loading: false,
         error: null,
       });
