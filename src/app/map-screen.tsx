@@ -17,6 +17,8 @@ import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
+import { useObjectsStore } from '~/store/useObjectsStore';
+import { useUserStore } from '~/store/useUserStore';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -34,6 +36,7 @@ export default function MapScreen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selectedObject, setselectedObject] = useState(undefined);
   const userLocation = useRef<Location.LocationObject>();
+  const { fetchUserHistory } = useUserStore();
 
   // Zustand store
   const {
@@ -108,7 +111,7 @@ export default function MapScreen() {
     if (userLocation.current === undefined) setSearchMode('idle');
     console.log('Selected location:', location);
     setRoute({
-      locationFrom: [userLocation.current.coords.longitude, userLocation.current.coords.latitude],
+      locationFrom: [userLocation.current?.coords.longitude, userLocation.current?.coords.latitude],
     });
   };
 
@@ -133,6 +136,10 @@ export default function MapScreen() {
         break;
     }
   };
+
+  useEffect(() => {
+    fetchUserHistory();
+  }, []);
 
   return (
     <>
@@ -317,9 +324,25 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     setSearchMode,
     searchMode,
   } = useLocationStore();
+  const { searchHistory, updateUserHistory } = useUserStore();
+  const { allObjects } = useObjectsStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
   console.log('locations', _locations, searchQuery);
+
+  let shownLocations = _locations;
+  if (searchHistory && allObjects) {
+    const mappedHistory = searchHistory.map((n) => {
+      const object = allObjects().find((l) => l.id === n.objectId);
+      return {
+        id: n.objectId,
+        name: object?.name,
+        type: 'Historia',
+        coordinates: [object?.latitude, object?.longitude],
+      };
+    });
+    shownLocations = [...mappedHistory, ..._locations];
+  }
 
   const showSearchbar = searchMode !== 'idle';
   return (
@@ -406,12 +429,15 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                 <Text className="ml-3 text-lg text-black">{t('map.search.startingPoint')}</Text>
               </TouchableOpacity>
             )}
-            {_locations.map((item) => (
+            {shownLocations.map((item) => (
               <TouchableOpacity
                 key={item.id}
                 className="flex-row items-center bg-white p-2"
                 onPress={() => {
                   if (searchMode === 'searchfrom') {
+                    // TODO adjust route created count instead of 1
+                    updateUserHistory(item.id, 1);
+
                     setRoute({
                       locationFrom: item,
                     });
@@ -429,9 +455,9 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                 <Text className="ml-3 text-lg text-black">{item.name}</Text>
               </TouchableOpacity>
             ))}
-            {_locations.length === 0 && (
+            {shownLocations.length === 0 && (
               <View key={0} className="flex-row justify-center bg-white p-2 text-center">
-                <Text className="text-lg text-gray-600">No locations found</Text>
+                <Text className="text-lg text-gray-600">{t('map.search.noResults')}</Text>
               </View>
             )}
           </View>
@@ -447,6 +473,7 @@ const tti = {
   Pomnik: 'place-of-worship',
   Przyroda: 'canadian-maple-leaf',
   'Dom Studencki': 'hotel',
+  Historia: 'history',
 };
 
 const typeToIcon = (t: string) => tti[t] || 'building';
