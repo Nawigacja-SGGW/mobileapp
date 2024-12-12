@@ -37,7 +37,7 @@ export default function Register() {
     try {
       await register(data.email, data.password);
       ToastAndroid.show('Zarejestrowano pomyślnie', ToastAndroid.SHORT);
-      navigation.navigate('l ogin');
+      navigation.navigate('login');
     } catch {
       ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
     }
