@@ -6,7 +6,7 @@ interface Guide {
   description: string | null;
 }
 
-interface MapObject {
+export interface MapObject {
   id: number;
   latitude: string;
   longitude: string;
@@ -32,7 +32,7 @@ interface PointObject extends MapObject {
   eventEnd: Date | null;
 }
 
-interface AreaObject extends MapObject {
+export interface AreaObject extends MapObject {
   number: number | null;
   isPaid: boolean | null;
   faculties: AreaObjectFaculty[] | null;
@@ -211,6 +211,10 @@ interface StoreState {
   loading: boolean;
   error: string | null;
   fetchData: () => Promise<void>;
+  allObjects: () => MapObject[];
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number) => MapObject[];
+  sortedByNumber: () => MapObject[];
+  filteredBy: (filterFn: (a: MapObject) => boolean) => MapObject[];
 }
 
 const useRealObjectsStore = create<StoreState>((set, get) => ({
@@ -235,15 +239,25 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
       return Promise.reject(error);
     }
   },
-  sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
+
+  allObjects: (): MapObject[] => {
+    return [...get().areaObjects, ...get().pointObjects];
+  },
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].sort(compareFn);
   },
-  filteredBy: async (filterFn: (a: MapObject) => boolean): Promise<MapObject[]> => {
+  sortedByNumber: (): MapObject[] => {
+    const areaObjs = get().areaObjects.sort(
+      (a: AreaObject, b: AreaObject) => a.number ?? Number.MAX_VALUE - (b.number ?? 0)
+    );
+    return [...areaObjs, ...get().pointObjects];
+  },
+  filteredBy: (filterFn: (a: MapObject) => boolean): MapObject[] => {
     return [...get().areaObjects, ...get().pointObjects].filter(filterFn);
   },
 }));
 
-const useFakeObjectsStore = create<StoreState>((set) => ({
+const useFakeObjectsStore = create<StoreState>((set, get) => ({
   pointObjects: [],
   areaObjects: [],
   loading: false,
@@ -265,10 +279,19 @@ const useFakeObjectsStore = create<StoreState>((set) => ({
       return Promise.reject(error);
     }
   },
-  sortedBy: async (compareFn: (a: MapObject, b: MapObject) => number): Promise<MapObject[]> => {
+  allObjects: (): MapObject[] => {
+    return [...get().areaObjects, ...get().pointObjects];
+  },
+  sortedBy: (compareFn: (a: MapObject, b: MapObject) => number): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].sort(compareFn);
   },
-  filteredBy: async (filterFn: (a: MapObject) => boolean): Promise<MapObject[]> => {
+  sortedByNumber: (): MapObject[] => {
+    const areaObjs = get().areaObjects.sort(
+      (a: AreaObject, b: AreaObject) => a.number ?? Number.MAX_VALUE - (b.number ?? 0)
+    );
+    return [...areaObjs, ...get().pointObjects];
+  },
+  filteredBy: (filterFn: (a: MapObject) => boolean): MapObject[] => {
     return [...fakeAreaObjects, ...fakePointObjects].filter(filterFn);
   },
 }));

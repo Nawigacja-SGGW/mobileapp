@@ -26,7 +26,7 @@ export function DrawerMenu() {
       label: t('menu.objects'),
       icon: <FontAwesome5 name="building" size={32} color="white" />,
       onPress: () => {
-        console.log('Open Objects');
+        navigation.navigate('objects');
       },
     },
     {
@@ -40,9 +40,9 @@ export function DrawerMenu() {
       label: t('menu.settings'),
       icon: <Feather name="settings" size={32} color="white" />,
       onPress: () => {
-        console.log('Open Settings');
+        navigation.navigate('settingsView');
       },
-    },
+    },    
   ];
 
   const logoutOption = {

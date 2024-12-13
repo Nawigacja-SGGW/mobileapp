@@ -2,10 +2,11 @@ import React, { MutableRefObject, useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { LocationButton } from './LocationDetailsScreen';
-import useLocationStore from '~/store/useLocationStore';
 import { useTranslation } from 'react-i18next';
 import { LocationObject } from 'expo-location';
+
+
+import useLocationStore from '~/store/useLocationStore';
 
 type LocationModalProps = {
   isVisible: boolean;
@@ -33,7 +34,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      transparent
       visible={isVisible}
       onRequestClose={() => setIsVisible(false)}>
       <Pressable className="flex-1 justify-end bg-black/50" onPress={() => setIsVisible(false)}>

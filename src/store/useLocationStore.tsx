@@ -35,12 +35,10 @@ useObjectsStore.subscribe((state) => {
       ...useObjectsStore.getState().areaObjects.map((n, i) => ({
         ...n,
         coordinates: [Number(n.longitude), Number(n.latitude)],
-        id: i + 1000,
       })),
       ...useObjectsStore.getState().pointObjects.map((n, i) => ({
         ...n,
         coordinates: [Number(n.longitude), Number(n.latitude)],
-        id: i + 2001,
       })),
     ],
   });
