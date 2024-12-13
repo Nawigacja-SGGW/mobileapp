@@ -84,7 +84,7 @@ export default function MapScreen() {
         },
         (location) => {
           userLocation.current = location;
-          console.log("map-screen.tsx location");
+          console.log('map-screen.tsx location');
           console.log(location);
         }
       );
@@ -99,7 +99,7 @@ export default function MapScreen() {
           ],
         });
       }
-      console.log("map-screen.tsx userLocation.current");
+      console.log('map-screen.tsx userLocation.current');
       console.log(userLocation.current);
     })();
   }, []);
@@ -141,14 +141,14 @@ export default function MapScreen() {
         setIsExpanded(true);
         break;
     }
-  }
-    
-  const handlePointNorth = () => {
-      console.log("handlePointNorth");
-      setMapRotation(0);
-     }
+  };
 
-  const handleMapChanged = (event :any) => {
+  const handlePointNorth = () => {
+    console.log('handlePointNorth');
+    setMapRotation(0);
+  };
+
+  const handleMapChanged = (event: any) => {
     const { properties } = event;
     if (properties != undefined) {
       setMapRotation(properties.heading);
@@ -158,7 +158,8 @@ export default function MapScreen() {
   };
 
   const compassStyle = {
-    transform: `rotate(${(-mapRotation - 45)}deg)`
+    transform: `rotate(${-mapRotation - 45}deg)`,
+    margin: -5,
   };
   console.log(-mapRotation - 45);
 
@@ -208,8 +209,10 @@ export default function MapScreen() {
           <MapLibreGL.UserLocation renderMode="native" androidRenderMode="compass" />
         </MapLibreGL.MapView>
         {/* compass */}
-        <TouchableOpacity onPress={handlePointNorth} className='absolute bottom-5 right-5 z-10'>
-          <Ionicons name="compass-sharp" size={50} color="#003228" style={compassStyle}/>
+        <TouchableOpacity
+          onPress={handlePointNorth}
+          className="absolute bottom-5 right-5 z-10 rounded-full bg-white">
+          <Ionicons name="compass-sharp" size={50} color="#003228" style={compassStyle} />
         </TouchableOpacity>
         <LocationModal
           isVisible={isExpanded}
