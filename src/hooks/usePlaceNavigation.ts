@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
+import { ToastAndroid } from 'react-native';
 
 import useLocationStore, { MapLocation } from '~/store/useLocationStore';
 
@@ -30,7 +31,6 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
           distanceInterval: 5,
         },
         (location) => {
-          // if (navigationMode !== 'navigating') return;
           const coords = [location.coords.longitude, location.coords.latitude] as [number, number];
           lastLocations.current.push(coords);
           if (lastLocations.current.length > 10) lastLocations.current.shift();
@@ -53,7 +53,6 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
     let locto = locationTo;
     if (!userlocation || !locationTo) return;
     if (!Array.isArray(locto)) locto = locationTo.coordinates;
-    const waypoints = [locfrom, locto];
     const wayString = [locfrom, locto].reduce((acc, c, i) => {
       acc += c[0].toString() + ',';
       acc += c[1].toString() + (1 === i ? '' : ';');
@@ -61,6 +60,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
     }, '');
     if (mapDistance(userlocation, locationTo) < 0.02) {
       console.log('ARRIVED');
+      ToastAndroid.show("Arrived at destination");
       setNavigationMode('arrived');
     }
     if (
@@ -86,7 +86,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
           });
         });
     } else {
-      let r = getRemainingRoute({
+      const r = getRemainingRoute({
         fullRoute: routeData.route,
         currentLocation: userlocation,
         previousLocations: lastLocations.current ?? [],
@@ -99,14 +99,10 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       });
     }
     console.log('routedata', routeData, lastLocations, userlocation);
-  }, [locationTo, userlocation, navigationMode]);
+  }, [locationTo, navigationMode === 'navigating' ? userlocation : undefined, navigationMode]);
 
   return {
-    route: getRemainingRoute({
-      fullRoute: routeData.route,
-      currentLocation: userlocation,
-      previousLocations: lastLocations.current ?? [],
-    }),
+    route: routeData.route,
     distance: routeData.distance,
     duration: routeData.duration,
     userLocation: userlocation,
@@ -148,23 +144,7 @@ const getRemainingRoute = ({
 }): [number, number][] => {
   console.log({ fullRoute, previousLocations, currentLocation });
   if (!fullRoute || fullRoute.length === 0) return [];
-  // if (true) return fullRoute;
   const closestIndex = findClosestPointIndex(fullRoute, currentLocation, previousLocations ?? []);
-
-  const isMovingForward = (() => {
-    if (!previousLocations || previousLocations.length < 2) return true; // Domyślnie idziemy naprzód
-    const lastPoint = previousLocations[previousLocations.length - 1];
-    const secondLastPoint = previousLocations[previousLocations.length - 2];
-
-    const distanceToNext = mapDistance(lastPoint, fullRoute[closestIndex + 1] ?? []);
-    const distanceToPrev = mapDistance(lastPoint, fullRoute[closestIndex - 1] ?? []);
-
-    return distanceToNext < distanceToPrev;
-  })();
-
-  console.log('forward');
-  // sort route, get best, sort route by previous path
-
   const prevLocation = previousLocations?.at(-1);
   if (prevLocation) return [prevLocation, ...fullRoute.slice(closestIndex)];
   return [...fullRoute.slice(closestIndex)].filter(Boolean);
@@ -200,10 +180,10 @@ const mapDistance = (
   );
 };
 
-function calculateDistance(points: [number, number][]) {
+function calculateDistance(route: [number, number][]) {
   let distance: number = 0;
-  for (let i = 0; i < points.length - 1; i++) {
-    distance += mapDistance(points[i], points[i + 1]);
+  for (let i = 0; i < route.length - 1; i++) {
+    distance += mapDistance(route[i], route[i + 1]);
   }
   return distance;
 }

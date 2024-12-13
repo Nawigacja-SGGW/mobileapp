@@ -37,7 +37,6 @@ export default function MapScreen() {
   const [selectedObject, setselectedObject] = useState(undefined);
   const userLocation = useRef<Location.LocationObject>();
 
-  // Zustand store
   const {
     locations,
     setSearchQuery,
@@ -50,18 +49,12 @@ export default function MapScreen() {
     setNavigationMode,
     navigationMode,
   } = useLocationStore();
-  const { route } = useRouteQuery('foot');
+  const { route, distance: routeQueryDistance } = useRouteQuery('foot');
   const { route: navRoute, distance, userLocation: uLocation } = usePlaceNavigation('foot');
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
   const lastRoutePoint = route?.at(-1);
-
-  const expandFullSearchBar = () => {
-    setIsExpanded(true);
-    clearFilteredLocations();
-    setSearchQuery('');
-  };
 
   const toggleSearchBar = () => {
     if (searchMode === 'idle') setSearchMode('searchto');
@@ -118,6 +111,8 @@ export default function MapScreen() {
   };
 
   const handleMarkerPress = (id: number, location: [number, number]) => {
+    // if (navigationMode !== 'arrived' || navigationMode) return;
+    console.log({ navigationMode });
     const locationObject = locations.find((l) => l.id == id);
     setIsExpanded(true);
     console.log('location Object ', locationObject, id, locations);
@@ -149,12 +144,13 @@ export default function MapScreen() {
         }}
       />
       <View className="flex-1">
-        {/* Pasek wyszukiwania */}
-        <SearchBar
-          handleSearch={handleSearch}
-          handleLocationSelect={handleLocationSelect}
-          isExpanded={isExpanded}
-        />
+        {navigationMode !== 'navigating' && (
+          <SearchBar
+            handleSearch={handleSearch}
+            handleLocationSelect={handleLocationSelect}
+            isExpanded={isExpanded}
+          />
+        )}
 
         <MapLibreGL.MapView
           ref={map}
@@ -205,8 +201,10 @@ export default function MapScreen() {
           onCancel={() => {
             setNavigationMode(undefined);
           }}
-          distanceLeft={distance / 1000}
-          visible={navigationMode === 'navigating'}
+          distanceLeft={
+            navigationMode === 'navigating' ? distance / 1000 : routeQueryDistance / 1000
+          }
+          visible={navigationMode === 'navigating' || navigationMode === 'routing'}
         />
       </View>
     </>
@@ -219,9 +217,7 @@ interface MapLineProps {
   locationTo?: [number, number];
 }
 
-function MapLine({ route, locationFrom }: MapLineProps) {
-  console.log('map line route', route);
-
+function MapLine({ route, locationFrom, locationTo }: MapLineProps) {
   const mapLineShape = {
     type: 'FeatureCollection',
     features: [
@@ -269,25 +265,17 @@ function MapLine({ route, locationFrom }: MapLineProps) {
         shape={{
           type: 'FeatureCollection',
           features: [
-            locationFrom && {
+            route.length > 0 && {
               type: 'Feature',
               id: 'endpoint',
               properties: {
                 icon: 'pin',
               },
               geometry: {
-                coordinates: locationFrom,
+                coordinates: route.at(-1),
                 type: 'Point',
               },
             },
-            ...route.map((point) => ({
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'Point',
-                coordinates: point,
-              },
-            })),
           ].filter(Boolean),
         }}>
         <MapLibreGL.CircleLayer
@@ -406,7 +394,6 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
   } = useLocationStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
-  console.log('locations', _locations, searchQuery);
 
   const showSearchbar = searchMode !== 'idle';
   return (

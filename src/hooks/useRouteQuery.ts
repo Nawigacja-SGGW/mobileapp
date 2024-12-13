@@ -9,7 +9,6 @@ export function useRouteQuery(
   routedBy: RoutedBy
 ) {
   const { locationFrom, locationTo } = useLocationStore();
-  console.log('routeQuery invocation', locationTo, locationFrom);
   const [routeData, setRouteData] = useState({
     route: [],
     distance: 0,
@@ -47,7 +46,7 @@ export function useRouteQuery(
         console.log(n['routes'][0].geometry.coordinates);
         setRouteData({
           route: n['routes'][0].geometry.coordinates,
-          distance: n['distance'],
+          distance: n['routes'][0]['distance'],
           duration: n['duration'],
         });
       });

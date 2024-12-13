@@ -9,7 +9,8 @@
     "location": "Location",
     "map": "Map",
     "details": "Details",
-    "navigatingTo":"Navigating to:"
+    "navigatingTo":"Navigating to:",
+    "start":"Start"
   },
   "menu": {
     "map": "Map",

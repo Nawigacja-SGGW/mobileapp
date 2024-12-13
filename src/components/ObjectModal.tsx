@@ -91,7 +91,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
                 setIsVisible(false);
                 console.log(userLocation.current);
                 if (!userLocation.current) return;
-              
+
                 setRoute({
                   locationTo: object,
                   locationFrom: [
@@ -101,21 +101,8 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
                 });
                 setNavigationMode('routing');
               }}>
-              <Text className="font-bold text-green-main">ROUTE</Text>
+              <Text className="font-bold text-green-main">{t('object.navigate')}</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity
-              className="flex-1 items-center rounded-full bg-white p-3"
-              onPress={() => {
-                setRoute({
-                  locationTo: object,
-                });
-                setNavigationMode('navigating');
-                setIsVisible(false);
-              }}>
-              <Text className="font-bold text-green-main">NAVIGATE</Text>
-            </TouchableOpacity>
-
             <TouchableOpacity
               className="flex-1 items-center rounded-full bg-white p-3"
               onPress={() => {
