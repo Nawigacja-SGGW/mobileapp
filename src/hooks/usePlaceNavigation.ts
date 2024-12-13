@@ -60,7 +60,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
     }, '');
     if (mapDistance(userlocation, locationTo) < 0.02) {
       console.log('ARRIVED');
-      ToastAndroid.show("Arrived at destination");
+      ToastAndroid.show('Arrived at destination');
       setNavigationMode('arrived');
     }
     if (
@@ -100,6 +100,10 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
     }
     console.log('routedata', routeData, lastLocations, userlocation);
   }, [locationTo, navigationMode === 'navigating' ? userlocation : undefined, navigationMode]);
+
+  useEffect(() => {
+    lastLocations.current = [];
+  }, [locationTo]);
 
   return {
     route: routeData.route,

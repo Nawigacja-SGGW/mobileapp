@@ -13,7 +13,7 @@ interface NavigationModalProps {
 }
 
 export default function NavigationModal({ onCancel, visible, distanceLeft }: NavigationModalProps) {
-  const { locationTo, navigationMode, setNavigationMode } = useLocationStore();
+  const { locationFrom, locationTo, navigationMode, setNavigationMode } = useLocationStore();
   const { t } = useTranslation();
 
   if (!locationTo || !visible) return <></>;
@@ -36,21 +36,23 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
               {'  ' + getFormattedTime(distanceLeft)} {'  ' + formatDistance(distanceLeft)}
             </Text>
           </View>
-          <View className="flex-row items-end  justify-center gap-5  pb-6">
-            <TouchableOpacity
-              className="w-60 items-center rounded-full bg-white p-2"
-              onPress={() => {
-                if (navigationMode === 'routing') {
-                  setNavigationMode('navigating');
-                } else {
-                  onCancel();
-                }
-              }}>
-              <Text className="font-bold text-green-main">
-                {navigationMode === 'navigating' ? t('cancel') : t('navigation.start')}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {Array.isArray(locationFrom) && (
+            <View className="flex-row items-end  justify-center gap-5  pb-6">
+              <TouchableOpacity
+                className="w-60 items-center rounded-full bg-white p-2"
+                onPress={() => {
+                  if (navigationMode === 'routing') {
+                    setNavigationMode('navigating');
+                  } else {
+                    onCancel();
+                  }
+                }}>
+                <Text className="font-bold text-green-main">
+                  {navigationMode === 'navigating' ? t('cancel') : t('navigation.start')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </>
       </View>
     </View>

@@ -21,6 +21,7 @@ export function useRouteQuery(
   );
 
   useEffect(() => {
+    console.log({ locationFrom, locationTo });
     let locfrom = locationFrom;
     let locto = locationTo;
     if (!locationFrom) {
