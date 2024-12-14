@@ -32,6 +32,24 @@ interface StoreState {
   updateUserStatistics: () => Promise<void>;
 }
 
+type Response = {
+  code: number;
+  message: string;
+};
+
+interface LoginResponse extends Response {
+  userId: number;
+  token: string;
+}
+
+interface FetchUserHistory extends Response {
+  history: SearchHistoryEntry[];
+}
+
+interface FetchUserStatistics extends Response {
+  statistics: UserStatistics;
+}
+
 // TODO implement persisting user data and refreshing token after integration with real API
 const useRealUserStore = create<StoreState>((set, get) => ({
   id: null,
@@ -45,9 +63,9 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   login: async (email: string, password: string) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await api.post<LoginResponse>('/auth/login', { email, password });
       set({
-        id: response.data['user_id'],
+        id: response.data.userId,
         token: response.data.token,
         email,
         loading: false,
@@ -99,8 +117,14 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   fetchUserHistory: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.get('/user-history', { data: { user: get().id } });
-      set({ searchHistory: response.data.history, loading: false, error: null });
+      const response = await api.get<FetchUserHistory>('/user-history', {
+        params: { user_id: get().id },
+      });
+      set({
+        searchHistory: response.data.history,
+        loading: false,
+        error: null,
+      });
       return Promise.resolve();
     } catch (error) {
       console.log('Error fetching user history', error);
@@ -111,11 +135,14 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   updateUserHistory: async (objectId: number, routeCreatedCount: number) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.post('/user-history', {
-        data: { objectId, userId: get().id, timestamp: Date.now(), routeCreatedCount },
+      console.log(Date.now().toString());
+      await api.post('/user-history', {
+        object_id: objectId,
+        user_id: get().id,
+        timestamp: new Date().toISOString(),
+        route_created_count: routeCreatedCount,
       });
-      // TODO alter only one entry
-      set({ searchHistory: response.data.history, loading: false, error: null });
+      await get().fetchUserHistory();
       return Promise.resolve();
     } catch (error) {
       console.log('Error updating user history', error);
@@ -126,7 +153,9 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   fetchUserStatistics: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.get('/user-statistics', { data: { user: get().id } });
+      const response = await api.get<FetchUserStatistics>('/user-statistics', {
+        params: { user_id: get().id },
+      });
       set({ statistics: response.data.statistics, loading: false, error: null });
       return Promise.resolve();
     } catch (error) {
