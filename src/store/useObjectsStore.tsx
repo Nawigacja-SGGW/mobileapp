@@ -245,6 +245,12 @@ interface StoreState {
   filteredBy: (filterFn: (a: MapObject) => boolean) => MapObject[];
 }
 
+type FetchDataResponse = {
+  code: number;
+  areaObjects: AreaObject[];
+  pointObjects: PointObject[];
+};
+
 const useRealObjectsStore = create<StoreState>((set, get) => ({
   areaObjects: [],
   pointObjects: [],
@@ -254,10 +260,10 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
   fetchData: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.get('/objects');
+      const response = await api.get<FetchDataResponse>('/objects');
       set({
-        areaObjects: response.data['area_objects'],
-        pointObjects: response.data['point_objects'],
+        areaObjects: response.data.areaObjects,
+        pointObjects: response.data.pointObjects,
         loading: false,
         error: null,
       });
