@@ -1,5 +1,4 @@
 import Drawer from 'expo-router/drawer';
-import { t } from 'i18next';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -16,8 +15,8 @@ import TopHeader from '~/components/TopHeader';
 import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
 
 const routeOptions = [
-  { label: t('settings.walk'), value: RoutePreference.Walk },
-  { label: t('settings.bike'), value: RoutePreference.Bike },
+  { label: 'settings.walk', value: RoutePreference.Walk },
+  { label: 'settings.bike', value: RoutePreference.Bike },
 ];
 
 export default function ChangeLanguageView() {
@@ -54,7 +53,7 @@ export default function ChangeLanguageView() {
             }`}>
             <Text
               className={`text-lg ${routePreference === item.value ? 'text-black' : 'text-gray-800'}`}>
-              {item.label}
+              {t(item.label)}
             </Text>
           </TouchableOpacity>
         )}
