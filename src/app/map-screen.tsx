@@ -433,11 +433,8 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
               <TouchableOpacity
                 key={item.id}
                 className="flex-row items-center bg-white p-2"
-                onPress={() => {
+                onPress={async () => {
                   if (searchMode === 'searchfrom') {
-                    // TODO adjust route created count instead of 1
-                    updateUserHistory(item.id, 1);
-
                     setRoute({
                       locationFrom: item,
                     });
@@ -446,6 +443,8 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                       locationTo: item,
                     });
                   }
+                  // TODO adjust route created count instead of 1
+                  await updateUserHistory(item.id, 1);
                   console.log('press in list');
                   setSearchMode('idle');
                 }}>

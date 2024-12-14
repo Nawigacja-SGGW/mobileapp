@@ -16,7 +16,6 @@ const LocationDetailsScreen = () => {
   const locations = useObjectsStore().sortedBy((a, b) => a.name.localeCompare(b.name));
 
   const object = locations.find((n) => n.id === Number(objectId));
-  console.log('objectId', objectId, object, locations);
   if (!object) return null;
 
   const locationData = {

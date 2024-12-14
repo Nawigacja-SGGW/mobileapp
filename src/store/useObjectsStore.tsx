@@ -255,7 +255,6 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await api.get('/objects');
-      console.log('dupa', response.data);
       set({
         areaObjects: response.data['area_objects'],
         pointObjects: response.data['point_objects'],

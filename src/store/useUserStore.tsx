@@ -46,7 +46,13 @@ const useRealUserStore = create<StoreState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await api.post('/auth/login', { email, password });
-      set({ id: response.data.id, token: response.data.token, email, loading: false, error: null });
+      set({
+        id: response.data['user_id'],
+        token: response.data.token,
+        email,
+        loading: false,
+        error: null,
+      });
       return Promise.resolve();
     } catch (error) {
       console.log('Error logging in', error);
@@ -105,8 +111,8 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   updateUserHistory: async (objectId: number, routeCreatedCount: number) => {
     set({ loading: true, error: null });
     try {
-      const response = await api.put('/user-history', {
-        data: { objectId, user: get().id, timestamp: Date.now(), routeCreatedCount },
+      const response = await api.post('/user-history', {
+        data: { objectId, userId: get().id, timestamp: Date.now(), routeCreatedCount },
       });
       // TODO alter only one entry
       set({ searchHistory: response.data.history, loading: false, error: null });
