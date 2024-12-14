@@ -4,6 +4,7 @@ import { create, StoreApi, UseBoundStore } from 'zustand';
 interface Guide {
   id: number;
   description: string | null;
+  descriptionEng: string | null;
 }
 
 export interface MapObject {
@@ -11,8 +12,10 @@ export interface MapObject {
   latitude: string;
   longitude: string;
   name: string;
+  nameEng: string;
   type: string | null;
   description: string | null;
+  descriptionEng: string | null;
   imageUrl: string | null;
   website: string | null;
   address: Address | null;
@@ -24,6 +27,7 @@ interface Address {
   street: string;
   postalCode: string;
   city: string;
+  cityEng: string;
 }
 
 interface PointObject extends MapObject {
@@ -48,10 +52,12 @@ interface AreaObjectFaculty {
 interface Faculty {
   id: number;
   name: string;
+  nameEng: string;
   deansOfficeNumber: string;
 }
 
 interface Entry {
+  id: number;
   latitude: string;
   longitude: string;
 }
@@ -68,6 +74,7 @@ const fakeAreaObjects: AreaObject[] = [
     latitude: '52.15751256140029',
     longitude: '21.04533087961154',
     name: 'Basen',
+    nameEng: 'Swimming Pool',
     type: 'Obiekt sportowy',
     description: 'Basen SGGW',
     imageUrl: null,
@@ -77,30 +84,36 @@ const fakeAreaObjects: AreaObject[] = [
       street: 'Jana Ciszewskiego 10',
       postalCode: '02-786',
       city: 'Warszawa',
+      cityEng: 'Warsaw',
     },
     guide: null,
     number: 27,
     isPaid: false,
     entries: [
       {
+        id: 1,
         latitude: '52.157492963116354',
         longitude: '21.045311993639817',
       },
       {
+        id: 2,
         latitude: '52.15738477026233',
         longitude: '21.045143685026403',
       },
     ],
     importantPlaces: null,
     faculties: null,
+    descriptionEng: null,
   },
   {
     id: 2,
     latitude: '52.161963648191104',
     longitude: '21.046332383073644',
     name: 'Wydział Zastosowań Informatyki i Matematyki',
+    nameEng: 'Faculty of Applied Informatics and Mathematics',
     type: 'Wydział',
     description: 'Nasz wydział',
+    descriptionEng: 'Our department',
     imageUrl: null,
     website: null,
     address: {
@@ -108,24 +121,29 @@ const fakeAreaObjects: AreaObject[] = [
       street: 'Nowoursynowska 159/bud. 34',
       postalCode: '02-776',
       city: 'Warszawa',
+      cityEng: 'Warsaw',
     },
     guide: null,
     number: 34,
     isPaid: false,
     entries: [
       {
+        id: 3,
         latitude: '52.16223642854811',
         longitude: '21.046152023033034',
       },
       {
+        id: 4,
         latitude: '52.162163941623355,',
         longitude: ' 21.045977882304165',
       },
       {
+        id: 5,
         latitude: '52.16171375702599',
         longitude: '21.046394576191098',
       },
       {
+        id: 6,
         latitude: '52.16179578252496',
         longitude: '21.046640239005036',
       },
@@ -138,8 +156,10 @@ const fakeAreaObjects: AreaObject[] = [
     latitude: '52.16313727334748',
     longitude: '21.03888543277215',
     name: 'Dom Studencki Limba',
+    nameEng: 'Student Dormitory',
     type: 'Dom Studencki',
     description: null,
+    descriptionEng: null,
     imageUrl: null,
     website: null,
     address: {
@@ -147,12 +167,14 @@ const fakeAreaObjects: AreaObject[] = [
       street: 'Nowoursynowska 161L',
       postalCode: '02-787',
       city: 'Warszawa',
+      cityEng: 'Warsaw',
     },
     guide: null,
     number: 161,
     isPaid: false,
     entries: [
       {
+        id: 7,
         latitude: '52.16311211536585',
         longitude: '21.038731335128542',
       },
@@ -168,8 +190,10 @@ const fakePointObjects: PointObject[] = [
     latitude: '52.15957117010191',
     longitude: '21.046369211223155',
     name: 'Pomnik Krowy',
+    nameEng: "Cow's Monument",
     type: 'Pomnik',
     description: null,
+    descriptionEng: null,
     imageUrl: null,
     website: null,
     address: {
@@ -177,6 +201,7 @@ const fakePointObjects: PointObject[] = [
       street: 'Nowoursynowska 166',
       postalCode: '02-787',
       city: 'Warszawa',
+      cityEng: 'Warsaw',
     },
     guide: null,
     eventCategory: null,
@@ -188,8 +213,10 @@ const fakePointObjects: PointObject[] = [
     latitude: '52.15928975854478',
     longitude: '21.049575056750555',
     name: 'Jezioro',
+    nameEng: 'Lake',
     type: 'Przyroda',
     description: null,
+    descriptionEng: null,
     imageUrl: null,
     website: null,
     address: {
@@ -197,6 +224,7 @@ const fakePointObjects: PointObject[] = [
       street: 'Nowoursynowska 166',
       postalCode: '02-787',
       city: 'Warszawa',
+      cityEng: 'Warsaw',
     },
     guide: null,
     eventCategory: null,
@@ -227,9 +255,10 @@ const useRealObjectsStore = create<StoreState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       const response = await api.get('/objects');
+      console.log('dupa', response.data);
       set({
-        areaObjects: response.data.areaObjects,
-        pointObjects: response.data.pointObjects,
+        areaObjects: response.data['area_objects'],
+        pointObjects: response.data['point_objects'],
         loading: false,
         error: null,
       });

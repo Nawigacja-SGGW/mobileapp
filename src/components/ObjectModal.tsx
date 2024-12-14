@@ -7,7 +7,7 @@ import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { LocationButton } from './LocationDetailsScreen';
 
 import useLocationStore from '~/store/useLocationStore';
-import { useObjectsStore } from '~/store/useObjectsStore';
+import { AreaObject, useObjectsStore } from '~/store/useObjectsStore';
 
 type LocationModalProps = {
   isVisible: boolean;
@@ -19,17 +19,18 @@ const LocationModal = ({ isVisible, setIsVisible, objectId }: LocationModalProps
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const { locations, setRoute } = useLocationStore();
+  const { setRoute } = useLocationStore();
+  const { allObjects } = useObjectsStore();
 
-  const object = locations.find((n) => n.id === objectId);
+  const object = allObjects().find((n) => n.id === objectId);
   if (!object) return null;
 
   const locationData = {
     title: object?.name,
-    buildingNo: object?.number ?? '',
-    address: `${object?.address.city} ${object?.address.street} ${object?.address.postalCode}`,
+    buildingNo: (object as AreaObject).number ?? '',
+    address: `${object?.address?.city} ${object?.address?.street} ${object?.address?.postalCode}`,
     website: object?.website,
-    coordinates: object?.coordinates,
+    coordinates: [object?.longitude, object?.latitude],
   };
 
   return (
@@ -68,7 +69,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId }: LocationModalProps
                 className="my-2 flex-1 text-ellipsis px-4 text-white"
                 ellipsizeMode="tail"
                 numberOfLines={1}>
-                {locationData.address}
+                {locationData.address && locationData.address}
               </Text>
             </View>
 
