@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { ToastAndroid } from 'react-native';
 
 import useLocationStore, { MapLocation } from '~/store/useLocationStore';
+import { useRoutingApiCache } from '~/store/useRouteCache';
 
 type RoutedBy = 'car' | 'bike' | 'foot';
 
@@ -16,6 +17,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
   const [userlocation, setUserLocation] = useState<[number, number] | undefined>(undefined);
   const { navigationMode, locationTo, setNavigationMode } = useLocationStore();
   const lastLocations = useRef<[number, number][]>([]);
+  const { fetchRoute } = useRoutingApiCache();
 
   useEffect(() => {
     (async () => {
@@ -60,7 +62,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
     }, '');
     if (mapDistance(userlocation, locationTo) < 0.02) {
       console.log('ARRIVED');
-      ToastAndroid.show('Arrived at destination');
+      ToastAndroid.show('Arrived at destination', ToastAndroid.SHORT);
       setNavigationMode('arrived');
     }
     if (
@@ -72,19 +74,15 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
         lastLocations.current,
         mapDistance(lastLocations.current[0], userlocation)
       );
-      fetch(
-        `https://routing.openstreetmap.de/routed-${routedBy}/route/v1/foot/${wayString}?overview=full&geometries=geojson`
-      )
-        .then((n) => n.json())
-        .then((n) => {
-          console.log(n, lastLocations.current);
-          console.log(n['routes'][0].geometry.coordinates);
-          setRouteData({
-            route: n['routes'][0].geometry.coordinates,
-            distance: n['routes'][0].distance,
-            duration: n['duration'],
-          });
+      fetchRoute(routedBy, wayString).then((n) => {
+        console.log(n, lastLocations.current);
+        console.log(n['routes'][0].geometry.coordinates);
+        setRouteData({
+          route: n['routes'][0].geometry.coordinates,
+          distance: n['routes'][0].distance,
+          duration: n['duration'],
         });
+      });
     } else {
       const r = getRemainingRoute({
         fullRoute: routeData.route,
@@ -104,6 +102,16 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
   useEffect(() => {
     lastLocations.current = [];
   }, [locationTo]);
+
+  if (routeData.distance === 0) {
+    console.log({
+      route: routeData.route,
+      distance: routeData.distance,
+      duration: routeData.duration,
+      userLocation: userlocation,
+    });
+    console.log('routedata zero');
+  }
 
   return {
     route: routeData.route,
@@ -151,7 +159,7 @@ const getRemainingRoute = ({
   const closestIndex = findClosestPointIndex(fullRoute, currentLocation, previousLocations ?? []);
   const prevLocation = previousLocations?.at(-1);
   if (prevLocation) return [prevLocation, ...fullRoute.slice(closestIndex)];
-  return [...fullRoute.slice(closestIndex)].filter(Boolean);
+  return [...fullRoute.slice(closestIndex)];
 };
 
 const mapDistance = (

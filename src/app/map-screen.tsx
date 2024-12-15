@@ -207,7 +207,7 @@ export default function MapScreen() {
             minZoomLevel={12.5}
             followUserLocation={navigationMode === 'navigating'}
             allowUpdates
-            followUserMode={UserTrackingMode.FollowWithHeading}
+            followUserMode={UserTrackingMode.Follow}
           />
           {/* linia trasy */}
           <MapLine
