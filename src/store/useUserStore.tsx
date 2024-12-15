@@ -142,7 +142,6 @@ const useRealUserStore = create<StoreState>((set, get) => ({
         timestamp: new Date().toISOString(),
         route_created_count: routeCreatedCount,
       });
-      await get().fetchUserHistory();
       return Promise.resolve();
     } catch (error) {
       console.log('Error updating user history', error);

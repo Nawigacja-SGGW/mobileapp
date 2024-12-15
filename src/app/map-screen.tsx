@@ -1,5 +1,7 @@
 import { FontAwesome5 } from '@expo/vector-icons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import MapLibreGL from '@maplibre/maplibre-react-native';
+import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
 import * as Location from 'expo-location';
 import { Drawer } from 'expo-router/drawer';
 import React, { useEffect, useRef, useState } from 'react';
@@ -20,9 +22,6 @@ import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
 import { useObjectsStore } from '~/store/useObjectsStore';
 import { useUserStore } from '~/store/useUserStore';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
-import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -128,7 +127,7 @@ export default function MapScreen() {
   const handleMarkerPress = (id: number, location: [number, number]) => {
     const locationObject = locations.find((l) => l.id == id);
     setIsExpanded(true);
-    console.log('location Object ', locationObject, id, locations);
+    //console.log('location Object ', locationObject, id, locations);
     switch (searchMode) {
       case 'searchfrom':
         setRoute({
@@ -361,11 +360,11 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     setSearchMode,
     searchMode,
   } = useLocationStore();
-  const { searchHistory, updateUserHistory } = useUserStore();
+  const { searchHistory, fetchUserHistory, updateUserHistory } = useUserStore();
   const { allObjects } = useObjectsStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
-  console.log('locations', _locations, searchQuery);
+  //console.log('locations', _locations, searchQuery);
 
   let shownLocations = _locations;
   if (searchHistory && allObjects) {
@@ -373,7 +372,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
       const object = allObjects().find((l) => l.id === n.objectId);
       return {
         id: n.objectId,
-        name: object?.name,
+        name: object?.name ?? 'Brak nazwy',
         type: 'Historia',
         coordinates: [object?.latitude, object?.longitude],
       };
@@ -468,7 +467,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
             )}
             {shownLocations.map((item) => (
               <TouchableOpacity
-                key={item.id}
+                key={item.id + item.type === 'Historia' ? 'history' : null}
                 className="flex-row items-center bg-white p-2"
                 onPress={async () => {
                   if (searchMode === 'searchfrom') {
@@ -482,6 +481,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                   }
                   // TODO adjust route created count instead of 1
                   await updateUserHistory(item.id, 1);
+                  await fetchUserHistory();
                   console.log('press in list');
                   setSearchMode('idle');
                 }}>
