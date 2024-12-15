@@ -62,7 +62,7 @@ export default function ChangeLanguageView() {
       {/* Przycisk zapisz */}
       <TouchableOpacity
         onPress={() => console.log('Save Language')}
-        className="mt-8 h-14 items-center justify-center rounded-full bg-[#004D40]"
+        className="mb-20 h-14 items-center justify-center rounded-full bg-[#004D40]"
         style={{
           width: width > 400 ? '80%' : '100%',
           alignSelf: 'center',
