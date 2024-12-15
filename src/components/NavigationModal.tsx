@@ -19,7 +19,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
   if (!locationTo || !visible) return <></>;
 
   return (
-    <View className="absolute bottom-0 max-h-96 w-full items-end justify-center">
+    <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">
       <View className="flex w-full justify-end bg-green-main">
         <>
           {navigationMode === 'routing' && (

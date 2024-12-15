@@ -83,7 +83,7 @@ const LocationDetailsScreen = () => {
                 locationFrom: [location.coords.longitude, location.coords.latitude],
                 locationTo: object,
               });
-              router.back();
+              router.navigate('/map-screen');
             }}
             style={styles.navigationButton}>
             <Text style={styles.navigationButtonText}>Nawiguj</Text>

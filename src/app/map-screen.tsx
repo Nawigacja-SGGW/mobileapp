@@ -230,7 +230,7 @@ export default function MapScreen() {
         {/* compass */}
         <TouchableOpacity
           onPress={handlePointNorth}
-          className="absolute bottom-5 right-5 z-10 rounded-full bg-white">
+          className="absolute bottom-5 right-5 z-0 z-10 rounded-full bg-white">
           <Ionicons name="compass-sharp" size={50} color="#003228" style={compassStyle} />
         </TouchableOpacity>
         <LocationModal
