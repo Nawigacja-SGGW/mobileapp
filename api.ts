@@ -1,4 +1,5 @@
 import axios from 'axios';
+import camelcaseKeys from 'camelcase-keys';
 
 const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
@@ -18,6 +19,8 @@ api.interceptors.response.use(
     console.log('Response received:');
     console.log('Status:', response.status);
     console.log('Data:', response.data);
+
+    response.data = camelcaseKeys(response.data, { deep: true });
     return response; // Zwróć odpowiedź do aplikacji
   },
   (error) => {

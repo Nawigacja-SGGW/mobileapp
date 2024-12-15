@@ -5,8 +5,8 @@ import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { LocationObject } from 'expo-location';
 
-
 import useLocationStore from '~/store/useLocationStore';
+import { AreaObject, useObjectsStore } from '~/store/useObjectsStore';
 
 type LocationModalProps = {
   isVisible: boolean;
@@ -19,16 +19,18 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
   const navigation = useNavigation();
   const { t } = useTranslation();
 
+  const { allObjects } = useObjectsStore();
+
+  const object = allObjects().find((n) => n.id === objectId);
   const { locations, setRoute, setNavigationMode } = useLocationStore();
-  const object = locations.find((n) => n.id === objectId);
   if (!object) return null;
 
   const locationData = {
     title: object?.name,
-    buildingNo: object?.number ?? '',
-    address: `${object?.address.city} ${object?.address.street} ${object?.address.postalCode}`,
+    buildingNo: (object as AreaObject).number ?? '',
+    address: `${object?.address?.city} ${object?.address?.street} ${object?.address?.postalCode}`,
     website: object?.website,
-    coordinates: object?.coordinates,
+    coordinates: [object?.longitude, object?.latitude],
   };
 
   return (
@@ -67,7 +69,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
                 className="my-2 flex-1 text-ellipsis px-4 text-white"
                 ellipsizeMode="tail"
                 numberOfLines={1}>
-                {locationData.address}
+                {locationData.address && locationData.address}
               </Text>
             </View>
 
@@ -94,7 +96,10 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
                 if (!userLocation.current) return;
 
                 setRoute({
-                  locationTo: object,
+                  locationTo: {
+                    ...object,
+                    coordinates: [Number(object.longitude), Number(object.latitude)],
+                  },
                   locationFrom: [
                     userLocation.current.coords.longitude,
                     userLocation.current.coords.latitude,

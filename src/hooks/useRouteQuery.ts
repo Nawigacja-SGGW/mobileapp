@@ -29,6 +29,7 @@ export function useRouteQuery(
     if (!Array.isArray(locationTo)) locto = locationTo.coordinates;
     const waypoints = [locfrom, locto];
     console.log(waypoints);
+    console.log(useLocationStore.getState());
 
     const wayString = waypoints.reduce((acc, c, i) => {
       acc += c[0].toString() + ',';

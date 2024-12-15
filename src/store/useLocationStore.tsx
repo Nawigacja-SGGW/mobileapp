@@ -42,6 +42,7 @@ useObjectsStore.subscribe((state) => {
       })),
     ],
   });
+  console.log('useLocationStore update', useLocationStore.getState());
 });
 
 const useLocationStore = create<LocationStore>((set, get) => ({
