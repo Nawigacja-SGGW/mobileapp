@@ -103,6 +103,15 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
     lastLocations.current = [];
   }, [locationTo]);
 
+  useEffect(() => {
+    if (navigationMode !== 'navigating') {
+      setRouteData((n) => ({
+        ...n,
+        route: [],
+      }));
+    }
+  }, [navigationMode]);
+
   if (routeData.distance === 0) {
     console.log({
       route: routeData.route,
