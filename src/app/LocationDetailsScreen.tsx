@@ -3,6 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import Drawer from 'expo-router/drawer';
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
+import * as Location from 'expo-location';
 
 import TopHeader from '~/components/TopHeader';
 import useLocationStore from '~/store/useLocationStore';
@@ -18,6 +19,7 @@ const LocationDetailsScreen = () => {
   const object = locations.find((n) => n.id === Number(objectId));
   console.log('objectId', objectId, object, locations);
   if (!object) return null;
+  object.coordinates = [object.longitude, object.latitude];
 
   const locationData = {
     title: object.name ?? 'title',
@@ -74,11 +76,14 @@ const LocationDetailsScreen = () => {
 
           {/* Navigation Button */}
           <TouchableOpacity
-            onPress={() => {
+            onPress={async () => {
+              const location = await Location.getCurrentPositionAsync({});
+
               setRoute({
+                locationFrom: [location.coords.longitude, location.coords.latitude],
                 locationTo: object,
               });
-              router.back();
+              router.navigate('/map-screen');
             }}
             style={styles.navigationButton}>
             <Text style={styles.navigationButtonText}>Nawiguj</Text>

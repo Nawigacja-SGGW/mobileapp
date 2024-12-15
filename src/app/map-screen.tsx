@@ -1,5 +1,5 @@
 import { FontAwesome5 } from '@expo/vector-icons';
-import MapLibreGL, { CameraRef } from '@maplibre/maplibre-react-native';
+import MapLibreGL, { UserTrackingMode, CameraRef } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
 import { Drawer } from 'expo-router/drawer';
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,9 +11,11 @@ import DarkGreenDot from '../../assets/ellipse2.svg';
 import MapPin from '../../assets/map-pin.png';
 import SearchIcon1 from '../../assets/search1.svg';
 
+import NavigationModal from '~/components/NavigationModal';
 import LocationModal from '~/components/ObjectModal';
 import TopHeader from '~/components/TopHeader';
 import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
+import { usePlaceNavigation } from '~/hooks/usePlaceNavigation';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
@@ -38,7 +40,6 @@ export default function MapScreen() {
   const [selectedObject, setselectedObject] = useState(undefined);
   const userLocation = useRef<Location.LocationObject>();
 
-  // Zustand store
   const {
     locations,
     setSearchQuery,
@@ -48,8 +49,11 @@ export default function MapScreen() {
     locationFrom,
     setRoute,
     setSearchMode,
+    setNavigationMode,
+    navigationMode,
   } = useLocationStore();
-  const { route } = useRouteQuery('foot');
+  const { route, distance: routeQueryDistance } = useRouteQuery('foot');
+  const { route: navRoute, distance, userLocation: uLocation } = usePlaceNavigation('foot');
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -122,6 +126,8 @@ export default function MapScreen() {
   };
 
   const handleMarkerPress = (id: number, location: [number, number]) => {
+    // if (navigationMode !== 'arrived' || navigationMode) return;
+    console.log({ navigationMode });
     const locationObject = locations.find((l) => l.id == id);
     setIsExpanded(true);
     console.log('location Object ', locationObject, id, locations);
@@ -173,12 +179,13 @@ export default function MapScreen() {
         }}
       />
       <View className="flex-1">
-        {/* Pasek wyszukiwania */}
-        <SearchBar
-          handleSearch={handleSearch}
-          handleLocationSelect={handleLocationSelect}
-          isExpanded={isExpanded}
-        />
+        {navigationMode !== 'navigating' && (
+          <SearchBar
+            handleSearch={handleSearch}
+            handleLocationSelect={handleLocationSelect}
+            isExpanded={isExpanded}
+          />
+        )}
 
         <MapLibreGL.MapView
           ref={map}
@@ -198,26 +205,48 @@ export default function MapScreen() {
             heading={mapRotation}
             maxBounds={campusBounds}
             minZoomLevel={12.5}
+            followUserLocation={navigationMode === 'navigating'}
+            allowUpdates
+            followUserMode={UserTrackingMode.Follow}
           />
           {/* linia trasy */}
-          <MapLine route={route} />
+          <MapLine
+            route={
+              navigationMode === 'navigating' ? navRoute : navigationMode === 'routing' ? route : []
+            }
+            locationFrom={uLocation}
+          />
           <MapMarkers
             lastRoutePoint={lastRoutePoint}
             locations={locations}
             onMarkerPress={handleMarkerPress}
           />
-          <MapLibreGL.UserLocation renderMode="native" androidRenderMode="compass" />
+          <MapLibreGL.UserLocation
+            animated={false}
+            renderMode="native"
+            androidRenderMode="compass"
+          />
         </MapLibreGL.MapView>
         {/* compass */}
         <TouchableOpacity
           onPress={handlePointNorth}
-          className="absolute bottom-5 right-5 z-10 rounded-full bg-white">
+          className="absolute bottom-5 right-5 z-0 z-10 rounded-full bg-white">
           <Ionicons name="compass-sharp" size={50} color="#003228" style={compassStyle} />
         </TouchableOpacity>
         <LocationModal
           isVisible={isExpanded}
           setIsVisible={setIsExpanded}
           objectId={selectedObject}
+          userLocation={userLocation}
+        />
+        <NavigationModal
+          onCancel={() => {
+            setNavigationMode(undefined);
+          }}
+          distanceLeft={
+            navigationMode === 'navigating' ? distance / 1000 : routeQueryDistance / 1000
+          }
+          visible={navigationMode === 'navigating' || navigationMode === 'routing'}
         />
       </View>
     </>
@@ -226,48 +255,83 @@ export default function MapScreen() {
 
 interface MapLineProps {
   route: [number, number][];
+  locationFrom?: [number, number];
+  locationTo?: [number, number];
 }
 
-function MapLine({ route }: MapLineProps) {
+function MapLine({ route, locationFrom, locationTo }: MapLineProps) {
+  const mapLineShape = {
+    type: 'FeatureCollection',
+    features: [
+      route &&
+        route.length >= 2 && {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'LineString',
+            coordinates: route,
+          },
+        },
+    ].filter(Boolean),
+  };
+
   return (
-    <MapLibreGL.ShapeSource
-      id="symbolLocationSource1"
-      hitbox={{ width: 20, height: 20 }}
-      shape={{
-        type: 'FeatureCollection',
-        features: [
-          route &&
-            route.length >= 2 && {
+    <>
+      <MapLibreGL.ShapeSource
+        id="symbolLocationSource1"
+        hitbox={{ width: 20, height: 20 }}
+        shape={mapLineShape}>
+        <MapLibreGL.LineLayer
+          id="layer1"
+          style={{
+            lineColor: '#fff',
+            lineCap: 'round',
+            lineJoin: 'round',
+            lineWidth: 10,
+            lineSortKey: -2,
+          }}
+        />
+        <MapLibreGL.LineLayer
+          id="layer2"
+          style={{
+            lineColor: '#003228',
+            lineCap: 'round',
+            lineJoin: 'round',
+            lineWidth: 6,
+            lineSortKey: -1,
+          }}
+        />
+      </MapLibreGL.ShapeSource>
+      <MapLibreGL.ShapeSource
+        id="symbolLocationSource123"
+        shape={{
+          type: 'FeatureCollection',
+          features: [
+            route.length > 0 && {
               type: 'Feature',
-              properties: {},
+              id: 'endpoint',
+              properties: {
+                icon: 'pin',
+              },
               geometry: {
-                type: 'LineString',
-                coordinates: route,
+                coordinates: route.at(-1),
+                type: 'Point',
               },
             },
-        ].filter(Boolean),
-      }}>
-      <MapLibreGL.LineLayer
-        id="layer1"
-        style={{
-          lineColor: '#fff',
-          lineCap: 'round',
-          lineJoin: 'round',
-          lineWidth: 10,
-          lineSortKey: -2,
-        }}
-      />
-      <MapLibreGL.LineLayer
-        id="layer2"
-        style={{
-          lineColor: '#003228',
-          lineCap: 'round',
-          lineJoin: 'round',
-          lineWidth: 6,
-          lineSortKey: -1,
-        }}
-      />
-    </MapLibreGL.ShapeSource>
+          ].filter(Boolean),
+        }}>
+        <MapLibreGL.CircleLayer
+          id="3534"
+          style={{
+            circleRadius: 3,
+            circleStrokeWidth: 3,
+            circleStrokeColor: 'gray',
+            circleColor: 'white',
+            circleBlur: 0.1,
+          }}
+        />
+      </MapLibreGL.ShapeSource>
+    </>
   );
 }
 
@@ -286,14 +350,7 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
         }}
       />
       <MapLibreGL.ShapeSource
-        id="symbolLocationSource"
-        hitbox={{ width: 20, height: 20 }}
-        onPress={(e) => {
-          console.log(e);
-          if (e.features.length > 0) {
-            onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
-          }
-        }}
+        id="symbolLocationSource123"
         shape={{
           type: 'FeatureCollection',
           features: [
@@ -308,7 +365,31 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
                 type: 'Point',
               },
             },
-
+          ].filter(Boolean),
+        }}>
+        <MapLibreGL.CircleLayer
+          id="3534"
+          style={{
+            circleRadius: 7,
+            circleStrokeWidth: 3,
+            circleStrokeColor: 'gray',
+            circleColor: 'white',
+            circleBlur: 0.1,
+          }}
+        />
+      </MapLibreGL.ShapeSource>
+      <MapLibreGL.ShapeSource
+        id="symbolLocationSource"
+        hitbox={{ width: 20, height: 20 }}
+        onPress={(e) => {
+          console.log(e);
+          if (e.features.length > 0) {
+            onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
+          }
+        }}
+        shape={{
+          type: 'FeatureCollection',
+          features: [
             ...locations.map((n, i) => ({
               type: 'Feature',
               id: n.id,
@@ -355,7 +436,6 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
   } = useLocationStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
-  console.log('locations', _locations, searchQuery);
 
   const showSearchbar = searchMode !== 'idle';
   return (
@@ -476,6 +556,29 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     </>
   );
 }
+
+const mapDistance = (
+  location1: [number, number] | MapLocation,
+  location2: [number, number] | MapLocation
+): number => {
+  if (!location1 || !location2) return 0;
+  const [lat1, lon1] = Array.isArray(location1) ? location1 : location1.coordinates;
+  const [lat2, lon2] = Array.isArray(location2) ? location2 : location2.coordinates;
+
+  const toRad = (deg: number) => (deg * Math.PI) / 180,
+    R = 6371;
+  const [dLat, dLon] = [toRad(lat2 - lat1), toRad(lon2 - lon1)];
+  return (
+    R *
+    2 *
+    Math.asin(
+      Math.sqrt(
+        Math.sin(dLat / 2) ** 2 +
+          Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2
+      )
+    )
+  );
+};
 
 const tti = {
   'Obiekt sportowy': 'basketball-ball',

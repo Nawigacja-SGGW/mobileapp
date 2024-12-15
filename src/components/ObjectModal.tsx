@@ -1,26 +1,25 @@
+import React, { MutableRefObject, useState } from 'react';
+import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
+import { LocationObject } from 'expo-location';
 
-import { LocationButton } from './LocationDetailsScreen';
 
 import useLocationStore from '~/store/useLocationStore';
-import { useObjectsStore } from '~/store/useObjectsStore';
 
 type LocationModalProps = {
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
   objectId: number;
+  userLocation: MutableRefObject<LocationObject | undefined>;
 };
 
-const LocationModal = ({ isVisible, setIsVisible, objectId }: LocationModalProps) => {
+const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: LocationModalProps) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const { locations, setRoute } = useLocationStore();
-
+  const { locations, setRoute, setNavigationMode } = useLocationStore();
   const object = locations.find((n) => n.id === objectId);
   if (!object) return null;
 
@@ -91,13 +90,20 @@ const LocationModal = ({ isVisible, setIsVisible, objectId }: LocationModalProps
               className="flex-1 items-center rounded-full bg-white p-3"
               onPress={() => {
                 setIsVisible(false);
+                console.log(userLocation.current);
+                if (!userLocation.current) return;
+
                 setRoute({
                   locationTo: object,
+                  locationFrom: [
+                    userLocation.current.coords.longitude,
+                    userLocation.current.coords.latitude,
+                  ] as [number, number],
                 });
+                setNavigationMode('routing');
               }}>
               <Text className="font-bold text-green-main">{t('object.navigate')}</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               className="flex-1 items-center rounded-full bg-white p-3"
               onPress={() => {

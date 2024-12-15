@@ -8,7 +8,9 @@
     "counter": "Licznik",
     "location": "Lokalizacja",
     "map": "Mapa",
-    "details": "Szczegóły"
+    "details": "Szczegóły",
+    "navigatingTo":"Nawiguję do:",
+    "start":"Start"
   },
   "getStarted": "Otwórz kod dla tego ekranu:",
   "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.",
@@ -88,6 +90,7 @@
     "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
     "didntReceiveEmail" : "Nie otrzymałeś emaila?"
   },
+  "cancel":"Anuluj",
   "objects":{
     "noResults" : "Nie znaleziono wyników",
     "sortBy": "SORTUJ PO",
