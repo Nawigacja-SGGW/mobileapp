@@ -16,10 +16,10 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
   const { locationFrom, locationTo, navigationMode, setNavigationMode } = useLocationStore();
   const { t } = useTranslation();
 
-  if (!locationTo || !visible) return <></>;
+  if (!locationTo || !visible || distanceLeft === 0) return <></>;
 
   return (
-    <View className="absolute bottom-0 max-h-96 w-full items-end justify-center">
+    <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">
       <View className="flex w-full justify-end bg-green-main">
         <>
           {navigationMode === 'routing' && (

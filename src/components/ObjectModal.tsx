@@ -1,10 +1,9 @@
+import React, { MutableRefObject, useState } from 'react';
+import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
-
-import { LocationButton } from './LocationDetailsScreen';
+import { LocationObject } from 'expo-location';
 
 import useLocationStore from '~/store/useLocationStore';
 import { AreaObject, useObjectsStore } from '~/store/useObjectsStore';
@@ -13,16 +12,17 @@ type LocationModalProps = {
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
   objectId: number;
+  userLocation: MutableRefObject<LocationObject | undefined>;
 };
 
-const LocationModal = ({ isVisible, setIsVisible, objectId }: LocationModalProps) => {
+const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: LocationModalProps) => {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
-  const { setRoute } = useLocationStore();
   const { allObjects } = useObjectsStore();
 
   const object = allObjects().find((n) => n.id === objectId);
+  const { locations, setRoute, setNavigationMode } = useLocationStore();
   if (!object) return null;
 
   const locationData = {
@@ -92,13 +92,23 @@ const LocationModal = ({ isVisible, setIsVisible, objectId }: LocationModalProps
               className="flex-1 items-center rounded-full bg-white p-3"
               onPress={() => {
                 setIsVisible(false);
+                console.log(userLocation.current);
+                if (!userLocation.current) return;
+
                 setRoute({
-                  locationTo: object,
+                  locationTo: {
+                    ...object,
+                    coordinates: [Number(object.longitude), Number(object.latitude)],
+                  },
+                  locationFrom: [
+                    userLocation.current.coords.longitude,
+                    userLocation.current.coords.latitude,
+                  ] as [number, number],
                 });
+                setNavigationMode('routing');
               }}>
               <Text className="font-bold text-green-main">{t('object.navigate')}</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               className="flex-1 items-center rounded-full bg-white p-3"
               onPress={() => {

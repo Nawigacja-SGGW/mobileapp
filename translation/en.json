@@ -8,7 +8,9 @@
     "counter": "Counter",
     "location": "Location",
     "map": "Map",
-    "details": "Details"
+    "details": "Details",
+    "navigatingTo":"Navigating to:",
+    "start":"Start"
   },
   "menu": {
     "map": "Map",
@@ -87,13 +89,17 @@
   },
   "getStarted": "Open this display's code:",
   "changeCode": "Change any text, save the file and the app will update automatically.",
+  "cancel":"Cancel",
 
   "settings": {
     "routePreferences": "Route Preferences",
     "language": "Language",
     "changePassword": "Change a Password",
     "informations": "Informations",
-    "save": "Save"
+    "save": "Save",
+    "saved": "Saved",
+    "walk": "By foot",
+    "bike": "By bike"
 },
 "resetPassword": {
     "title": "Change Password",
