@@ -1,17 +1,20 @@
 import { Feather, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { TouchableOpacity, View, Text, ToastAndroid } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import Loading from './Loading';
+import StatisticsIcon from '../../assets/trending-up.svg';
 
 import { LanguageSwitch } from '~/components/LanguageSwitch';
 import { useUserStore } from '~/store/useUserStore';
 
 export function DrawerMenu() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { logout, loading, error } = useUserStore();
 
   const menuOptions = [
@@ -35,14 +38,14 @@ export function DrawerMenu() {
       onPress: () => {
         navigation.navigate('profileView');
       },
-    },    
+    },
     {
       label: t('menu.settings'),
       icon: <Feather name="settings" size={32} color="white" />,
       onPress: () => {
         navigation.navigate('settingsView');
       },
-    },    
+    },
   ];
 
   const logoutOption = {
@@ -96,10 +99,22 @@ export function DrawerMenu() {
           </TouchableOpacity>
         </View>
 
-        <View className="mb-4">
+        <View className="mb-4 flex-row justify-between">
           <LanguageSwitch />
+          <StatisticsButton />
         </View>
       </View>
+    </>
+  );
+}
+
+function StatisticsButton() {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  return (
+    <>
+      <TouchableOpacity onPress={() => navigation.navigate('statisticsView')}>
+        <StatisticsIcon width={32} height={32} fill="white" />
+      </TouchableOpacity>
     </>
   );
 }
