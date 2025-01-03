@@ -59,7 +59,7 @@ export default function StatisticsView() {
                 <Text className="ml-2 flex-1 text-sm text-gray-700">
                   {allObjects().find((o) => o.id === item.objectId)?.name}
                 </Text>
-                <Text className="text-sm text-gray-500">{item.count} times</Text>
+                <Text className="text-sm text-gray-500">{item.routeCreatedCount} times</Text>
               </View>
             )}
           />

@@ -9,7 +9,7 @@ interface SearchHistoryEntry {
 }
 
 interface UserStatistics {
-  topFiveVisitedPlaces: { objectId: number; count: number }[];
+  topFiveVisitedPlaces: { objectId: number; timestamp: string; routeCreatedCount: number }[];
   uniquePlacesVisitedCount: number;
   distanceSum: number;
 }
@@ -183,6 +183,7 @@ const useRealUserStore = create<StoreState>((set, get) => ({
         data: { user: get().id, timestamp: Date.now() },
       });
       set({ statistics: response.data.statistics, loading: false, error: null });
+      console.log(response.data.statistics);
       return Promise.resolve();
     } catch (error) {
       console.log('Error updating user statistics', error);
@@ -300,11 +301,11 @@ const useFakeUserStore = create<StoreState>((set) => ({
       set({
         statistics: {
           topFiveVisitedPlaces: [
-            { objectId: 1, count: 1 },
-            { objectId: 2, count: 2 },
-            { objectId: 3, count: 3 },
-            { objectId: 4, count: 4 },
-            { objectId: 5, count: 5 },
+            { objectId: 1, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 1 },
+            { objectId: 2, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 2 },
+            { objectId: 3, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 3 },
+            { objectId: 4, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 4 },
+            { objectId: 5, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 5 },
           ],
           uniquePlacesVisitedCount: 5,
           distanceSum: 33,
