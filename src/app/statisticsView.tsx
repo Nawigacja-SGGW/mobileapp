@@ -36,7 +36,7 @@ export default function StatisticsView() {
         <View className="flex-row items-center rounded-2xl bg-white p-4 shadow-md">
           <MaterialIcons name="directions-walk" size={40} />
           <View className="ml-4">
-            <Text className="text-base text-gray-700">Your distance covered:</Text>
+            <Text className="text-base text-gray-700">{t('statistics.totalDistance')}</Text>
             <Text className="text-2xl font-bold text-gray-800">
               {statistics?.distanceSum ?? 0} km
             </Text>
@@ -47,7 +47,7 @@ export default function StatisticsView() {
           <Text className="mb-2 text-lg font-bold">Top 5</Text>
           {!statistics?.topFiveVisitedPlaces && (
             <View className="items-center">
-              <Text className="mb-2 text-base font-bold">No locations visited</Text>
+              <Text className="mb-2 text-base font-bold">{t('statistics.noData')}</Text>
             </View>
           )}
           <FlatList
@@ -59,14 +59,16 @@ export default function StatisticsView() {
                 <Text className="ml-2 flex-1 text-sm text-gray-700">
                   {allObjects().find((o) => o.id === item.objectId)?.name}
                 </Text>
-                <Text className="text-sm text-gray-500">{item.routeCreatedCount} times</Text>
+                <Text className="text-sm text-gray-500">
+                  {t('statistics.times', { count: item.routeCreatedCount })}
+                </Text>
               </View>
             )}
           />
         </View>
 
         <View className="mt-6 rounded-2xl bg-white p-4 shadow-md">
-          <Text className="text-lg font-bold">Number of locations visited:</Text>
+          <Text className="text-lg font-bold">{t('statistics.visitedPlacesNumber')}</Text>
           <View className="mt-2 flex-row items-center justify-center">
             <MaterialIcons name="apartment" size={32} />
             <Text className="ml-2 text-2xl font-bold">{statistics?.uniquePlacesVisitedCount}</Text>

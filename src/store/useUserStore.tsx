@@ -302,10 +302,10 @@ const useFakeUserStore = create<StoreState>((set) => ({
         statistics: {
           topFiveVisitedPlaces: [
             { objectId: 1, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 1 },
-            { objectId: 2, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 2 },
-            { objectId: 3, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 3 },
-            { objectId: 4, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 4 },
-            { objectId: 5, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 5 },
+            { objectId: 2, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 4 },
+            { objectId: 3, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 6 },
+            { objectId: 4, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 11 },
+            { objectId: 5, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 33 },
           ],
           uniquePlacesVisitedCount: 5,
           distanceSum: 33,

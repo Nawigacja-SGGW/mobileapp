@@ -107,6 +107,11 @@
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm New Password",
     "resetButton": "Reset Password"
+  },
+  "statistics": {
+    "totalDistance": "Total distance",
+    "times": "{{count}} time",
+    "times_plural": "{{count}} times",
+    "visitedPlacesNumber": "Number of visited places"
   }
-
 }
