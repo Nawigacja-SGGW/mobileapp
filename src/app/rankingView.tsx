@@ -1,5 +1,6 @@
 import Drawer from 'expo-router/drawer';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { View, Text, FlatList, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -17,6 +18,8 @@ const RankingList = ({
   data: { name: string; value: number }[];
   userPlace: number | null;
 }) => {
+  const { t } = useTranslation();
+
   const renderItem = ({
     item,
     index,
@@ -27,7 +30,9 @@ const RankingList = ({
     <View className="flex-row items-center border-b border-gray-200 px-4 py-2">
       <Text className="text-lg font-bold">{index + 1}.</Text>
       <View className="flex-1 flex-row justify-between">
-        {userPlace === index + 1 && <Text className="ml-4 text-lg font-bold">You</Text>}
+        {userPlace === index + 1 && (
+          <Text className="ml-4 text-lg font-bold">{t('rankingView.you')}</Text>
+        )}
         {userPlace !== index + 1 && <Text className="ml-4 text-lg">{item.name}</Text>}
         <Text className="ml-4 text-lg font-bold">{item.value}</Text>
       </View>
@@ -46,7 +51,9 @@ const RankingList = ({
         {userPlace !== null && (
           <View className="bg-gray-50 px-4 py-2">
             <Text className="text-center text-lg">
-              Your place in the ranking: <Text className="font-bold">{userPlace}</Text>
+              {t('rankingView.your_place_in_ranking')}
+              {': '}
+              <Text className="font-bold">{userPlace}</Text>
             </Text>
           </View>
         )}
@@ -57,6 +64,7 @@ const RankingList = ({
 
 const RankingView = () => {
   const { height } = Dimensions.get('window');
+  const { t } = useTranslation();
 
   const {
     loading,
@@ -88,7 +96,7 @@ const RankingView = () => {
         <View className="p-4">
           {/* Ranking List: Users with the most visits in one place */}
           <RankingList
-            title="Users with the most visits in one place:"
+            title={t('rankingView.users_with_the_most_visits_in_one_place')}
             data={mostVisitsInOnePlace()
               .sort((a, b) => b.count - a.count)
               .slice(0, 5)
@@ -101,7 +109,7 @@ const RankingView = () => {
 
           {/* Ranking List: Users with the most visited places */}
           <RankingList
-            title="Users with the most visited places:"
+            title={t('rankingView.users_with_the_most_visited_places')}
             data={mostVisitedPlaces()
               .slice(0, 5)
               .map((item) => ({
@@ -113,7 +121,7 @@ const RankingView = () => {
 
           {/* Ranking List: Users with the most distance traveled */}
           <RankingList
-            title="Users with the most distance traveled:"
+            title={t('rankingView.users_with_the_most_distance_traveled')}
             data={mostDistanceTraveled()
               .slice(0, 5)
               .map((item) => ({

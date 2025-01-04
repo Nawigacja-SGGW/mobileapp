@@ -107,6 +107,12 @@
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm New Password",
     "resetButton": "Reset Password"
+  },
+  "rankingView": {
+    "users_with_the_most_visits_in_one_place": "Users with the most visits in one place",
+    "users_with_the_most_visited_places": "Users with the most visited places",
+    "users_with_the_most_distance_traveled": "Users with the most distance traveled",
+    "your_place_in_ranking": "Your place in ranking",
+    "you": "You"
   }
-
 }
