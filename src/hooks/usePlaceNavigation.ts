@@ -7,6 +7,52 @@ import { useRoutingApiCache } from '~/store/useRouteCache';
 
 type RoutedBy = 'car' | 'bike' | 'foot';
 
+function PointsDistance(point1: [number, number], point2: [number, number]): number {
+  const [lat1, lon1] = point1;
+  const [lat2, lon2] = point2;
+
+  // Promień Ziemi w kilometrach
+  const R = 6371;
+
+  // Konwersja stopni na radiany
+  const toRadians = (degrees: number) => degrees * (Math.PI / 180);
+
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+
+  const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  // Odległość w kilometrach
+  const distance = R * c;
+  return distance;
+}
+
+
+
+export function isOutsideCampus(userLocation: [number, number] | undefined): boolean {
+
+  if (!userLocation) return false;
+
+  const CAMPUS_CENTER: [number, number] = [21.046307578708316, 52.16363222817587]; // wspórzędne kampusu
+
+
+  // console.log("userLocation");
+  // console.log(userLocation);
+  
+  const distanceFromCampus = PointsDistance(userLocation, CAMPUS_CENTER);
+
+  // console.log("distanceFromCampus");
+  // console.log(distanceFromCampus);
+
+  // Convert to kilometers and check if outside 1km radius
+  return distanceFromCampus > 1;
+}
+
 export function usePlaceNavigation(routedBy: RoutedBy) {
   const [routeData, setRouteData] = useState({
     route: [] as [number, number][],
@@ -18,6 +64,33 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
   const { navigationMode, locationTo, setNavigationMode } = useLocationStore();
   const lastLocations = useRef<[number, number][]>([]);
   const { fetchRoute } = useRoutingApiCache();
+
+
+
+  useEffect(() => {
+    Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.High,
+        timeInterval: 500,
+        distanceInterval: 5,
+      },
+      (location) => {
+        const coords = [location.coords.longitude, location.coords.latitude] as [number, number];
+        lastLocations.current.push(coords);
+        if (lastLocations.current.length > 10) lastLocations.current.shift();
+        setUserLocation(coords);
+
+        // Add check for campus proximity
+        if (isOutsideCampus(coords)) {
+          ToastAndroid.show(
+            'You are outside the campus area (>1km from center)', 
+            ToastAndroid.LONG
+          );
+          // console.log("Jestes za daleko od kampusu!");
+        }
+      }
+    );
+  }, []);  
 
   useEffect(() => {
     (async () => {
@@ -65,6 +138,10 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       ToastAndroid.show('Arrived at destination', ToastAndroid.SHORT);
       setNavigationMode('arrived');
     }
+
+
+  
+
     if (
       lastLocations.current.length === 0 ||
       mapDistance(lastLocations.current[0], userlocation) > 0.01
