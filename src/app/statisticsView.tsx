@@ -52,9 +52,9 @@ export default function StatisticsView() {
           )}
           <FlatList
             data={
-              statistics?.topFiveVisitedPlaces.sort(
-                (a, b) => b.routeCreatedCount - a.routeCreatedCount
-              ) || []
+              statistics?.topFiveVisitedPlaces
+                .sort((a, b) => b.routeCreatedCount - a.routeCreatedCount)
+                .slice(0, 5) || []
             }
             keyExtractor={(item) => item.objectId.toString()}
             renderItem={({ item, index }) => (
