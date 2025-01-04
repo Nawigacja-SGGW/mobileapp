@@ -51,7 +51,11 @@ export default function StatisticsView() {
             </View>
           )}
           <FlatList
-            data={statistics?.topFiveVisitedPlaces || []}
+            data={
+              statistics?.topFiveVisitedPlaces.sort(
+                (a, b) => b.routeCreatedCount - a.routeCreatedCount
+              ) || []
+            }
             keyExtractor={(item) => item.objectId.toString()}
             renderItem={({ item, index }) => (
               <View className="flex-row items-center justify-between py-2">
