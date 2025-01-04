@@ -4,6 +4,7 @@ import api from '../../api';
 
 interface UserStatistics {
   userId: number;
+  userEmail: string;
   topFiveVisitedPlaces: { objectId: number; count: number }[];
   uniquePlacesVisitedCount: number;
   distanceSum: number;
@@ -14,9 +15,9 @@ interface StoreState {
   loading: boolean;
   error: any;
   fetchUserStatistics: () => Promise<void>;
-  mostVisitsInOnePlace: () => { userId: number; count: number }[];
-  mostDistanceTraveled: () => { userId: number; distance: number }[];
-  mostVisitedPlaces: () => { objectId: number; count: number }[];
+  mostVisitsInOnePlace: () => { userId: number; userEmail: string; count: number }[];
+  mostDistanceTraveled: () => { userId: number; userEmail: string; distance: number }[];
+  mostVisitedPlaces: () => { userId: number; userEmail: string; count: number }[];
 }
 
 type Response = {
@@ -31,29 +32,35 @@ interface FetchUserStatisticsResponse {
 
 function mostVisitsInOnePlace(
   userStatistics: UserStatistics[]
-): { userId: number; count: number }[] {
+): { userId: number; userEmail: string; count: number }[] {
   return userStatistics
-    .map((user) => ({ userId: user.userId, count: user.topFiveVisitedPlaces[0].count }))
+    .map((user) => ({
+      userId: user.userId,
+      userEmail: user.userEmail,
+      count: user.topFiveVisitedPlaces[0].count,
+    }))
     .sort((a, b) => b.count - a.count);
 }
 
 function mostDistanceTraveled(
   userStatistics: UserStatistics[]
-): { userId: number; distance: number }[] {
+): { userId: number; userEmail: string; distance: number }[] {
   return userStatistics
-    .map((user) => ({ userId: user.userId, distance: user.distanceSum }))
+    .map((user) => ({ userId: user.userId, userEmail: user.userEmail, distance: user.distanceSum }))
     .sort((a, b) => b.distance - a.distance);
 }
 
 function mostVisitedPlaces(
   userStatistics: UserStatistics[]
-): { objectId: number; count: number }[] {
+): { userId: number; userEmail: string; count: number }[] {
   return userStatistics
     .map((user) => ({
-      objectId: user.topFiveVisitedPlaces[0].objectId,
-      count: user.topFiveVisitedPlaces[0].count,
+      userId: user.userId,
+      userEmail: user.userEmail,
+      count: user.uniquePlacesVisitedCount,
     }))
-    .sort((a, b) => b.count - a.count);
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
 }
 
 const useFakeRankingStore = create<StoreState>((set, get) => ({
@@ -68,6 +75,7 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
         userStatistics: [
           {
             userId: 1,
+            userEmail: '0Kp8o@example.com',
             topFiveVisitedPlaces: [
               { objectId: 1, count: 1 },
               { objectId: 2, count: 2 },
@@ -80,6 +88,7 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
           },
           {
             userId: 2,
+            userEmail: 'RbF7w@example.com',
             topFiveVisitedPlaces: [
               { objectId: 1, count: 5 },
               { objectId: 2, count: 4 },
@@ -100,11 +109,11 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
       return Promise.reject(error);
     }
   },
-  mostVisitsInOnePlace: (): { userId: number; count: number }[] =>
+  mostVisitsInOnePlace: (): { userId: number; userEmail: string; count: number }[] =>
     mostVisitsInOnePlace(get().userStatistics || []),
-  mostDistanceTraveled: (): { userId: number; distance: number }[] =>
+  mostDistanceTraveled: (): { userId: number; userEmail: string; distance: number }[] =>
     mostDistanceTraveled(get().userStatistics || []),
-  mostVisitedPlaces: (): { objectId: number; count: number }[] =>
+  mostVisitedPlaces: (): { userId: number; userEmail: string; count: number }[] =>
     mostVisitedPlaces(get().userStatistics || []),
 }));
 
@@ -127,11 +136,11 @@ const useRealRankingStore = create<StoreState>((set, get) => ({
       return Promise.reject(error);
     }
   },
-  mostVisitsInOnePlace: (): { userId: number; count: number }[] =>
+  mostVisitsInOnePlace: (): { userId: number; userEmail: string; count: number }[] =>
     mostVisitsInOnePlace(get().userStatistics || []),
-  mostDistanceTraveled: (): { userId: number; distance: number }[] =>
+  mostDistanceTraveled: (): { userId: number; userEmail: string; distance: number }[] =>
     mostDistanceTraveled(get().userStatistics || []),
-  mostVisitedPlaces: (): { objectId: number; count: number }[] =>
+  mostVisitedPlaces: (): { userId: number; userEmail: string; count: number }[] =>
     mostVisitedPlaces(get().userStatistics || []),
 }));
 

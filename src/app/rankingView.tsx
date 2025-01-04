@@ -1,36 +1,53 @@
+import Drawer from 'expo-router/drawer';
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, ScrollView, Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
+import Loading from '~/components/Loading';
+import TopHeader from '~/components/TopHeader';
 import { useRankingStore } from '~/store/useRankingStore';
+import { useUserStore } from '~/store/useUserStore';
 
-const RankingList = ({ title, data, userPlace }) => {
-  const renderItem = ({ item, index }) => (
-    <View className="flex-row items-center justify-between border-b border-gray-200 px-4 py-2">
+const RankingList = ({
+  title,
+  data,
+  userPlace,
+}: {
+  title: string;
+  data: { name: string }[];
+  userPlace: number | null;
+}) => {
+  const renderItem = ({ item, index }: { item: { name: string }; index: number }) => (
+    <View className="flex-row items-center border-b border-gray-200 px-4 py-2">
       <Text className="text-lg font-bold">{index + 1}.</Text>
-      <Text className="text-lg">{item.name}</Text>
+      <Text className="ml-4 text-lg">{item.name}</Text>
     </View>
   );
 
   return (
-    <View className="my-4 rounded-lg bg-white shadow-md">
-      <Text className="bg-gray-100 py-2 text-center text-xl font-bold">{title}</Text>
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-      />
-      {userPlace && (
-        <View className="bg-gray-50 px-4 py-2">
-          <Text className="text-center text-lg">
-            Your place in the ranking: <Text className="font-bold">{userPlace}</Text>
-          </Text>
-        </View>
-      )}
-    </View>
+    data && (
+      <View className="my-4 rounded-lg bg-white shadow-md">
+        <Text className="bg-gray-100 py-2 text-center text-xl font-bold">{title}</Text>
+        <FlatList
+          data={data}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={renderItem}
+        />
+        {userPlace !== null && (
+          <View className="bg-gray-50 px-4 py-2">
+            <Text className="text-center text-lg">
+              Your place in the ranking: <Text className="font-bold">{userPlace}</Text>
+            </Text>
+          </View>
+        )}
+      </View>
+    )
   );
 };
 
 const RankingView = () => {
+  const { height } = Dimensions.get('window');
+
   const {
     loading,
     fetchUserStatistics,
@@ -43,40 +60,53 @@ const RankingView = () => {
     fetchUserStatistics();
   }, []);
 
+  const { id } = useUserStore();
+
   return (
-    <View className="flex-1 bg-gray-100">
-      {/* Loading indicator */}
-      {loading && <Text>Loading...</Text>}
+    <SafeAreaView className="flex-1 bg-gray-100">
+      {loading && <Loading />}
 
       {/* Header */}
-      <View className="bg-green-800 py-4">
-        <Text className="text-center text-xl font-bold text-white">logo/nazwa</Text>
-      </View>
+      <Drawer.Screen
+        options={{
+          headerShown: true,
+          header: () => <TopHeader onlyBack modeSearch toggleSearchBar={() => {}} />,
+        }}
+      />
+      <ScrollView className="flex-1 bg-gray-100" style={{ marginTop: height * 0.03 }}>
+        {/* Content */}
+        <View className="p-4">
+          {/* Ranking List: Users with the most visits in one place */}
+          <RankingList
+            title="Users with the most visits in one place:"
+            data={mostVisitsInOnePlace()
+              .sort((a, b) => b.count - a.count)
+              .map((item) => ({
+                name: item.userEmail,
+              }))}
+            userPlace={mostVisitsInOnePlace().findIndex((item) => item.userId === id) + 1}
+          />
 
-      {/* Content */}
-      <View className="p-4">
-        {/* Ranking List: Users with the most visits in one place */}
-        <RankingList
-          title="Users with the most visits in one place:"
-          data={mostVisitsInOnePlace()}
-          userPlace={8}
-        />
+          {/* Ranking List: Users with the most visited places */}
+          <RankingList
+            title="Users with the most visited places:"
+            data={mostVisitedPlaces().map((item) => ({
+              name: item.userEmail,
+            }))}
+            userPlace={mostVisitedPlaces().findIndex((item) => item.userId === id) + 1}
+          />
 
-        {/* Ranking List: Users with the most visited places */}
-        <RankingList
-          title="Users with the most visited places:"
-          data={mostVisitedPlaces()}
-          userPlace={null}
-        />
-
-        {/* Ranking List: Users with the most distance traveled */}
-        <RankingList
-          title="Users with the most distance traveled:"
-          data={mostDistanceTraveled()}
-          userPlace={9}
-        />
-      </View>
-    </View>
+          {/* Ranking List: Users with the most distance traveled */}
+          <RankingList
+            title="Users with the most distance traveled:"
+            data={mostDistanceTraveled().map((item) => ({
+              name: item.userEmail,
+            }))}
+            userPlace={mostDistanceTraveled().findIndex((item) => item.userId === id) + 1}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
