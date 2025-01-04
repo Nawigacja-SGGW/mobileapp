@@ -33,13 +33,15 @@ interface FetchUserStatisticsResponse {
 function mostVisitsInOnePlace(
   userStatistics: UserStatistics[]
 ): { userId: number; userEmail: string; count: number }[] {
-  return userStatistics
-    .map((user) => ({
+  return userStatistics.map((user) => {
+    const counts = user.topFiveVisitedPlaces.map((place) => place.count);
+
+    return {
       userId: user.userId,
       userEmail: user.userEmail,
-      count: user.topFiveVisitedPlaces[0].count,
-    }))
-    .sort((a, b) => b.count - a.count);
+      count: Math.max(...counts),
+    };
+  });
 }
 
 function mostDistanceTraveled(
@@ -59,8 +61,7 @@ function mostVisitedPlaces(
       userEmail: user.userEmail,
       count: user.uniquePlacesVisitedCount,
     }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+    .sort((a, b) => b.count - a.count);
 }
 
 const useFakeRankingStore = create<StoreState>((set, get) => ({
@@ -79,25 +80,72 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
             topFiveVisitedPlaces: [
               { objectId: 1, count: 1 },
               { objectId: 2, count: 2 },
-              { objectId: 3, count: 3 },
               { objectId: 4, count: 4 },
-              { objectId: 5, count: 5 },
             ],
-            uniquePlacesVisitedCount: 5,
-            distanceSum: 10,
+            uniquePlacesVisitedCount: 8,
+            distanceSum: 33,
           },
           {
             userId: 2,
             userEmail: 'RbF7w@example.com',
             topFiveVisitedPlaces: [
-              { objectId: 1, count: 5 },
+              { objectId: 1, count: 7 },
               { objectId: 2, count: 4 },
               { objectId: 3, count: 3 },
               { objectId: 4, count: 2 },
               { objectId: 6, count: 2 },
             ],
             uniquePlacesVisitedCount: 5,
-            distanceSum: 10,
+            distanceSum: 121,
+          },
+          {
+            userId: 2,
+            userEmail: '4dXG3@example.com',
+            topFiveVisitedPlaces: [
+              { objectId: 1, count: 2 },
+              { objectId: 2, count: 2 },
+            ],
+            uniquePlacesVisitedCount: 4,
+            distanceSum: 13,
+          },
+          {
+            userId: 2,
+            userEmail: 'x2rG7@example.com',
+            topFiveVisitedPlaces: [
+              { objectId: 1, count: 12 },
+              { objectId: 2, count: 14 },
+              { objectId: 5, count: 13 },
+              { objectId: 6, count: 12 },
+              { objectId: 4, count: 11 },
+            ],
+            uniquePlacesVisitedCount: 4,
+            distanceSum: 130,
+          },
+          {
+            userId: 2,
+            userEmail: 'vxYlA@example.com',
+            topFiveVisitedPlaces: [
+              { objectId: 1, count: 12 },
+              { objectId: 2, count: 15 },
+              { objectId: 5, count: 13 },
+              { objectId: 6, count: 12 },
+              { objectId: 4, count: 11 },
+            ],
+            uniquePlacesVisitedCount: 4,
+            distanceSum: 110,
+          },
+          {
+            userId: 2,
+            userEmail: 'aBcYK@example.com',
+            topFiveVisitedPlaces: [
+              { objectId: 1, count: 12 },
+              { objectId: 2, count: 14 },
+              { objectId: 5, count: 13 },
+              { objectId: 6, count: 12 },
+              { objectId: 4, count: 11 },
+            ],
+            uniquePlacesVisitedCount: 4,
+            distanceSum: 135,
           },
         ],
         loading: false,

@@ -14,13 +14,23 @@ const RankingList = ({
   userPlace,
 }: {
   title: string;
-  data: { name: string }[];
+  data: { name: string; value: number }[];
   userPlace: number | null;
 }) => {
-  const renderItem = ({ item, index }: { item: { name: string }; index: number }) => (
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: { name: string; value: number };
+    index: number;
+  }) => (
     <View className="flex-row items-center border-b border-gray-200 px-4 py-2">
       <Text className="text-lg font-bold">{index + 1}.</Text>
-      <Text className="ml-4 text-lg">{item.name}</Text>
+      <View className="flex-1 flex-row justify-between">
+        {userPlace === index + 1 && <Text className="ml-4 text-lg font-bold">You</Text>}
+        {userPlace !== index + 1 && <Text className="ml-4 text-lg">{item.name}</Text>}
+        <Text className="ml-4 text-lg font-bold">{item.value}</Text>
+      </View>
     </View>
   );
 
@@ -81,8 +91,10 @@ const RankingView = () => {
             title="Users with the most visits in one place:"
             data={mostVisitsInOnePlace()
               .sort((a, b) => b.count - a.count)
+              .slice(0, 5)
               .map((item) => ({
                 name: item.userEmail,
+                value: item.count,
               }))}
             userPlace={mostVisitsInOnePlace().findIndex((item) => item.userId === id) + 1}
           />
@@ -90,18 +102,24 @@ const RankingView = () => {
           {/* Ranking List: Users with the most visited places */}
           <RankingList
             title="Users with the most visited places:"
-            data={mostVisitedPlaces().map((item) => ({
-              name: item.userEmail,
-            }))}
+            data={mostVisitedPlaces()
+              .slice(0, 5)
+              .map((item) => ({
+                name: item.userEmail,
+                value: item.count,
+              }))}
             userPlace={mostVisitedPlaces().findIndex((item) => item.userId === id) + 1}
           />
 
           {/* Ranking List: Users with the most distance traveled */}
           <RankingList
             title="Users with the most distance traveled:"
-            data={mostDistanceTraveled().map((item) => ({
-              name: item.userEmail,
-            }))}
+            data={mostDistanceTraveled()
+              .slice(0, 5)
+              .map((item) => ({
+                name: item.userEmail,
+                value: item.distance,
+              }))}
             userPlace={mostDistanceTraveled().findIndex((item) => item.userId === id) + 1}
           />
         </View>
