@@ -122,19 +122,25 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
 
   //apka nie będzie nas nawigować gdy jesteśmy za daleko od kampusu
   useEffect(() => {
-    if (navigationMode !== 'navigating') return;
+    if (navigationMode !== 'navigating' && navigationMode !== 'routing') return;
     console.log('uloc, toloc', userlocation, locationTo);
     let locfrom = userlocation;
     let locto = locationTo;
     if (!userlocation || !locationTo) return;
 
+    // Sprawdzamy czy użytkownik jest poza kampusem przed próbą wyznaczenia trasy
     if (isOutsideCampus(userlocation)) {
       ToastAndroid.show(
-          'Cannot calculate route - you are too far outside the campus area', 
+          'Cannot calculate route - you are outside the campus area', 
           ToastAndroid.LONG
       );
-      setNavigationMode('idle'); // Przerywamy nawigację
-      return; // Przerywamy wykonywanie funkcji - trasa nie zostanie wyznaczona
+      setNavigationMode('idle'); // Przerywamy nawigację/routing
+      setRouteData({  // Czyścimy dane trasy
+          route: [],
+          distance: 0,
+          duration: 0
+      });
+      return;
   }
 
 
