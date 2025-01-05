@@ -50,7 +50,7 @@ export function isOutsideCampus(userLocation: [number, number] | undefined): boo
   // console.log(distanceFromCampus);
 
   // Convert to kilometers and check if outside 1km radius
-  return distanceFromCampus > 1;
+  return distanceFromCampus > 1.5;
 }
 
 export function usePlaceNavigation(routedBy: RoutedBy) {
@@ -122,7 +122,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
 
   //apka nie będzie nas nawigować gdy jesteśmy za daleko od kampusu
   useEffect(() => {
-    if (navigationMode !== 'navigating' && navigationMode !== 'routing') return;
+    if (navigationMode !== 'navigating' && navigationMode !== 'routing') return; //nie przerywamy dopiero wtedy anie nie nawigujemy ani nie rutujemy
     console.log('uloc, toloc', userlocation, locationTo);
     let locfrom = userlocation;
     let locto = locationTo;
