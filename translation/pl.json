@@ -88,7 +88,14 @@
     "backToLogin": "Wróć do logowania",
     "confirmation" : "Sprawdź email w celu zresetowania hasła",
     "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
-    "didntReceiveEmail" : "Nie otrzymałeś emaila?"
+    "didntReceiveEmail" : "Nie otrzymałeś emaila?",
+    "emailSentSuccessfully": "Email wysłany poprawnie",
+    "fillAllFields": "Wypełnij wszystkie pola",
+    "errorOccurred": "Wystąpił błąd",
+    "passwordMismatch": "Hasła nie są identyczne",
+    "passwordChanged": "Zmieniono hasło pomyślnie",
+    "registrationSuccessful": "Zarejestrowano pomyślnie"
+
   },
   "cancel":"Anuluj",
   "objects":{

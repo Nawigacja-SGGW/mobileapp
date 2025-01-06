@@ -31,15 +31,15 @@ export default function Register() {
 
   const onSubmit = async (data: FieldValues) => {
     if (!data.email || !data.password || !data.confirmPassword) {
-      ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.fillAllFields'), ToastAndroid.SHORT);
       return;
     }
     try {
       await register(data.email, data.password);
-      ToastAndroid.show('Zarejestrowano pomyślnie', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.registrationSuccessful'), ToastAndroid.SHORT);
       navigation.navigate('login');
     } catch {
-      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.errorOccurred'), ToastAndroid.SHORT);
     }
   };
 

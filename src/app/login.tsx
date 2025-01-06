@@ -36,14 +36,14 @@ export default function Login() {
 
   const onSubmit = async (data: FieldValues) => {
     if (!data.usernameOrEmail || !data.password) {
-      ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.fillAllFields'), ToastAndroid.SHORT);
       return;
     }
     try {
       await login(data.usernameOrEmail, data.password);
       navigation.navigate('map-screen');
     } catch {
-      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.errorOccurred'), ToastAndroid.SHORT);
     }
   };
 
