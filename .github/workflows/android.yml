@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - develop
-
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: macos-latest
+    environment:
+      name: 'Dev'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
