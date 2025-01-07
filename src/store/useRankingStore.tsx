@@ -5,9 +5,11 @@ import api from '../../api';
 interface UserStatistics {
   userId: number;
   userEmail: string;
-  topFiveVisitedPlaces: { objectId: number; count: number }[];
-  uniquePlacesVisitedCount: number;
-  distanceSum: number;
+  statistics: {
+    topFiveVisitedPlaces: { objectId: number; timestamp: string; routeCreatedCount: number }[];
+    uniquePlacesVisitedCount: number;
+    distanceSum: number;
+  };
 }
 
 interface StoreState {
@@ -26,7 +28,7 @@ type Response = {
 };
 
 interface FetchUserStatisticsResponse {
-  userStatistics: UserStatistics[] | null;
+  users: UserStatistics[] | null;
   error: Response | null;
 }
 
@@ -34,7 +36,15 @@ function mostVisitsInOnePlace(
   userStatistics: UserStatistics[]
 ): { userId: number; userEmail: string; count: number }[] {
   return userStatistics.map((user) => {
-    const counts = user.topFiveVisitedPlaces.map((place) => place.count);
+    if (user.statistics.topFiveVisitedPlaces.length === 0) {
+      return {
+        userId: user.userId,
+        userEmail: user.userEmail,
+        count: 0,
+      };
+    }
+
+    const counts = user.statistics.topFiveVisitedPlaces.map((place) => place.routeCreatedCount);
 
     return {
       userId: user.userId,
@@ -48,7 +58,11 @@ function mostDistanceTraveled(
   userStatistics: UserStatistics[]
 ): { userId: number; userEmail: string; distance: number }[] {
   return userStatistics
-    .map((user) => ({ userId: user.userId, userEmail: user.userEmail, distance: user.distanceSum }))
+    .map((user) => ({
+      userId: user.userId,
+      userEmail: user.userEmail,
+      distance: user.statistics.distanceSum,
+    }))
     .sort((a, b) => b.distance - a.distance);
 }
 
@@ -59,7 +73,7 @@ function mostVisitedPlaces(
     .map((user) => ({
       userId: user.userId,
       userEmail: user.userEmail,
-      count: user.uniquePlacesVisitedCount,
+      count: user.statistics.uniquePlacesVisitedCount,
     }))
     .sort((a, b) => b.count - a.count);
 }
@@ -77,75 +91,87 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
           {
             userId: 1,
             userEmail: '0Kp8o@example.com',
-            topFiveVisitedPlaces: [
-              { objectId: 1, count: 1 },
-              { objectId: 2, count: 2 },
-              { objectId: 4, count: 4 },
-            ],
-            uniquePlacesVisitedCount: 8,
-            distanceSum: 33,
+            statistics: {
+              topFiveVisitedPlaces: [
+                { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 1 },
+                { objectId: 2, timestamp: '0000-00-00T00:00', routeCreatedCount: 2 },
+                { objectId: 4, timestamp: '0000-00-00T00:00', routeCreatedCount: 4 },
+              ],
+              uniquePlacesVisitedCount: 8,
+              distanceSum: 33,
+            },
           },
           {
             userId: 2,
             userEmail: 'RbF7w@example.com',
-            topFiveVisitedPlaces: [
-              { objectId: 1, count: 7 },
-              { objectId: 2, count: 4 },
-              { objectId: 3, count: 3 },
-              { objectId: 4, count: 2 },
-              { objectId: 6, count: 2 },
-            ],
-            uniquePlacesVisitedCount: 5,
-            distanceSum: 121,
+            statistics: {
+              topFiveVisitedPlaces: [
+                { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 7 },
+                { objectId: 2, timestamp: '0000-00-00T00:00', routeCreatedCount: 4 },
+                { objectId: 3, timestamp: '0000-00-00T00:00', routeCreatedCount: 3 },
+                { objectId: 4, timestamp: '0000-00-00T00:00', routeCreatedCount: 2 },
+                { objectId: 6, timestamp: '0000-00-00T00:00', routeCreatedCount: 2 },
+              ],
+              uniquePlacesVisitedCount: 5,
+              distanceSum: 121,
+            },
           },
           {
             userId: 2,
             userEmail: '4dXG3@example.com',
-            topFiveVisitedPlaces: [
-              { objectId: 1, count: 2 },
-              { objectId: 2, count: 2 },
-            ],
-            uniquePlacesVisitedCount: 4,
-            distanceSum: 13,
+            statistics: {
+              topFiveVisitedPlaces: [
+                { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 2 },
+                { objectId: 2, timestamp: '0000-00-00T00:00', routeCreatedCount: 2 },
+              ],
+              uniquePlacesVisitedCount: 4,
+              distanceSum: 13,
+            },
           },
           {
             userId: 2,
             userEmail: 'x2rG7@example.com',
-            topFiveVisitedPlaces: [
-              { objectId: 1, count: 12 },
-              { objectId: 2, count: 14 },
-              { objectId: 5, count: 13 },
-              { objectId: 6, count: 12 },
-              { objectId: 4, count: 11 },
-            ],
-            uniquePlacesVisitedCount: 4,
-            distanceSum: 130,
+            statistics: {
+              topFiveVisitedPlaces: [
+                { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 12 },
+                { objectId: 2, timestamp: '0000-00-00T00:00', routeCreatedCount: 14 },
+                { objectId: 5, timestamp: '0000-00-00T00:00', routeCreatedCount: 13 },
+                { objectId: 6, timestamp: '0000-00-00T00:00', routeCreatedCount: 12 },
+                { objectId: 4, timestamp: '0000-00-00T00:00', routeCreatedCount: 11 },
+              ],
+              uniquePlacesVisitedCount: 4,
+              distanceSum: 130,
+            },
           },
           {
             userId: 2,
             userEmail: 'vxYlA@example.com',
-            topFiveVisitedPlaces: [
-              { objectId: 1, count: 12 },
-              { objectId: 2, count: 15 },
-              { objectId: 5, count: 13 },
-              { objectId: 6, count: 12 },
-              { objectId: 4, count: 11 },
-            ],
-            uniquePlacesVisitedCount: 4,
-            distanceSum: 110,
+            statistics: {
+              topFiveVisitedPlaces: [
+                { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 12 },
+                { objectId: 2, timestamp: '0000-00-00T00:00', routeCreatedCount: 15 },
+                { objectId: 5, timestamp: '0000-00-00T00:00', routeCreatedCount: 13 },
+                { objectId: 6, timestamp: '0000-00-00T00:00', routeCreatedCount: 12 },
+                { objectId: 4, timestamp: '0000-00-00T00:00', routeCreatedCount: 11 },
+              ],
+              uniquePlacesVisitedCount: 4,
+              distanceSum: 110,
+            },
           },
           {
             userId: 2,
             userEmail: 'aBcYK@example.com',
-            topFiveVisitedPlaces: [
-              { objectId: 1, count: 12 },
-              { objectId: 2, count: 14 },
-              { objectId: 5, count: 13 },
-              { objectId: 6, count: 12 },
-              { objectId: 4, count: 11 },
-            ],
-            uniquePlacesVisitedCount: 4,
-            distanceSum: 135,
+            statistics: {
+              topFiveVisitedPlaces: [
+                { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 12 },
+                { objectId: 2, timestamp: '0000-00-00T00:00', routeCreatedCount: 14 },
+                { objectId: 5, timestamp: '0000-00-00T00:00', routeCreatedCount: 13 },
+                { objectId: 6, timestamp: '0000-00-00T00:00', routeCreatedCount: 12 },
+                { objectId: 4, timestamp: '0000-00-00T00:00', routeCreatedCount: 11 },
+              ],
+              uniquePlacesVisitedCount: 4,
+              distanceSum: 135,
+            },
           },
         ],
         loading: false,
@@ -172,9 +198,9 @@ const useRealRankingStore = create<StoreState>((set, get) => ({
   fetchUserStatistics: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await api.get<FetchUserStatisticsResponse>('/user-statistics');
+      const response = await api.get<FetchUserStatisticsResponse>('/users-rankings');
       set({
-        userStatistics: response.data.userStatistics,
+        userStatistics: response.data.users,
         loading: false,
         error: null,
       });
