@@ -441,7 +441,9 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     setSearchMode,
     searchMode,
   } = useLocationStore();
-  const { searchHistory, fetchUserHistory, updateUserHistory } = useUserStore();
+  const { searchHistory, fetchUserHistory, updateUserHistory, updateUserStatistics } =
+    useUserStore();
+  const { distance } = useRouteQuery('foot');
   const { allObjects } = useObjectsStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
@@ -563,6 +565,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                   // TODO adjust route created count instead of 1
                   await updateUserHistory(item.id, 1);
                   await fetchUserHistory();
+                  await updateUserStatistics(distance);
                   console.log('press in list');
                   setSearchMode('idle');
                 }}>

@@ -30,7 +30,7 @@ interface StoreState {
   fetchUserHistory: () => Promise<void>;
   updateUserHistory: (objectId: number, routeCreatedCount: number) => Promise<void>;
   fetchUserStatistics: () => Promise<void>;
-  updateUserStatistics: () => Promise<void>;
+  updateUserStatistics: (newDistanceSum: number) => Promise<void>;
 }
 
 type Response = {
@@ -176,11 +176,15 @@ const useRealUserStore = create<StoreState>((set, get) => ({
       return Promise.reject(error);
     }
   },
-  updateUserStatistics: async () => {
+  updateUserStatistics: async (newDistanceSum: number) => {
     set({ loading: true, error: null });
     try {
       const response = await api.patch('/user-statistics', {
-        data: { user: get().id, timestamp: Date.now() },
+        data: {
+          user: get().id,
+          timestamp: Date.now(),
+          distance_sum: get().statistics?.distanceSum ?? 0 + newDistanceSum,
+        },
       });
       set({ statistics: response.data.statistics, loading: false, error: null });
       console.log(response.data.statistics);
