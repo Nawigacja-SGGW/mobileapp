@@ -178,16 +178,12 @@ const useRealUserStore = create<StoreState>((set, get) => ({
   },
   updateUserStatistics: async (newDistanceSum: number) => {
     set({ loading: true, error: null });
+    const currentDist = get().statistics?.distanceSum ?? 0;
     try {
-      const response = await api.patch('/user-statistics', {
-        data: {
-          user: get().id,
-          timestamp: Date.now(),
-          distance_sum: get().statistics?.distanceSum ?? 0 + newDistanceSum,
-        },
+      await api.patch('/user-statistics', {
+        user_id: get().id,
+        distance_sum: currentDist + Math.round(newDistanceSum),
       });
-      set({ statistics: response.data.statistics, loading: false, error: null });
-      console.log(response.data.statistics);
       return Promise.resolve();
     } catch (error) {
       console.log('Error updating user statistics', error);

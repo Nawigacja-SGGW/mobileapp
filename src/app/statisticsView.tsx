@@ -38,7 +38,7 @@ export default function StatisticsView() {
           <View className="ml-4">
             <Text className="text-base text-gray-700">{t('statistics.totalDistance')}</Text>
             <Text className="text-2xl font-bold text-gray-800">
-              {statistics?.distanceSum ?? 0} km
+              {statistics?.distanceSum ?? 0} m
             </Text>
           </View>
         </View>

@@ -41,7 +41,7 @@ export default function MapScreen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selectedObject, setselectedObject] = useState(undefined);
   const userLocation = useRef<Location.LocationObject>();
-  const { fetchUserHistory } = useUserStore();
+  const { fetchUserHistory, updateUserHistory } = useUserStore();
 
   const {
     locations,
@@ -134,6 +134,10 @@ export default function MapScreen() {
     const locationObject = locations.find((l) => l.id == id);
     setIsExpanded(true);
     //console.log('location Object ', locationObject, id, locations);
+
+    updateUserHistory(id, 1);
+    fetchUserHistory();
+
     switch (searchMode) {
       case 'searchfrom':
         setRoute({
@@ -441,8 +445,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     setSearchMode,
     searchMode,
   } = useLocationStore();
-  const { searchHistory, fetchUserHistory, updateUserHistory, updateUserStatistics } =
-    useUserStore();
+  const { searchHistory, fetchUserHistory, updateUserHistory } = useUserStore();
   const { distance } = useRouteQuery('foot');
   const { allObjects } = useObjectsStore();
   const _locations =
@@ -565,7 +568,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                   // TODO adjust route created count instead of 1
                   await updateUserHistory(item.id, 1);
                   await fetchUserHistory();
-                  await updateUserStatistics(distance);
+
                   console.log('press in list');
                   setSearchMode('idle');
                 }}>
