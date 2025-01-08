@@ -102,8 +102,10 @@ export function DrawerMenu() {
 
         <View className="mb-4 flex-row justify-between">
           <LanguageSwitch />
-          <RankingButton />
-          <StatisticsButton />
+          <View className="flex-row gap-4">
+            <StatisticsButton />
+            <RankingButton />
+          </View>
         </View>
       </View>
     </>
