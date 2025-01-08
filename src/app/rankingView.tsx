@@ -1,5 +1,6 @@
+import { useFocusEffect } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, FlatList, ScrollView, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -74,9 +75,11 @@ const RankingView = () => {
     mostDistanceTraveled,
   } = useRankingStore();
 
-  React.useEffect(() => {
-    fetchUserStatistics();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserStatistics();
+    }, [])
+  );
 
   const { id } = useUserStore();
 
