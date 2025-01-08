@@ -9,7 +9,7 @@ interface SearchHistoryEntry {
 }
 
 interface UserStatistics {
-  topFiveVisitedPlaces: { objectId: number; count: number }[];
+  topFiveVisitedPlaces: { objectId: number; timestamp: string; routeCreatedCount: number }[];
   uniquePlacesVisitedCount: number;
   distanceSum: number;
 }
@@ -30,7 +30,7 @@ interface StoreState {
   fetchUserHistory: () => Promise<void>;
   updateUserHistory: (objectId: number, routeCreatedCount: number) => Promise<void>;
   fetchUserStatistics: () => Promise<void>;
-  updateUserStatistics: () => Promise<void>;
+  updateUserStatistics: (newDistanceSum: number) => Promise<void>;
 }
 
 type Response = {
@@ -176,13 +176,14 @@ const useRealUserStore = create<StoreState>((set, get) => ({
       return Promise.reject(error);
     }
   },
-  updateUserStatistics: async () => {
+  updateUserStatistics: async (newDistanceSum: number) => {
     set({ loading: true, error: null });
+    const currentDist = get().statistics?.distanceSum ?? 0;
     try {
-      const response = await api.patch('/user-statistics', {
-        data: { user: get().id, timestamp: Date.now() },
+      await api.patch('/user-statistics', {
+        user_id: get().id,
+        distance_sum: currentDist + Math.round(newDistanceSum),
       });
-      set({ statistics: response.data.statistics, loading: false, error: null });
       return Promise.resolve();
     } catch (error) {
       console.log('Error updating user statistics', error);
@@ -300,11 +301,11 @@ const useFakeUserStore = create<StoreState>((set) => ({
       set({
         statistics: {
           topFiveVisitedPlaces: [
-            { objectId: 1, count: 1 },
-            { objectId: 2, count: 2 },
-            { objectId: 3, count: 3 },
-            { objectId: 4, count: 4 },
-            { objectId: 5, count: 5 },
+            { objectId: 1, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 1 },
+            { objectId: 2, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 4 },
+            { objectId: 3, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 6 },
+            { objectId: 4, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 11 },
+            { objectId: 5, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 33 },
           ],
           uniquePlacesVisitedCount: 5,
           distanceSum: 33,
