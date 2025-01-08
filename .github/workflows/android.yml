@@ -3,7 +3,7 @@ name: "Build Android app"
 on:
   push:
     branches:
-      - develop
+      - gh-actions-build
   workflow_dispatch:
 
 jobs:
@@ -26,6 +26,14 @@ jobs:
           fileDir: 'android/app/'
           # The base64 encoded string
           encodedString: ${{ secrets.KEYSTORE }}
+
+      - name: Create .env file
+        run: |
+          echo "EXPO_PUBLIC_API_URL=${{ secrets.API_URL }}" >> .env
+          echo "EXPO_PUBLIC_MODE=${{ secrets.MODE }}" >> .env
+
+      - name: Verify .env content
+        run: cat .env
           
       - name: Install Java
         uses: actions/setup-java@v4
