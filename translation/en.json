@@ -69,7 +69,14 @@
     "backToLogin" : "Back to login",
     "confirmation" : "Check email for reset link",
     "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
-    "didntReceiveEmail" : "Didn't receive an email?"
+    "didntReceiveEmail" : "Didn't receive an email?",
+    "emailSentSuccessfully": "Email sent successfully",
+    "fillAllFields": "Complete all fields",
+    "errorOccurred": "An error occurred",
+    "passwordMismatch": "The passwords are not identical",
+    "passwordChanged": "Password changed successfully",
+    "registrationSuccessful": "Registered successfully"
+
   },
   "objects":{
     "noResults" : "No results found",
@@ -114,5 +121,11 @@
     "users_with_the_most_distance_traveled": "Users with the most distance traveled",
     "your_place_in_ranking": "Your place in ranking",
     "you": "You"
+  },
+  "statistics": {
+    "totalDistance": "Total distance",
+    "times": "{{count}} time",
+    "times_plural": "{{count}} times",
+    "visitedPlacesNumber": "Number of visited places"
   }
 }

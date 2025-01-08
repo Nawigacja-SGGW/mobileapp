@@ -8,13 +8,14 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 
 import Loading from './Loading';
 import RankingIcon from '../../assets/leaderboard.svg';
+import StatisticsIcon from '../../assets/trending-up.svg';
 
 import { LanguageSwitch } from '~/components/LanguageSwitch';
 import { useUserStore } from '~/store/useUserStore';
 
 export function DrawerMenu() {
   const { t } = useTranslation();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { logout, loading, error } = useUserStore();
 
   const menuOptions = [
@@ -102,6 +103,7 @@ export function DrawerMenu() {
         <View className="mb-4 flex-row justify-between">
           <LanguageSwitch />
           <RankingButton />
+          <StatisticsButton />
         </View>
       </View>
     </>
@@ -114,6 +116,17 @@ function RankingButton() {
     <>
       <TouchableOpacity onPress={() => navigation.navigate('rankingView')}>
         <RankingIcon width={32} height={32} fill="white" />
+      </TouchableOpacity>
+    </>
+  );
+}
+
+function StatisticsButton() {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  return (
+    <>
+      <TouchableOpacity onPress={() => navigation.navigate('statisticsView')}>
+        <StatisticsIcon width={32} height={32} fill="white" />
       </TouchableOpacity>
     </>
   );

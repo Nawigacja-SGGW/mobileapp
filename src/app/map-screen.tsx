@@ -11,7 +11,6 @@ import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
 
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
-import MapPin from '../../assets/map-pin.png';
 import SearchIcon1 from '../../assets/search1.svg';
 
 import NavigationModal from '~/components/NavigationModal';
@@ -41,7 +40,7 @@ export default function MapScreen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selectedObject, setselectedObject] = useState(undefined);
   const userLocation = useRef<Location.LocationObject>();
-  const { fetchUserHistory } = useUserStore();
+  const { fetchUserHistory, updateUserHistory } = useUserStore();
 
   const {
     locations,
@@ -55,6 +54,7 @@ export default function MapScreen() {
     setNavigationMode,
     navigationMode,
   } = useLocationStore();
+  const { allObjects } = useObjectsStore();
   const { route, distance: routeQueryDistance } = useRouteQuery('foot');
   const { route: navRoute, distance, userLocation: uLocation } = usePlaceNavigation('foot');
 
@@ -134,6 +134,10 @@ export default function MapScreen() {
     const locationObject = locations.find((l) => l.id == id);
     setIsExpanded(true);
     //console.log('location Object ', locationObject, id, locations);
+
+    updateUserHistory(id, 1);
+    fetchUserHistory();
+
     switch (searchMode) {
       case 'searchfrom':
         setRoute({
@@ -175,6 +179,9 @@ export default function MapScreen() {
     margin: -5,
   };
   console.log(-mapRotation - 45);
+
+  console.log('Locations: ', locations);
+  console.log('objects: ', allObjects());
 
   return (
     <>
@@ -353,7 +360,7 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
     <>
       <MapLibreGL.Images
         images={{
-          pin: MapPin,
+          pin: require('./../../assets/map-pin.png'),
         }}
       />
       <MapLibreGL.ShapeSource
@@ -442,6 +449,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     searchMode,
   } = useLocationStore();
   const { searchHistory, fetchUserHistory, updateUserHistory } = useUserStore();
+  const { distance } = useRouteQuery('foot');
   const { allObjects } = useObjectsStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
@@ -563,6 +571,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                   // TODO adjust route created count instead of 1
                   await updateUserHistory(item.id, 1);
                   await fetchUserHistory();
+
                   console.log('press in list');
                   setSearchMode('idle');
                 }}>

@@ -21,15 +21,15 @@ export default function ForgotPassword() {
 
   const onSubmit = async (data: FieldValues) => {
     if (!data.email) {
-      ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.fillAllFields'), ToastAndroid.SHORT);
       return;
     }
     try {
       await resetPasswordRequest(data.email);
-      ToastAndroid.show('Email wysłany pomyślnie', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.emailSentSuccessfully'), ToastAndroid.SHORT);
       navigation.navigate('confirmation');
     } catch {
-      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.errorOccurred'), ToastAndroid.SHORT);
     }
   };
 

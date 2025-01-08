@@ -1,3 +1,4 @@
+import { FontAwesome5 } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import React from 'react';
@@ -6,7 +7,6 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import MenuIcon from '../../assets/menus1.svg';
 import NavigationIcon from '../../assets/navigation.svg';
 import SearchIcon2 from '../../assets/search2.svg';
-import { FontAwesome5 } from '@expo/vector-icons';
 
 type TopBarProps = {
   modeSearch: boolean;

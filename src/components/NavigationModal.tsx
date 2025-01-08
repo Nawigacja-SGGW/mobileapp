@@ -1,10 +1,12 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { TouchableOpacity } from 'react-native';
-import { Modal, View, Text, Button } from 'react-native';
+import { TouchableOpacity, View, Text } from 'react-native';
+
 import CloseButton from '~/components/CloseButton';
+import { useRouteQuery } from '~/hooks/useRouteQuery';
 import useLocationStore from '~/store/useLocationStore';
+import { useUserStore } from '~/store/useUserStore';
 
 interface NavigationModalProps {
   visible: boolean;
@@ -15,6 +17,8 @@ interface NavigationModalProps {
 export default function NavigationModal({ onCancel, visible, distanceLeft }: NavigationModalProps) {
   const { locationFrom, locationTo, navigationMode, setNavigationMode } = useLocationStore();
   const { t } = useTranslation();
+  const { fetchUserStatistics, updateUserStatistics } = useUserStore();
+  const { distance } = useRouteQuery('foot');
 
   if (!locationTo || !visible || distanceLeft === 0) return <></>;
 
@@ -40,9 +44,11 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
             <View className="flex-row items-end  justify-center gap-5  pb-6">
               <TouchableOpacity
                 className="w-60 items-center rounded-full bg-white p-2"
-                onPress={() => {
+                onPress={async () => {
                   if (navigationMode === 'routing') {
                     setNavigationMode('navigating');
+                    await updateUserStatistics(distance);
+                    await fetchUserStatistics();
                   } else {
                     onCancel();
                   }
