@@ -126,6 +126,7 @@
     "totalDistance": "Total distance",
     "times": "{{count}} time",
     "times_plural": "{{count}} times",
-    "visitedPlacesNumber": "Number of visited places"
+    "visitedPlacesNumber": "Number of visited places",
+    "noData": "No data"
   }
 }

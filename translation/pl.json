@@ -142,6 +142,7 @@
   "times_2": "{{count}} razy",
   "times_few": "{{count}} razy",
   "times_other": "{{count}} razy",
-  "visitedPlacesNumber": "Ilość odwiedzonych miejsc"
+  "visitedPlacesNumber": "Ilość odwiedzonych miejsc",
+  "noData": "Brak danych"
 }
 }
