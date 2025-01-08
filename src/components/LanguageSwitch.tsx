@@ -7,18 +7,20 @@ import { useSettingsStore } from '~/store/useSettingsStore';
 export function LanguageSwitch() {
   const { i18n } = useTranslation();
 
-  const onPressed = async () => {
-    const newLanguage = i18n.language === 'pl' ? 'en' : 'pl';
-    await i18n.changeLanguage(newLanguage);
-    useSettingsStore.getState().setLanguage(newLanguage);
+  const onPressed = async (selectedLanguage) => {
+    // check if language is selected
+    if (i18n.language !== selectedLanguage) {
+      await i18n.changeLanguage(selectedLanguage);
+      useSettingsStore.getState().setLanguage(selectedLanguage);
+    }
   };
 
   return (
     <View className="flex-row gap-2">
-      <TouchableOpacity onPress={onPressed}>
+      <TouchableOpacity onPress={() => onPressed('pl')}>
         <Text
-          className={`text-lg text-white ${
-            i18n.language === 'pl' ? 'font-bold underline' : 'text-white'
+          className={`text-lg ${
+            i18n.language === 'pl' ? 'font-bold underline text-white' : 'text-gray-500'
           }`}>
           PL
         </Text>
@@ -26,10 +28,10 @@ export function LanguageSwitch() {
 
       <Text className="text-lg text-gray-500">/</Text>
 
-      <TouchableOpacity onPress={onPressed}>
+      <TouchableOpacity onPress={() => onPressed('en')}>
         <Text
-          className={`text-lg text-white ${
-            i18n.language === 'en' ? 'font-bold underline' : 'text-white'
+          className={`text-lg ${
+            i18n.language === 'en' ? 'font-bold underline text-white' : 'text-gray-500'
           }`}>
           EN
         </Text>
