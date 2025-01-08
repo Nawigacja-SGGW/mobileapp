@@ -69,7 +69,14 @@
     "backToLogin" : "Back to login",
     "confirmation" : "Check email for reset link",
     "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
-    "didntReceiveEmail" : "Didn't receive an email?"
+    "didntReceiveEmail" : "Didn't receive an email?",
+    "emailSentSuccessfully": "Email sent successfully",
+    "fillAllFields": "Complete all fields",
+    "errorOccurred": "An error occurred",
+    "passwordMismatch": "The passwords are not identical",
+    "passwordChanged": "Password changed successfully",
+    "registrationSuccessful": "Registered successfully"
+
   },
   "objects":{
     "noResults" : "No results found",

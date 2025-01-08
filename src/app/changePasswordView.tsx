@@ -32,20 +32,20 @@ export default function ChangePasswordView() {
 
   const onSubmit = async (data: FieldValues) => {
     if (!data.newPassword || !data.confirmNewPassword) {
-      ToastAndroid.show('Wypełnij wszystkie pola', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.fillAllFields'), ToastAndroid.SHORT);
       return;
     }
 
     if (data.newPassword !== data.confirmNewPassword) {
-      ToastAndroid.show('Hasła nie są identyczne', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.passwordMismatch'), ToastAndroid.SHORT);
       return;
     }
 
     try {
       await resetPassword(data.newPassword);
-      ToastAndroid.show('Zmieniono hasło pomyślnie', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.passwordChanged'), ToastAndroid.SHORT);
     } catch {
-      ToastAndroid.show('Wystąpił błąd', ToastAndroid.SHORT);
+      ToastAndroid.show(t('login.errorOccurred'), ToastAndroid.SHORT);
     }
   };
 
