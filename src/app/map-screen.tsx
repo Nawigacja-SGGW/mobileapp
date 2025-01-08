@@ -11,7 +11,6 @@ import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
 
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
-import MapPin from '../../assets/map-pin.png';
 import SearchIcon1 from '../../assets/search1.svg';
 
 import NavigationModal from '~/components/NavigationModal';
@@ -55,6 +54,7 @@ export default function MapScreen() {
     setNavigationMode,
     navigationMode,
   } = useLocationStore();
+  const { allObjects } = useObjectsStore();
   const { route, distance: routeQueryDistance } = useRouteQuery('foot');
   const { route: navRoute, distance, userLocation: uLocation } = usePlaceNavigation('foot');
 
@@ -179,6 +179,9 @@ export default function MapScreen() {
     margin: -5,
   };
   console.log(-mapRotation - 45);
+
+  console.log('Locations: ', locations);
+  console.log('objects: ', allObjects());
 
   return (
     <>
@@ -357,7 +360,7 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
     <>
       <MapLibreGL.Images
         images={{
-          pin: MapPin,
+          pin: require('./../../assets/map-pin.png'),
         }}
       />
       <MapLibreGL.ShapeSource

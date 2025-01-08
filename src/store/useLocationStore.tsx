@@ -1,7 +1,5 @@
 import { create } from 'zustand';
 
-import { useObjectsStore } from '~/store/useObjectsStore';
-
 export interface MapLocation {
   id: number;
   name: string;
@@ -27,23 +25,6 @@ interface LocationStore {
   filterLocations: (query: string) => void;
   clearFilteredLocations: () => void;
 }
-
-useObjectsStore.subscribe((state) => {
-  // Aktualizowanie listy lokalizacji na podstawie obiektów w useObjectsStore
-  useLocationStore.setState({
-    locations: [
-      ...useObjectsStore.getState().areaObjects.map((n, i) => ({
-        ...n,
-        coordinates: [Number(n.longitude), Number(n.latitude)],
-      })),
-      ...useObjectsStore.getState().pointObjects.map((n, i) => ({
-        ...n,
-        coordinates: [Number(n.longitude), Number(n.latitude)],
-      })),
-    ],
-  });
-  console.log('useLocationStore update', useLocationStore.getState());
-});
 
 const useLocationStore = create<LocationStore>((set, get) => ({
   locations: [],
