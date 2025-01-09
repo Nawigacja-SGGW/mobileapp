@@ -115,10 +115,18 @@
     "confirmNewPassword": "Confirm New Password",
     "resetButton": "Reset Password"
   },
+  "rankingView": {
+    "users_with_the_most_visits_in_one_place": "Users with the most visits in one place",
+    "users_with_the_most_visited_places": "Users with the most visited places",
+    "users_with_the_most_distance_traveled": "Users with the most distance traveled",
+    "your_place_in_ranking": "Your place in ranking",
+    "you": "You"
+  },
   "statistics": {
     "totalDistance": "Total distance",
     "times": "{{count}} time",
     "times_plural": "{{count}} times",
-    "visitedPlacesNumber": "Number of visited places"
+    "visitedPlacesNumber": "Number of visited places",
+    "noData": "No data"
   }
 }

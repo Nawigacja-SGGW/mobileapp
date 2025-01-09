@@ -120,21 +120,29 @@
     "saved": "Zapisano",
     "walk": "Piesza",
     "bike": "Rowerowa"
-  },
-  "resetPassword": {
-    "title": "Zmień hasło",
-    "currentPassword": "Aktualne hasło",
-    "newPassword": "Nowe hasło",
-    "confirmNewPassword": "Potwierdź nowe hasło",
-    "resetButton": "Zresetuj hasło"
-  },
-  "statistics": {
-    "totalDistance": "Pokonany dystans",
-    "times_0": "{{count}} raz",
-    "times_1": "{{count}} razy",
-    "times_2": "{{count}} razy",
-    "times_few": "{{count}} razy",
-    "times_other": "{{count}} razy",
-    "visitedPlacesNumber": "Ilość odwiedzonych miejsc"
-  }
+},
+"resetPassword": {
+  "title": "Zmień hasło",
+  "currentPassword": "Aktualne hasło",
+  "newPassword": "Nowe hasło",
+  "confirmNewPassword": "Potwierdź nowe hasło",
+  "resetButton": "Zresetuj hasło"
+},
+"rankingView": {
+  "users_with_the_most_visits_in_one_place": "Użytkownicy z największą liczbą odwiedzin jednego miejsca",
+  "users_with_the_most_visited_places": "Użytkownicy z największą liczbą odwiedzin unikalnych miejsc",
+  "users_with_the_most_distance_traveled": "Użytkownicy z największym przebytym dystansem",
+  "your_place_in_ranking": "Twoje miejsce w rankingu",
+  "you": "Ty"
+},
+"statistics": {
+  "totalDistance": "Pokonany dystans",
+  "times_0": "{{count}} raz",
+  "times_1": "{{count}} razy",
+  "times_2": "{{count}} razy",
+  "times_few": "{{count}} razy",
+  "times_other": "{{count}} razy",
+  "visitedPlacesNumber": "Ilość odwiedzonych miejsc",
+  "noData": "Brak danych"
+}
 }
