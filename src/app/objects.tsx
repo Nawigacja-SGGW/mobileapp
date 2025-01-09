@@ -16,7 +16,7 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 
 import SearchIcon1 from '../../assets/search1.svg';
 
-import TopHeaderOL from '~/components/TopHeaderObjectList';
+import TopHeaderSort from '~/components/TopHeaderSort';
 import { MapObject, useObjectsStore } from '~/store/useObjectsStore';
 
 export default function Objects() {
@@ -44,7 +44,7 @@ export default function Objects() {
 
   return (
     <View className="absolute h-full w-full">
-      <Drawer.Screen options={{ header: () => <TopHeaderOL onClick={toggleBottomSheet} /> }} />
+      <Drawer.Screen options={{ header: () => <TopHeaderSort onSortClick={toggleBottomSheet} /> }} />
       <SearchSection locations={locations} />
       {isVisible && (
         <SortBottomSheet
