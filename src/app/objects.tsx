@@ -57,7 +57,7 @@ export default function Objects() {
           toggleSection={toggleBottomSheet}
           switchedBy={sortedBy}
           setSwitchedBy={setSortedBy}
-          label = 'objects.sortBy'
+          label = 'sortBy'
           options = {options}
         />
       )}
@@ -90,7 +90,7 @@ function SearchSection(props: SearchSectionProps) {
             <SearchIcon1 width={28} height={28} className="mr-2" />
             <TextInput
               className="ml-8 flex-1 text-lg"
-              placeholder={t('objects.search')}
+              placeholder={t('search')}
               placeholderTextColor="#000"
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -114,7 +114,7 @@ function SearchSection(props: SearchSectionProps) {
             ))
           ) : (
             <Text className="mt-5 text-center text-[16px] font-normal text-[#8B8B8B]">
-              {t('objects.noResults')}
+              {t('noResults')}
             </Text>
           )}
         </ScrollView>

@@ -5,7 +5,7 @@ import TopHeader from '~/components/TopHeaderSort';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions} from 'react-native';
-import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection';
+import {BottomChoiceSection} from '~/components/BottomChoiceSection';
 
 export default function TimeTableView() {
     const [isSortVisible, setSortVisible] = useState(false);
@@ -57,7 +57,7 @@ export default function TimeTableView() {
                 toggleSection={toggleSortSheet}
                 switchedBy={sortedBy}
                 setSwitchedBy={setSortedBy}
-                label='events.sortBy'
+                label='sortBy'
                 options={sortOptions}
                 />
             )}
@@ -67,7 +67,7 @@ export default function TimeTableView() {
                 toggleSection={toggleFilterSheet}
                 switchedBy={filterBy}
                 setSwitchedBy={setFilteredBy}
-                label='events.filterBy'
+                label='filterBy'
                 options={filterOptions}
                 />
             )}

@@ -80,21 +80,18 @@
 
   },
   "objects":{
-    "noResults" : "No results found",
-    "sortBy": "SORT BY",
     "number": "number",
-    "name": "name: from A to Z",
-    "search": "Search"
+    "name": "name: from A to Z"
   },
   "events": {
-    "sortBy": "SORT BY",
-    "filterBy": "FILER BY",
     "date": "date",
     "location": "location",
-    "category": "category",
-    "search": "Search",
-    "noResults" : "No results found"
+    "category": "category"
   },
+  "sortBy": "SORT BY",
+  "filterBy": "FILER BY",
+  "search": "Search",
+  "noResults" : "No results found",
 
   "loading": "Loading",
 

@@ -100,21 +100,20 @@
   },
   "cancel":"Anuluj",
   "objects":{
-    "noResults" : "Nie znaleziono wyników",
     "sortBy": "SORTUJ PO",
     "number": "numerze",
-    "name": "nazwie: od A do Z",
-    "search": "Szukaj"
+    "name": "nazwie: od A do Z"
   },
   "events": {
     "sortBy": "SORTUJ PO",
     "filterBy": "FILTRUJ PO",
     "date": "dacie",
     "location": "Lokalizacji",
-    "category": "kategorii",
-    "search": "Szukaj",
-    "noResults" : "Nie znaleziono wyników"
+    "category": "kategorii"
   },
+  "search": "Szukaj",
+  "noResults" : "Nie znaleziono wyników",
+
   "profile": {
     "email": "Email",
     "myKilometers": "Moje kilometry",
