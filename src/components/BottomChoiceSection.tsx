@@ -11,32 +11,32 @@ export type SortFilerOption = {
 
 type BottomChoiceSectionProps = {
     slideAnim: Animated.Value;
-    toggleBottomSheet: () => void;
-    sortedBy: string;
-    setSortedBy: React.Dispatch<React.SetStateAction<string>>;
+    toggleSection: () => void;
+    switchedBy: string;
+    setSwitchedBy: React.Dispatch<React.SetStateAction<string>>;
     label :string;
     options : SortFilerOption[];
   };
 
 export function BottomChoiceSection({
     slideAnim,
-    toggleBottomSheet,
-    sortedBy,
-    setSortedBy,
+    toggleSection: toggleSection,
+    switchedBy: switchedBy,
+    setSwitchedBy: setSwitchedBy,
     label,
     options,
   }: BottomChoiceSectionProps) {
     const { t } = useTranslation();
   
     const handleSelectSortOption = (optionId: string) => {
-      setSortedBy(optionId);
-      toggleBottomSheet();
+      setSwitchedBy(optionId);
+      toggleSection();
     };
   
     return (
       <>
         <TouchableOpacity
-          onPress={() => toggleBottomSheet()}
+          onPress={() => toggleSection()}
           className="absolute bottom-0 left-0 right-0 top-0"
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
         />
@@ -50,7 +50,7 @@ export function BottomChoiceSection({
               className="flex-row justify-between py-3"
               onPress={() => handleSelectSortOption(option.id)}>
               <Text className="text-lg font-semibold text-black">{t(option.label)}</Text>
-              {sortedBy === option.id && (
+              {switchedBy === option.id && (
                 <FontAwesome6 name="circle-dot" size={20} color="[#0F9D58]" />
               )}
             </TouchableOpacity>

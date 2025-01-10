@@ -54,9 +54,9 @@ export default function Objects() {
       {isVisible && (
         <BottomChoiceSection
           slideAnim={slideAnim}
-          toggleBottomSheet={toggleBottomSheet}
-          sortedBy={sortedBy}
-          setSortedBy={setSortedBy}
+          toggleSection={toggleBottomSheet}
+          switchedBy={sortedBy}
+          setSwitchedBy={setSortedBy}
           label = 'objects.sortBy'
           options = {options}
         />
