@@ -106,6 +106,15 @@
     "name": "nazwie: od A do Z",
     "search": "Szukaj"
   },
+  "events": {
+    "sortBy": "SORTUJ PO",
+    "filterBy": "FILTRUJ PO",
+    "date": "dacie",
+    "location": "Lokalizacji",
+    "category": "kategorii",
+    "search": "Szukaj",
+    "noResults" : "Nie znaleziono wyników"
+  },
   "profile": {
     "email": "Email",
     "myKilometers": "Moje kilometry",

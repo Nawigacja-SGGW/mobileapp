@@ -86,6 +86,15 @@
     "name": "name: from A to Z",
     "search": "Search"
   },
+  "events": {
+    "sortBy": "SORT BY",
+    "filterBy": "FILER BY",
+    "date": "date",
+    "location": "location",
+    "category": "category",
+    "search": "Search",
+    "noResults" : "No results found"
+  },
 
   "loading": "Loading",
 
