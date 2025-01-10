@@ -6,6 +6,8 @@ import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions} from 'react-native';
 import {BottomChoiceSection} from '~/components/BottomChoiceSection';
+import Feather from '@expo/vector-icons/Feather';
+import {PointObject} from '~/store/useObjectsStore';
 
 export default function TimeTableView() {
     const [isSortVisible, setSortVisible] = useState(false);
@@ -51,6 +53,12 @@ export default function TimeTableView() {
             <Drawer.Screen options={{ header: () =>
                 <TopHeader onSortClick = {toggleSortSheet} filter onFilterClick = {toggleFilterSheet} />
             }}/>
+            <View className="flex-1 bg-white px-3">
+              <View className="h-15 relative mb-5 mt-36 rounded-3xl border border-[#E4E4E4] p-3">
+                <Search/>
+              </View>
+              <EventsList/>
+            </View>
             {isSortVisible && (
                 <BottomChoiceSection
                 slideAnim={slideAnim}
@@ -73,4 +81,31 @@ export default function TimeTableView() {
             )}
         </>
     );
+}
+
+const { t } = useTranslation();
+const [searchQuery, setSearchQuery] = useState('');
+
+function Search() {
+  return (
+    <View className="flex-row items-center">
+      <Feather name="search" size={28} color="black" className="mr-1"/>
+      <TextInput
+        className="ml-8 flex-1 text-lg"
+        placeholder={t('search')}
+        placeholderTextColor="#000"
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        autoFocus
+      />
+    </View>
+  );
+}
+
+function EventsList() {
+  return (
+    <ScrollView>
+
+    </ScrollView>
+  );
 }

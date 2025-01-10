@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
-import SearchIcon1 from '../../assets/search1.svg';
+import Feather from '@expo/vector-icons/Feather';
 
 import TopHeaderSort from '~/components/TopHeaderSort';
 import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection';
@@ -87,7 +87,7 @@ function SearchSection(props: SearchSectionProps) {
       <View className="flex-1 bg-white px-3">
         <View className="h-15 relative mb-5 mt-36 rounded-3xl border border-[#E4E4E4] p-3">
           <View className="flex-row items-center">
-            <SearchIcon1 width={28} height={28} className="mr-2" />
+            <Feather name="search" size={28} color="black" className="mr-1"/>
             <TextInput
               className="ml-8 flex-1 text-lg"
               placeholder={t('search')}
