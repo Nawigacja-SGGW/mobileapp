@@ -11,6 +11,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
+import { AppButton } from '~/components/AppButton';
 import TopHeader from '~/components/TopHeader';
 import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
 import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
@@ -63,20 +64,20 @@ export default function ChangeLanguageView() {
       />
 
       {/* Przycisk zapisz */}
-      <TouchableOpacity
+      <AppButton
+        title={t('settings.save')}
         onPress={() => {
           useSettingsStore
             .getState()
             .setRoutePreference(useSettingsStore.getState().routePreference);
           ToastAndroid.show(t('settings.saved'), ToastAndroid.SHORT);
         }}
-        className="mt-8 h-14 items-center justify-center rounded-full bg-[#004D40]"
         style={{
           width: width > 400 ? '80%' : '100%',
           alignSelf: 'center',
-        }}>
-        <Text className="text-base font-bold text-white">{t('settings.save')}</Text>
-      </TouchableOpacity>
+          marginTop: height * 0.01,
+        }}
+      />
     </SafeAreaView>
   );
 }

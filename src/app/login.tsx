@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
-  StyleSheet,
   Image,
   TouchableOpacity,
   ScrollView,
@@ -24,7 +23,6 @@ export default function Login() {
   const { control, handleSubmit } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { t } = useTranslation();
-  const externalIconsSize = 44;
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { loading, login } = useUserStore();
 
