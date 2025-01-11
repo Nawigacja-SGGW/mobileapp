@@ -30,7 +30,7 @@
   },
   "menu": {
     "map": "Mapa",
-    "objects": "Obiekty",
+    "objects": "Miejsca",
     "profile": "Profil",
     "settings": "Ustawienia",
     "logout": "Wyloguj się"
@@ -81,7 +81,7 @@
     "sendButton": "Wyślij",
     "resetButton": "Zresetuj hasło",
     "forgotPassword": "Zapomniałeś hasła?",
-    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła",
+    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła.",
     "resetPassword": "Zresetuj hasło",
     "resetPasswordText": "Wprowadź nowe hasło dla ",
     "continueWith": "Lub kontynuuj z",

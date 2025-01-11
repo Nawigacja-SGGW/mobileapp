@@ -14,7 +14,7 @@
   },
   "menu": {
     "map": "Map",
-    "objects": "Objects",
+    "objects": "Places",
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Logout"
@@ -62,7 +62,7 @@
     "sendButton":"send",
     "resetButton":"reset password",
     "forgotPassword":"Forgot password",
-    "forgotPasswordText":"Please enter the e-mail address and we will send you instructions to reset your password",
+    "forgotPasswordText":"Please enter the e-mail address and we will send you instructions to reset your password.",
     "resetPassword":"Reset password",
     "resetPasswordText":"Enter a new password for ",
     "continueWith" : "Or continue with",
