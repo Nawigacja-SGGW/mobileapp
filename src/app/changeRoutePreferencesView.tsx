@@ -13,10 +13,11 @@ import {
 
 import TopHeader from '~/components/TopHeader';
 import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
+import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 
 const routeOptions = [
-  { label: 'settings.walk', value: RoutePreference.Walk },
-  { label: 'settings.bike', value: RoutePreference.Bike },
+  { label: 'settings.walk', value: RoutePreference.Walk, ikon: <FontAwesome5  name="walking" size={24} color="black" /> },
+  { label: 'settings.bike', value: RoutePreference.Bike, ikon: <MaterialIcons name="directions-bike" size={24} color="black" /> },
 ];
 
 export default function ChangeLanguageView() {
@@ -48,11 +49,12 @@ export default function ChangeLanguageView() {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => setRoutePreference(item.value)}
-            className={`flex-row items-center justify-between border-b border-gray-200 px-6 py-4 ${
-              routePreference === item.value ? 'bg-gray-200 font-bold' : ''
+            className={`flex-row items-center space-x-4 border-b border-gray-200 px-6 py-4 ${
+              routePreference === item.value ? 'bg-gray-200' : ''
             }`}>
+            <View className="mr-4">{item.ikon}</View>
             <Text
-              className={`text-lg ${routePreference === item.value ? 'text-black' : 'text-gray-800'}`}>
+              className={`text-lg ${routePreference === item.value ? 'text-black font-bold' : 'text-gray-800'}`}>
               {t(item.label)}
             </Text>
           </TouchableOpacity>
