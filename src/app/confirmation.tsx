@@ -3,7 +3,7 @@ import Drawer from 'expo-router/drawer';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { Logo } from '~/components/Logo';
