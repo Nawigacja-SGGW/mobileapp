@@ -1,4 +1,7 @@
 {
+  "loading": "Ładowanie",
+  "noLocationPermission": "Brak pozwolenia na lokalizację",
+  
   "button": {
     "polish": "Polski",
     "english": "Angielski"
@@ -73,8 +76,6 @@
       "label": "Potwierdź nowe hasło",
       "placeholder": "Wprowadź nowe hasło"
     },
-
-    "loading": "Ładowanie",
 
     "signInButton": "Zaloguj się",
     "signUpButton": "Zarejestruj się",
