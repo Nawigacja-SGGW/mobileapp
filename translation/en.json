@@ -82,7 +82,7 @@
   "objects":{
     "noResults" : "No results found",
     "sortBy": "SORT BY",
-    "number": "number",
+    "number": "building number",
     "name": "name: from A to Z",
     "search": "Search"
   },
