@@ -9,8 +9,9 @@
     "location": "Location",
     "map": "Map",
     "details": "Details",
-    "navigatingTo":"Navigating to:",
-    "start":"Start"
+    "start":"Start",
+    "timeLeft": "Time left: {{time}}"
+
   },
   "menu": {
     "map": "Map",
