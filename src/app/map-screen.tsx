@@ -15,7 +15,6 @@ import DarkGreenDot from '../../assets/ellipse2.svg';
 import SearchIcon1 from '../../assets/search1.svg';
 import Loading from '../components/Loading';
 
-import Loading from '~/components/Loading';
 import NavigationModal from '~/components/NavigationModal';
 import LocationModal from '~/components/ObjectModal';
 import TopHeader from '~/components/TopHeader';
