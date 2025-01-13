@@ -43,6 +43,7 @@ export default function MapScreen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selectedObject, setselectedObject] = useState(undefined);
   const userLocation = useRef<Location.LocationObject>();
+  const [locationEstablished, setLocationEstablished] = useState(false);
   const { fetchUserHistory, updateUserHistory } = useUserStore();
 
   const {
@@ -102,6 +103,7 @@ export default function MapScreen() {
         setErrorMsg('Permission to access location was denied');
         return;
       }
+
       Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.High,
@@ -109,13 +111,17 @@ export default function MapScreen() {
         },
         (location) => {
           userLocation.current = location;
+          if (!locationEstablished) {
+            setLocationEstablished(true);
+          }
           console.log('map-screen.tsx location');
           console.log(location);
         }
       );
 
-      const location = await Location.getCurrentPositionAsync({});
+      const location = await Location.getCurrentPositionAsync();
       userLocation.current = location;
+
       if (userLocation.current !== undefined && locationFrom === undefined) {
         setRoute({
           locationFrom: [
@@ -255,11 +261,13 @@ export default function MapScreen() {
             locations={locations}
             onMarkerPress={handleMarkerPress}
           />
-          <MapLibreGL.UserLocation
-            animated={false}
-            renderMode="native"
-            androidRenderMode="compass"
-          />
+          {(locationEstablished || userLocation.current) && (
+            <MapLibreGL.UserLocation
+              animated={false}
+              renderMode="native"
+              androidRenderMode="compass"
+            />
+          )}
         </MapLibreGL.MapView>
         {/* compass */}
         <TouchableOpacity
