@@ -6,6 +6,7 @@ import { TouchableOpacity, View, Text } from 'react-native';
 import CloseButton from '~/components/CloseButton';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
 import useLocationStore from '~/store/useLocationStore';
+import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
 import { useUserStore } from '~/store/useUserStore';
 
 interface NavigationModalProps {
@@ -18,9 +19,12 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
   const { locationFrom, locationTo, navigationMode, setNavigationMode } = useLocationStore();
   const { t } = useTranslation();
   const { fetchUserStatistics, updateUserStatistics } = useUserStore();
+  const { routePreference } = useSettingsStore();
   const { distance } = useRouteQuery('foot');
 
   if (!locationTo || !visible || distanceLeft === 0) return <></>;
+
+  const iconName = routePreference === RoutePreference.Bike ? 'biking' : 'walking';
 
   return (
     <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">
@@ -34,11 +38,10 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
           <Text className="ml-4 mr-20 py-5 text-xl font-bold text-white">
             {t('navigation.navigatingTo')} <Text>{locationTo?.name}</Text>
           </Text>
-          <View className="flex-1 flex-row items-center gap-5 p-5">
-            <Text className="p-2 text-2xl font-bold text-white">
-              <FontAwesome5 className="" size={30} name="walking" color="white" />
-              {'  ' + getFormattedTime(distanceLeft)} {'  ' + formatDistance(distanceLeft)}
-            </Text>
+          <View className="flex-1 flex-row items-center gap-6 p-6">
+            <FontAwesome5 className="" size={24} name={iconName} color="white" />
+            <Text className="text-2xl font-bold text-white">{getFormattedTime(distanceLeft)}</Text>
+            <Text className="text-2xl font-bold text-white">{formatDistance(distanceLeft)}</Text>
           </View>
           {Array.isArray(locationFrom) && (
             <View className="flex-row items-end  justify-center gap-5  pb-6">
