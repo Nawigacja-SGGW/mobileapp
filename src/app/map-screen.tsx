@@ -467,20 +467,49 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
   const { allObjects } = useObjectsStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
-  //console.log('locations', _locations, searchQuery);
 
-  let shownLocations = _locations;
+  let shownLocations: MapLocation[] = _locations;
+
+  let shownSearchHistory = searchHistory.filter((n) => {
+    const object = allObjects().find((l) => l.id === n.objectId);
+    if (!object) return false;
+    if (!(object.name.includes(searchQuery) || searchQuery.includes(object.name))) return false;
+    return true;
+  });
+
   if (searchHistory && allObjects) {
-    const mappedHistory = searchHistory.map((n) => {
-      const object = allObjects().find((l) => l.id === n.objectId);
-      return {
-        id: n.objectId,
-        name: object?.name ?? 'Brak nazwy',
-        type: 'Historia',
-        coordinates: [object?.latitude, object?.longitude],
-      };
+    shownSearchHistory = searchHistory.sort((a, b) => {
+      return b.timestamp - a.timestamp;
     });
+
+    const mappedHistory = shownSearchHistory
+      .map((n) => {
+        const object = allObjects().find((l) => l.id === n.objectId);
+        if (!object) return null;
+        if (!(object.name.includes(searchQuery) || searchQuery.includes(object.name))) return null;
+        return {
+          id: n.objectId,
+          name: object?.name ?? 'Brak nazwy',
+          type: 'Historia',
+          coordinates: [object?.latitude, object?.longitude],
+        };
+      })
+      .filter((n) => n != null);
+
     shownLocations = [...mappedHistory, ..._locations];
+
+    const uniqueLocations: MapLocation[] = [];
+    const seenNames = new Set<string>();
+
+    shownLocations.forEach((location) => {
+      if (!seenNames.has(location.name)) {
+        uniqueLocations.push(location);
+        seenNames.add(location.name);
+      }
+    });
+
+    // not the prettiest but quickly done
+    shownLocations = uniqueLocations;
   }
 
   const showSearchbar = searchMode !== 'idle';
