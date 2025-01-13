@@ -3,8 +3,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MapLibreGL, { UserTrackingMode, CameraRef } from '@maplibre/maplibre-react-native';
 import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
 import * as Location from 'expo-location';
+import { useFocusEffect } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
@@ -13,6 +14,7 @@ import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
 import SearchIcon1 from '../../assets/search1.svg';
 
+import Loading from '~/components/Loading';
 import NavigationModal from '~/components/NavigationModal';
 import LocationModal from '~/components/ObjectModal';
 import TopHeader from '~/components/TopHeader';
@@ -54,7 +56,7 @@ export default function MapScreen() {
     setNavigationMode,
     navigationMode,
   } = useLocationStore();
-  const { allObjects } = useObjectsStore();
+  const { loading, fetchData, allObjects } = useObjectsStore();
   const { route, distance: routeQueryDistance } = useRouteQuery('foot');
   const { route: navRoute, distance, userLocation: uLocation } = usePlaceNavigation('foot');
 
@@ -76,6 +78,12 @@ export default function MapScreen() {
     if (searchMode === 'idle') setSearchMode('searchto');
     else setSearchMode('idle');
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   useEffect(() => {
     (async () => {
@@ -185,6 +193,7 @@ export default function MapScreen() {
 
   return (
     <>
+      {loading && <Loading />}
       <Drawer.Screen
         options={{
           header: () => (
