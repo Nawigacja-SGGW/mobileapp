@@ -3,8 +3,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MapLibreGL, { UserTrackingMode, CameraRef } from '@maplibre/maplibre-react-native';
 import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
 import * as Location from 'expo-location';
+import { useFocusEffect } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
@@ -56,7 +57,6 @@ export default function MapScreen() {
     setNavigationMode,
     navigationMode,
   } = useLocationStore();
-  const { allObjects } = useObjectsStore();
   const { routePreference } = useSettingsStore();
   const {
     isLoading,
@@ -68,6 +68,7 @@ export default function MapScreen() {
     distance,
     userLocation: uLocation,
   } = usePlaceNavigation(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
+  const { loading, fetchData, allObjects } = useObjectsStore();
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -87,6 +88,12 @@ export default function MapScreen() {
     if (searchMode === 'idle') setSearchMode('searchto');
     else setSearchMode('idle');
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   useEffect(() => {
     (async () => {
@@ -196,7 +203,7 @@ export default function MapScreen() {
 
   return (
     <>
-      {isLoading && <Loading />}
+      {(isLoading || loading) && <Loading />}
 
       <Drawer.Screen
         options={{
