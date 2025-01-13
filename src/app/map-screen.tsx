@@ -471,7 +471,11 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
 
   let shownLocations = _locations;
   if (searchHistory && allObjects) {
-    const mappedHistory = searchHistory.map((n) => {
+    const sortedHistory = searchHistory.sort((a, b) => {
+      return b.timestamp - a.timestamp;
+    });
+
+    const mappedHistory = sortedHistory.map((n) => {
       const object = allObjects().find((l) => l.id === n.objectId);
       return {
         id: n.objectId,
