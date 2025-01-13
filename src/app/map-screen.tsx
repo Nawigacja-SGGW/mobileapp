@@ -12,6 +12,7 @@ import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
 import SearchIcon1 from '../../assets/search1.svg';
+import Loading from '../components/Loading';
 
 import NavigationModal from '~/components/NavigationModal';
 import LocationModal from '~/components/ObjectModal';
@@ -22,6 +23,7 @@ import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
 import { useObjectsStore } from '~/store/useObjectsStore';
+import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
 import { useUserStore } from '~/store/useUserStore';
 
 MapLibreGL.setAccessToken(null);
@@ -55,8 +57,17 @@ export default function MapScreen() {
     navigationMode,
   } = useLocationStore();
   const { allObjects } = useObjectsStore();
-  const { route, distance: routeQueryDistance } = useRouteQuery('foot');
-  const { route: navRoute, distance, userLocation: uLocation } = usePlaceNavigation('foot');
+  const { routePreference } = useSettingsStore();
+  const {
+    isLoading,
+    route,
+    distance: routeQueryDistance,
+  } = useRouteQuery(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
+  const {
+    route: navRoute,
+    distance,
+    userLocation: uLocation,
+  } = usePlaceNavigation(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -185,6 +196,8 @@ export default function MapScreen() {
 
   return (
     <>
+      {isLoading && <Loading />}
+
       <Drawer.Screen
         options={{
           header: () => (
@@ -448,8 +461,9 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     setSearchMode,
     searchMode,
   } = useLocationStore();
+  const { routePreference } = useSettingsStore();
   const { searchHistory, fetchUserHistory, updateUserHistory } = useUserStore();
-  const { distance } = useRouteQuery('foot');
+  const { distance } = useRouteQuery(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
   const { allObjects } = useObjectsStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);

@@ -19,7 +19,7 @@ export const useRoutingApiCache = create<CacheStore>((set, get) => ({
     console.log('Fetching new data');
     try {
       const response = await fetch(
-        `https://routing.openstreetmap.de/routed-${routedBy}/route/v1/foot/${wayString}?overview=full&geometries=geojson`
+        `https://routing.openstreetmap.de/routed-${routedBy}/route/v1/${routedBy}/${wayString}?overview=full&geometries=geojson`
       );
       const data = await response.json();
 

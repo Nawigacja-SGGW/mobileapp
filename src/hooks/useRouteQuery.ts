@@ -13,6 +13,8 @@ export function useRouteQuery(
   const { fetchRoute } = useRoutingApiCache();
 
   const [routeData, setRouteData] = useState({
+    isLoading: false,
+    isError: false,
     route: [],
     distance: 0,
     duration: 0,
@@ -36,13 +38,23 @@ export function useRouteQuery(
       acc += c[1].toString() + (waypoints.length - 1 === i ? '' : ';');
       return acc;
     }, '');
-    fetchRoute(routedBy, wayString).then((n) => {
-      setRouteData({
-        route: n['routes'][0].geometry.coordinates,
-        distance: n['routes'][0]['distance'],
-        duration: n['duration'],
+
+    setRouteData({ isLoading: true, isError: false, route: [], distance: 0, duration: 0 });
+    try {
+      fetchRoute(routedBy, wayString).then((n) => {
+        setRouteData({
+          isLoading: false,
+          isError: false,
+          route: n['routes'][0].geometry.coordinates,
+          distance: n['routes'][0]['distance'],
+          duration: n['duration'],
+        });
       });
-    });
+    } catch (error) {
+      setRouteData({ isLoading: false, isError: true, route: [], distance: 0, duration: 0 });
+      throw error;
+    }
+
     // fetch(
     //   `https://routing.openstreetmap.de/routed-${routedBy}/route/v1/foot/${wayString}?overview=full&geometries=geojson`
     // )

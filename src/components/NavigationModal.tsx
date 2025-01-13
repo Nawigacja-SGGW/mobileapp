@@ -20,11 +20,9 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
   const { t } = useTranslation();
   const { fetchUserStatistics, updateUserStatistics } = useUserStore();
   const { routePreference, setRoutePreference } = useSettingsStore();
-  const { distance } = useRouteQuery('foot');
+  const { distance } = useRouteQuery(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
 
   if (!locationTo || !visible || distanceLeft === 0) return <></>;
-
-  const iconName = routePreference === RoutePreference.Bike ? 'biking' : 'walking';
 
   return (
     <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">
@@ -69,9 +67,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
                 onPress={async () => {
                   if (navigationMode === 'routing') {
                     setNavigationMode('navigating');
-                    await updateUserStatistics(
-                      routePreference === RoutePreference.Bike ? distanceBike : distanceFoot
-                    );
+                    await updateUserStatistics(distance);
                     await fetchUserStatistics();
                   } else {
                     onCancel();
