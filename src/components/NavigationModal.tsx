@@ -1,7 +1,7 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { TouchableOpacity, View, Text } from 'react-native';
+import { TouchableOpacity, View, Text, Pressable } from 'react-native';
 
 import CloseButton from '~/components/CloseButton';
 import { useRouteQuery } from '~/hooks/useRouteQuery';
@@ -19,7 +19,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
   const { locationFrom, locationTo, navigationMode, setNavigationMode } = useLocationStore();
   const { t } = useTranslation();
   const { fetchUserStatistics, updateUserStatistics } = useUserStore();
-  const { routePreference } = useSettingsStore();
+  const { routePreference, setRoutePreference } = useSettingsStore();
   const { distance } = useRouteQuery('foot');
 
   if (!locationTo || !visible || distanceLeft === 0) return <></>;
@@ -35,22 +35,34 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
               <CloseButton onClose={onCancel} />
             </View>
           )}
-          <Text className="ml-4 mr-20 py-5 text-xl font-bold text-white">
-            {t('navigation.navigatingTo')} <Text>{locationTo?.name}</Text>
+          <Text className="ml-4 mr-20 pt-5 text-3xl font-bold text-white">{locationTo?.name}</Text>
+          <Text className="ml-4 mr-20 text-2xl text-neutral-300">
+            {formatDistance(distanceLeft)}
           </Text>
-          <View className="flex-1 flex-row items-center gap-6 p-6">
-            <FontAwesome5 className="" size={24} name={iconName} color="white" />
-            <Text className="text-2xl font-bold text-white">{getFormattedTime(distanceLeft)}</Text>
-            <Text className="text-2xl font-bold text-white">{formatDistance(distanceLeft)}</Text>
+          <View className="my-6 w-full flex-1 flex-row items-center justify-center gap-10">
+            <RoutePreferenceOption
+              routePreference={RoutePreference.Walk}
+              setRoutePreference={setRoutePreference}
+              distance={distanceLeft}
+              isActive={routePreference === RoutePreference.Walk}
+            />
+            <RoutePreferenceOption
+              routePreference={RoutePreference.Bike}
+              setRoutePreference={setRoutePreference}
+              distance={distanceLeft}
+              isActive={routePreference === RoutePreference.Bike}
+            />
           </View>
           {Array.isArray(locationFrom) && (
-            <View className="flex-row items-end  justify-center gap-5  pb-6">
+            <View className="flex-row items-end  justify-center gap-5 py-4">
               <TouchableOpacity
-                className="w-60 items-center rounded-full bg-white p-2"
+                className="w-60 items-center rounded-full bg-white p-2 text-2xl font-bold text-green-main"
                 onPress={async () => {
                   if (navigationMode === 'routing') {
                     setNavigationMode('navigating');
-                    await updateUserStatistics(distance);
+                    await updateUserStatistics(
+                      routePreference === RoutePreference.Bike ? distanceBike : distanceFoot
+                    );
                     await fetchUserStatistics();
                   } else {
                     onCancel();
@@ -68,9 +80,38 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
   );
 }
 
+const RoutePreferenceOption = ({
+  routePreference,
+  setRoutePreference,
+  distance,
+  isActive,
+}: {
+  routePreference: RoutePreference;
+  setRoutePreference: (routePreference: RoutePreference) => void;
+  distance: number;
+  isActive: boolean;
+}) => {
+  const iconName = routePreference === RoutePreference.Bike ? 'biking' : 'walking';
+  return (
+    <>
+      <Pressable
+        className={`flex-row items-center justify-center gap-4
+ rounded-full bg-neutral-600/50 px-6 py-3 ${isActive ? 'border border-white' : ''}`}
+        onPress={async () => {
+          await setRoutePreference(routePreference);
+        }}>
+        <View className="w-10">
+          <FontAwesome5 size={24} name={iconName} color="white" />
+        </View>
+        <Text className="text-xl text-white">{getFormattedTime(distance)}</Text>
+      </Pressable>
+    </>
+  );
+};
+
 //stuff that probably should be replaced by some lib but no time : (
 function formatDistance(distance: number) {
-  if (distance > 2) return `${Math.round(distance * 10) / 10} km`;
+  if (distance > 2) return `${Math.round(distance * 10) / 10} m`;
   return `${Math.round((distance * 1000) / 5) * 5} m`;
 }
 
