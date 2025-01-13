@@ -16,6 +16,7 @@ import SearchIcon1 from '../../assets/search1.svg';
 import Loading from '../components/Loading';
 
 import NavigationModal from '~/components/NavigationModal';
+import NoLocationPermission from '~/components/NoLocationPemission';
 import LocationModal from '~/components/ObjectModal';
 import TopHeader from '~/components/TopHeader';
 import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
@@ -96,44 +97,47 @@ export default function MapScreen() {
     }, [])
   );
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-
-      Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.High,
-          timeInterval: 100,
-        },
-        (location) => {
-          userLocation.current = location;
-          if (!locationEstablished) {
-            setLocationEstablished(true);
-          }
-          console.log('map-screen.tsx location');
-          console.log(location);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+          return;
         }
-      );
 
-      const location = await Location.getCurrentPositionAsync();
-      userLocation.current = location;
+        Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            timeInterval: 100,
+          },
+          (location) => {
+            userLocation.current = location;
+            setErrorMsg(null);
+            if (!locationEstablished) {
+              setLocationEstablished(true);
+            }
+            console.log('map-screen.tsx location');
+            console.log(location);
+          }
+        );
 
-      if (userLocation.current !== undefined && locationFrom === undefined) {
-        setRoute({
-          locationFrom: [
-            userLocation.current.coords.longitude,
-            userLocation.current.coords.latitude,
-          ],
-        });
-      }
-      console.log('map-screen.tsx userLocation.current');
-      console.log(userLocation.current);
-    })();
-  }, []);
+        const location = await Location.getCurrentPositionAsync();
+        userLocation.current = location;
+
+        if (userLocation.current !== undefined && locationFrom === undefined) {
+          setRoute({
+            locationFrom: [
+              userLocation.current.coords.longitude,
+              userLocation.current.coords.latitude,
+            ],
+          });
+        }
+        console.log('map-screen.tsx userLocation.current');
+        console.log(userLocation.current);
+      })();
+    }, [])
+  );
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -210,6 +214,7 @@ export default function MapScreen() {
   return (
     <>
       {(isLoading || loading) && <Loading />}
+      {errorMsg && <NoLocationPermission />}
 
       <Drawer.Screen
         options={{

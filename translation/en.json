@@ -1,4 +1,7 @@
 {
+  "loading": "Loading",
+  "noLocationPermission": "No location permission",
+
   "button": {
     "polish": "Polish",
     "english": "English"
@@ -86,8 +89,6 @@
     "name": "name: from A to Z",
     "search": "Search"
   },
-
-  "loading": "Loading",
 
   "profile": {
     "email": "Email",
