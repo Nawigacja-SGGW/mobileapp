@@ -9,7 +9,8 @@
     "location": "Lokalizacja",
     "map": "Mapa",
     "details": "Szczegóły",
-    "start":"Start"
+    "start":"Start",
+    "timeLeft": "Pozostało: {{time}}"
   },
   "getStarted": "Otwórz kod dla tego ekranu:",
   "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.",

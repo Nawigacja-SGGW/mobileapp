@@ -39,20 +39,29 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
           <Text className="ml-4 mr-20 text-2xl text-neutral-300">
             {formatDistance(distanceLeft)}
           </Text>
-          <View className="my-6 w-full flex-1 flex-row items-center justify-center gap-10">
-            <RoutePreferenceOption
-              routePreference={RoutePreference.Walk}
-              setRoutePreference={setRoutePreference}
-              distance={distanceLeft}
-              isActive={routePreference === RoutePreference.Walk}
-            />
-            <RoutePreferenceOption
-              routePreference={RoutePreference.Bike}
-              setRoutePreference={setRoutePreference}
-              distance={distanceLeft}
-              isActive={routePreference === RoutePreference.Bike}
-            />
-          </View>
+          {navigationMode === 'routing' && (
+            <View className="my-6 w-full flex-1 flex-row items-center justify-center gap-10">
+              <RoutePreferenceOption
+                routePreference={RoutePreference.Walk}
+                setRoutePreference={setRoutePreference}
+                distance={distanceLeft}
+                isActive={routePreference === RoutePreference.Walk}
+              />
+              <RoutePreferenceOption
+                routePreference={RoutePreference.Bike}
+                setRoutePreference={setRoutePreference}
+                distance={distanceLeft}
+                isActive={routePreference === RoutePreference.Bike}
+              />
+            </View>
+          )}
+          {navigationMode === 'navigating' && (
+            <View className="flex-row items-end  justify-center gap-5 py-4">
+              <Text className="text-2xl font-bold text-white">
+                {t('navigation.timeLeft', { time: getFormattedTime(distanceLeft) })}
+              </Text>
+            </View>
+          )}
           {Array.isArray(locationFrom) && (
             <View className="flex-row items-end  justify-center gap-5 py-4">
               <TouchableOpacity
@@ -103,7 +112,7 @@ const RoutePreferenceOption = ({
         <View className="w-10">
           <FontAwesome5 size={24} name={iconName} color="white" />
         </View>
-        <Text className="text-xl text-white">{getFormattedTime(distance)}</Text>
+        {isActive && <Text className="text-xl text-white">{getFormattedTime(distance)}</Text>}
       </Pressable>
     </>
   );
