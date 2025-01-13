@@ -9,8 +9,8 @@
     "location": "Lokalizacja",
     "map": "Mapa",
     "details": "Szczegóły",
-    "navigatingTo":"Nawiguję do:",
-    "start":"Start"
+    "start":"Start",
+    "timeLeft": "Pozostało: {{time}}"
   },
   "getStarted": "Otwórz kod dla tego ekranu:",
   "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.",
@@ -101,7 +101,7 @@
   "objects":{
     "noResults" : "Nie znaleziono wyników",
     "sortBy": "SORTUJ PO",
-    "number": "numerze",
+    "number": "numerze budynku",
     "name": "nazwie: od A do Z",
     "search": "Szukaj"
   },
