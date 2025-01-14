@@ -41,6 +41,14 @@ export function DrawerMenu() {
       },
     },
     {
+      label: t('menu.guide'),
+      icon: <FontAwesome5 name="flag" size={32} color="white" />,
+      onPress: () => {
+        navigation.dispatch(DrawerActions.toggleDrawer());
+        console.log("open campus guide")
+      },
+    },
+    {
       label: t('menu.settings'),
       icon: <Feather name="settings" size={32} color="white" />,
       onPress: () => {

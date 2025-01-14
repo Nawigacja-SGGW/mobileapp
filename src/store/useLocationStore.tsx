@@ -18,6 +18,7 @@ interface LocationStore {
   locationTo: undefined | MapLocation;
   searchMode: SearchMode;
   navigationMode?: 'routing' | 'navigating' | 'arrived';
+  isGuideActive: boolean;
   setNavigationMode: (mode: NavigationMode | undefined) => void;
   setRoute: (options: { locationTo?: MapLocation; locationFrom?: MapLocation }) => void;
   setSearchMode: (mode: SearchMode) => void;
@@ -33,6 +34,7 @@ const useLocationStore = create<LocationStore>((set, get) => ({
   filteredLocations: [],
   searchQuery: '',
   searchMode: 'idle',
+  isGuideActive: false,
   navigationMode: undefined,
   setSearchMode: (mode: SearchMode) => {
     get().filterLocations(get().searchQuery);

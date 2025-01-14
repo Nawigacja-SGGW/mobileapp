@@ -1,9 +1,10 @@
 import { create } from 'zustand';
+
 import { MapLocation } from '~/store/useLocationStore';
 
 interface GuideStore {
   points: MapLocation;
-  nextPointId: MapLocation;
+  nextPointId: MapLocation|undefined;
   getNextPoint: () => MapLocation;
   switchNextPoint: () => void;
 }
