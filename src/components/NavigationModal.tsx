@@ -63,7 +63,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
           {Array.isArray(locationFrom) && (
             <View className="flex-row items-end  justify-center gap-5 py-4">
               <TouchableOpacity
-                className="w-60 items-center rounded-full bg-white p-2 text-2xl font-bold text-green-main"
+                className="h-12 w-64 items-center rounded-full bg-white p-2 text-2xl font-bold text-green-main"
                 onPress={async () => {
                   if (navigationMode === 'routing') {
                     setNavigationMode('navigating');
@@ -72,7 +72,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
                     onCancel();
                   }
                 }}>
-                <Text className="font-bold text-green-main">
+                <Text className="text-xl font-bold text-green-main">
                   {navigationMode === 'navigating' ? t('cancel') : t('navigation.start')}
                 </Text>
               </TouchableOpacity>
