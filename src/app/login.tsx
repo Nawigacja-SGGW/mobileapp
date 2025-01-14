@@ -93,20 +93,7 @@ export default function Login() {
           <View style={{ marginTop: 16 }} />
           <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)} />
         </View>
-        <View>
-          <Text className="text-center text-[13px] font-medium text-[#003228]">
-            {' '}
-            {t('login.continueWith')}
-          </Text>
-          <View className="mb-[20px] mt-[10px] flex-row justify-center">
-            <TouchableOpacity className={circleStyleClass}>
-              <Image source={require('./../../assets/google.png')} alt="Google logo" />
-            </TouchableOpacity>
-            <TouchableOpacity className={circleStyleClass}>
-              <Image source={require('./../../assets/apple.png')} alt="Apple logo" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <View />
       </ScrollView>
     </>
   );

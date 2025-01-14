@@ -42,19 +42,19 @@
     "passwordChanged": "Password changed successfully",
     "passwordMismatch": "The passwords are not identical",
     "registrationSuccessful": "Registered successfully",
-    "resetButton": "reset password",
+    "resetButton": "Reset password",
     "resetPassword": "Reset password",
     "resetPasswordText": "Enter a new password for ",
-    "sendButton": "send",
-    "signInButton": "sign in",
-    "signUpButton": "sign up",
+    "sendButton": "Send",
+    "signInButton": "Sign in",
+    "signUpButton": "Sign up",
     "username": {
       "label": "Username",
       "placeholder": "Enter your username"
     },
     "usernameOrEmail": {
-      "label": "Username or e-mail",
-      "placeholder": "Enter your username or e-mail"
+      "label": "E-mail",
+      "placeholder": "Enter your e-mail"
     }
   },
   "map": {
