@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { Text, Image, TouchableOpacity } from 'react-native';
 import Animated, { SlideInUp, SlideOutDown } from 'react-native-reanimated';
 
 import { useInternetConnection } from '~/hooks/useInternetConnection';
