@@ -202,142 +202,134 @@ const useRealUserStore = create<StoreState>()(
   )
 );
 
-const useFakeUserStore = create<StoreState>()(
-  persist(
-    (set, get) => ({
-      id: null,
-      email: null,
-      token: null,
-      statistics: null,
-      searchHistory: [],
-      loading: false,
-      error: null,
+const useFakeUserStore = create<StoreState>((set, get) => ({
+  id: null,
+  email: null,
+  token: null,
+  statistics: null,
+  searchHistory: [],
+  loading: false,
+  error: null,
 
-      login: async (email: string, password: string) => {
-        set({ loading: true, error: null });
-        try {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({ id: 1, email, token: 'token123abc', loading: false, error: null });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-      extendSession: async () => {
-        try {
-          set({ loading: true, error: null });
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({ loading: false, error: null });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-      logout: async () => {
-        try {
-          set({ loading: true, error: null });
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({
-            email: null,
-            token: null,
-            statistics: null,
-            searchHistory: [],
-            loading: false,
-            error: null,
-          });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-      register: async (email: string, password: string) => {
-        set({ loading: true, error: null });
-        try {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({ loading: false, error: null });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-      resetPasswordRequest: async (email: string) => {
-        set({ loading: true, error: null });
-        try {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({ loading: false, error: null });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-      resetPassword: async (newPassword: string) => {
-        set({ loading: true, error: null });
-        try {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({ loading: false, error: null });
-          return Promise.resolve();
-        } catch (error) {
-          console.log('Error resetting password', error);
-          set({ error, loading: false });
-          return Promise.reject(error);
-        }
-      },
-      fetchUserHistory: async () => {
-        set({ loading: true, error: null });
-        try {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({
-            searchHistory: get().searchHistory,
-            loading: false,
-            error: null,
-          });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-      updateUserHistory: async (objectId: number, routeCreatedCount: number) => {
-        set({ loading: true, error: null });
-        try {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          const history = get().searchHistory;
-          history.push({ objectId, routeCreatedCount, timestamp: Date.now() });
-          if (history.length >= 6) {
-            history.shift();
-          }
-          set({ searchHistory: history });
-          set({ loading: false, error: null });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-      fetchUserStatistics: async () => {
-        set({ loading: true, error: null });
-        try {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({
-            statistics: {
-              topFiveVisitedPlaces: get().statistics?.topFiveVisitedPlaces ?? [],
-              uniquePlacesVisitedCount: get().statistics?.uniquePlacesVisitedCount ?? 0,
-              distanceSum: get().statistics?.distanceSum ?? 0,
-            },
-            loading: false,
-            error: null,
-          });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-      updateUserStatistics: async (newDistanceSum: number) => {
-        set({ loading: true, error: null });
-        try {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          set({ loading: false, error: null });
-        } catch (error) {
-          set({ error: (error as Error).message, loading: false });
-        }
-      },
-    }),
-    {
-      name: 'user-fake',
-      storage: createJSONStorage(() => AsyncStorage),
+  login: async (email: string, password: string) => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ id: 1, email, token: 'token123abc', loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
     }
-  )
-);
+  },
+  extendSession: async () => {
+    try {
+      set({ loading: true, error: null });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  logout: async () => {
+    try {
+      set({ loading: true, error: null });
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({
+        email: null,
+        token: null,
+        statistics: null,
+        searchHistory: [],
+        loading: false,
+        error: null,
+      });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  register: async (email: string, password: string) => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  resetPasswordRequest: async (email: string) => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  resetPassword: async (newPassword: string) => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
+      return Promise.resolve();
+    } catch (error) {
+      console.log('Error resetting password', error);
+      set({ error, loading: false });
+      return Promise.reject(error);
+    }
+  },
+  fetchUserHistory: async () => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({
+        searchHistory: get().searchHistory,
+        loading: false,
+        error: null,
+      });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  updateUserHistory: async (objectId: number, routeCreatedCount: number) => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const history = get().searchHistory;
+      history.push({ objectId, routeCreatedCount, timestamp: Date.now() });
+      if (history.length >= 6) {
+        history.shift();
+      }
+      set({ searchHistory: history });
+      set({ loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  fetchUserStatistics: async () => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({
+        statistics: {
+          topFiveVisitedPlaces: get().statistics?.topFiveVisitedPlaces ?? [],
+          uniquePlacesVisitedCount: get().statistics?.uniquePlacesVisitedCount ?? 0,
+          distanceSum: get().statistics?.distanceSum ?? 0,
+        },
+        loading: false,
+        error: null,
+      });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+  updateUserStatistics: async (newDistanceSum: number) => {
+    set({ loading: true, error: null });
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      set({ loading: false, error: null });
+    } catch (error) {
+      set({ error: (error as Error).message, loading: false });
+    }
+  },
+}));
 
 export let useUserStore: UseBoundStore<StoreApi<StoreState>>;
 
