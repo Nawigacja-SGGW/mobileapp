@@ -18,7 +18,7 @@ interface NavigationModalProps {
 export default function NavigationModal({ onCancel, visible, distanceLeft }: NavigationModalProps) {
   const { locationFrom, locationTo, navigationMode, setNavigationMode } = useLocationStore();
   const { t } = useTranslation();
-  const { fetchUserStatistics, updateUserStatistics } = useUserStore();
+  const { updateUserStatistics } = useUserStore();
   const { routePreference, setRoutePreference } = useSettingsStore();
   const { distance } = useRouteQuery(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
 
@@ -68,7 +68,6 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
                   if (navigationMode === 'routing') {
                     setNavigationMode('navigating');
                     await updateUserStatistics(distance);
-                    await fetchUserStatistics();
                   } else {
                     onCancel();
                   }

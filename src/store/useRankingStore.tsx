@@ -1,7 +1,6 @@
 import { create, StoreApi, UseBoundStore } from 'zustand';
 
 import api from '../../api';
-import { useUserStore } from './useUserStore';
 
 interface UserStatistics {
   userId: number;

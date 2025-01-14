@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
+import { useFocusEffect } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, FlatList, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
@@ -16,9 +17,11 @@ export default function StatisticsView() {
 
   const { allObjects } = useObjectsStore();
 
-  React.useEffect(() => {
-    fetchUserStatistics();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserStatistics();
+    }, [])
+  );
 
   return (
     <SafeAreaView className="flex-1 px-4">
