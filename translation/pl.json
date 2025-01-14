@@ -66,8 +66,8 @@
       "placeholder": "Wprowadź swoją nazwę użytkownika"
     },
     "usernameOrEmail": {
-      "label": "Nazwa użytkownika lub e-mail",
-      "placeholder": "Wprowadź nazwę użytkownika lub e-mail"
+      "label": "E-mail",
+      "placeholder": "Wprowadź swój e-mail"
     }
   },
   "map": {
