@@ -33,6 +33,12 @@ export default function StatisticsView() {
       />
 
       <ScrollView className="p-2" style={{ marginTop: height * 0.12 }}>
+        {process.env.EXPO_PUBLIC_MODE === 'development' && (
+          <Text className="text-center text-xl font-bold text-red-500">
+            Statystyki wymagają środowiska production a nie development. Są ściśle związane z
+            serwerem.
+          </Text>
+        )}
         <View className="flex-row items-center rounded-2xl bg-white p-4 shadow-md">
           <MaterialIcons name="directions-walk" size={40} />
           <View className="ml-4">

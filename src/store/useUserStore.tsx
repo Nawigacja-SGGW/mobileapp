@@ -300,15 +300,9 @@ const useFakeUserStore = create<StoreState>((set, get) => ({
       await new Promise((resolve) => setTimeout(resolve, 1000));
       set({
         statistics: {
-          topFiveVisitedPlaces: [
-            { objectId: 1, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 1 },
-            { objectId: 2, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 4 },
-            { objectId: 3, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 6 },
-            { objectId: 4, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 11 },
-            { objectId: 5, timestamp: '0000-01-01T00:00:00', routeCreatedCount: 33 },
-          ],
-          uniquePlacesVisitedCount: 5,
-          distanceSum: 33,
+          topFiveVisitedPlaces: get().statistics?.topFiveVisitedPlaces ?? [],
+          uniquePlacesVisitedCount: get().statistics?.uniquePlacesVisitedCount ?? 0,
+          distanceSum: get().statistics?.distanceSum ?? 0,
         },
         loading: false,
         error: null,
@@ -317,7 +311,7 @@ const useFakeUserStore = create<StoreState>((set, get) => ({
       set({ error: (error as Error).message, loading: false });
     }
   },
-  updateUserStatistics: async () => {
+  updateUserStatistics: async (newDistanceSum: number) => {
     set({ loading: true, error: null });
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
