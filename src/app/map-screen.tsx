@@ -614,7 +614,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
             {shownLocations.map((item) => (
               <TouchableOpacity
                 key={item.id + item.type === 'Historia' ? 'history' : null}
-                className="flex-row items-center bg-white p-2"
+                className="flex-row items-center bg-white px-4 py-2"
                 onPress={async () => {
                   if (searchMode === 'searchfrom') {
                     setRoute({
@@ -635,7 +635,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                 <View>
                   <FontAwesome5 name={typeToIcon(item.type)} size={20} color="black" />
                 </View>
-                <Text className="ml-3 text-lg text-black">{item.name}</Text>
+                <Text className="ml-4 text-lg text-black">{item.name}</Text>
               </TouchableOpacity>
             ))}
             {shownLocations.length === 0 && (
