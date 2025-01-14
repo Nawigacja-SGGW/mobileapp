@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
+import Animated, { SlideInUp, SlideOutDown } from 'react-native-reanimated';
 
 import { useInternetConnection } from '~/hooks/useInternetConnection';
 
@@ -10,7 +11,10 @@ export const NoInternet = () => {
 
   return (
     !isConnected && (
-      <View className="absolute z-50 h-full w-screen flex-1 items-center justify-center bg-green-main">
+      <Animated.View
+        entering={SlideInUp}
+        exiting={SlideOutDown}
+        className="absolute z-50 h-full w-screen flex-1 items-center justify-center bg-green-main">
         <Image source={require('./../../assets/no-internet.png')} />
         <Text className="pb-2 text-2xl font-bold text-white">{t('noInternet.title')}</Text>
         <Text className="text-xl text-neutral-200">{t('noInternet.text')}</Text>
@@ -23,7 +27,7 @@ export const NoInternet = () => {
             {t('noInternet.tryAgain')}
           </Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     )
   );
 };
