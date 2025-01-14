@@ -1,9 +1,9 @@
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import Drawer from 'expo-router/drawer';
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
-import * as Location from 'expo-location';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 
 import TopHeader from '~/components/TopHeader';
 import useLocationStore from '~/store/useLocationStore';
@@ -87,30 +87,6 @@ const LocationDetailsScreen = () => {
             style={styles.navigationButton}>
             <Text style={styles.navigationButtonText}>Nawiguj</Text>
           </TouchableOpacity>
-
-          {/* Photos Section */}
-          <View style={styles.photosContainer}>
-            <View style={styles.photoPlaceholder}>
-              <Text style={styles.photoText}>photos</Text>
-              <TouchableOpacity
-                onPress={() => {}}
-                style={[styles.photoButton, styles.Left, { transform: [{ scaleY: 1.5 }] }]}>
-                <FontAwesome5 name="chevron-left" size={30} color="#003228" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {}}
-                style={[styles.photoButton, styles.Right, { transform: [{ scaleY: 1.5 }] }]}>
-                <FontAwesome5 name="chevron-right" size={30} color="#003228" />
-              </TouchableOpacity>
-            </View>
-
-            {/* Dots indicator */}
-            <View style={styles.dotsContainer}>
-              {[1, 2, 3].map((_, index) => (
-                <View key={index} style={[styles.dot, index === 0 ? styles.activeDot : null]} />
-              ))}
-            </View>
-          </View>
         </ScrollView>
       </View>
     </>
@@ -140,7 +116,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 24,
   },
@@ -154,11 +130,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   detailText: {
+    fontSize: 18,
     color: 'white',
     flex: 1,
   },
   description: {
     color: 'white',
+    fontSize: 16,
     lineHeight: 24,
     marginBottom: 24,
   },

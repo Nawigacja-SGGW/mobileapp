@@ -14,6 +14,7 @@ import SearchIcon1 from '../../assets/search1.svg';
 import Loading from '../components/Loading';
 
 import NavigationModal from '~/components/NavigationModal';
+import { NoInternet } from '~/components/NoInternet';
 import NoLocationPermission from '~/components/NoLocationPemission';
 import LocationModal from '~/components/ObjectModal';
 import TopHeader from '~/components/TopHeader';
@@ -25,7 +26,6 @@ import useLocationStore from '~/store/useLocationStore';
 import { useObjectsStore } from '~/store/useObjectsStore';
 import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
 import { useUserStore } from '~/store/useUserStore';
-import { NoInternet } from '~/components/NoInternet';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
