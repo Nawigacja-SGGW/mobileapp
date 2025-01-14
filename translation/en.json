@@ -1,4 +1,7 @@
 {
+  "loading": "Loading",
+  "noLocationPermission": "No location permission",
+
   "button": {
     "polish": "Polish",
     "english": "English"
@@ -9,8 +12,9 @@
     "location": "Location",
     "map": "Map",
     "details": "Details",
-    "navigatingTo":"Navigating to:",
-    "start":"Start"
+    "start":"Start",
+    "timeLeft": "Time left: {{time}}"
+
   },
   "menu": {
     "map": "Map",
@@ -69,17 +73,22 @@
     "backToLogin" : "Back to login",
     "confirmation" : "Check email for reset link",
     "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
-    "didntReceiveEmail" : "Didn't receive an email?"
+    "didntReceiveEmail" : "Didn't receive an email?",
+    "emailSentSuccessfully": "Email sent successfully",
+    "fillAllFields": "Complete all fields",
+    "errorOccurred": "An error occurred",
+    "passwordMismatch": "The passwords are not identical",
+    "passwordChanged": "Password changed successfully",
+    "registrationSuccessful": "Registered successfully"
+
   },
   "objects":{
     "noResults" : "No results found",
     "sortBy": "SORT BY",
-    "number": "number",
+    "number": "building number",
     "name": "name: from A to Z",
     "search": "Search"
   },
-
-  "loading": "Loading",
 
   "profile": {
     "email": "Email",
@@ -107,6 +116,19 @@
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm New Password",
     "resetButton": "Reset Password"
+  },
+  "rankingView": {
+    "users_with_the_most_visits_in_one_place": "Users with the most visits in one place",
+    "users_with_the_most_visited_places": "Users with the most visited places",
+    "users_with_the_most_distance_traveled": "Users with the most distance traveled",
+    "your_place_in_ranking": "Your place in ranking",
+    "you": "You"
+  },
+  "statistics": {
+    "totalDistance": "Total distance",
+    "times": "{{count}} time",
+    "times_plural": "{{count}} times",
+    "visitedPlacesNumber": "Number of visited places",
+    "noData": "No data"
   }
-
 }
