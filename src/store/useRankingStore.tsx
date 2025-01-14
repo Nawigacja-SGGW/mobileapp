@@ -86,11 +86,12 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+
       set({
         userStatistics: [
           {
-            userId: 1,
-            userEmail: '0Kp8o@example.com',
+            userId: 2,
+            userEmail: 'dostepu_do_innych_users@example.com',
             statistics: {
               topFiveVisitedPlaces: [
                 { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 1 },
@@ -102,8 +103,8 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
             },
           },
           {
-            userId: 2,
-            userEmail: 'RbF7w@example.com',
+            userId: 3,
+            userEmail: 'w_trybie_dev_nie_mamy@example.com',
             statistics: {
               topFiveVisitedPlaces: [
                 { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 7 },
@@ -117,8 +118,8 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
             },
           },
           {
-            userId: 2,
-            userEmail: '4dXG3@example.com',
+            userId: 4,
+            userEmail: 'wiec_dane_sa_od_czapy@example.com',
             statistics: {
               topFiveVisitedPlaces: [
                 { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 2 },
@@ -129,7 +130,7 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
             },
           },
           {
-            userId: 2,
+            userId: 5,
             userEmail: 'x2rG7@example.com',
             statistics: {
               topFiveVisitedPlaces: [
@@ -144,7 +145,7 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
             },
           },
           {
-            userId: 2,
+            userId: 6,
             userEmail: 'vxYlA@example.com',
             statistics: {
               topFiveVisitedPlaces: [
@@ -156,21 +157,6 @@ const useFakeRankingStore = create<StoreState>((set, get) => ({
               ],
               uniquePlacesVisitedCount: 4,
               distanceSum: 110,
-            },
-          },
-          {
-            userId: 2,
-            userEmail: 'aBcYK@example.com',
-            statistics: {
-              topFiveVisitedPlaces: [
-                { objectId: 1, timestamp: '0000-00-00T00:00', routeCreatedCount: 12 },
-                { objectId: 2, timestamp: '0000-00-00T00:00', routeCreatedCount: 14 },
-                { objectId: 5, timestamp: '0000-00-00T00:00', routeCreatedCount: 13 },
-                { objectId: 6, timestamp: '0000-00-00T00:00', routeCreatedCount: 12 },
-                { objectId: 4, timestamp: '0000-00-00T00:00', routeCreatedCount: 11 },
-              ],
-              uniquePlacesVisitedCount: 4,
-              distanceSum: 135,
             },
           },
         ],

@@ -97,6 +97,12 @@ const RankingView = () => {
       <ScrollView className="flex-1 bg-gray-100" style={{ marginTop: height * 0.03 }}>
         {/* Content */}
         <View className="p-4">
+          {process.env.EXPO_PUBLIC_MODE === 'development' && (
+            <Text className="pt-4 text-center text-xl font-bold text-red-500">
+              Rankingi wymagają środowiska production a nie development. Są ściśle związane z
+              serwerem.
+            </Text>
+          )}
           {/* Ranking List: Users with the most visits in one place */}
           <RankingList
             title={t('rankingView.users_with_the_most_visits_in_one_place')}

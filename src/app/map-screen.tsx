@@ -1,14 +1,12 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import MapLibreGL, { UserTrackingMode, CameraRef } from '@maplibre/maplibre-react-native';
-import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
+import MapLibreGL, { UserTrackingMode } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
 import { useFocusEffect } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
 
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
@@ -71,7 +69,7 @@ export default function MapScreen() {
     distance,
     userLocation: uLocation,
   } = usePlaceNavigation(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
-  const { loading, fetchData, allObjects } = useObjectsStore();
+  const { loading, allObjects } = useObjectsStore();
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -91,12 +89,6 @@ export default function MapScreen() {
     if (searchMode === 'idle') setSearchMode('searchto');
     else setSearchMode('idle');
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchData();
-    }, [])
-  );
 
   useFocusEffect(
     useCallback(() => {

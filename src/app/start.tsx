@@ -1,22 +1,37 @@
-import { Link, useLocalSearchParams } from 'expo-router';
+import { Link, useFocusEffect, useLocalSearchParams, useNavigation } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { View, Text, Image } from 'react-native';
+import { View, Image } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import Background from '../../assets/background.svg';
 
 import { AppButton } from '~/components/AppButton';
 import { useObjectsStore } from '~/store/useObjectsStore';
+import { useUserStore } from '~/store/useUserStore';
 
 export default function Start() {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const params = useLocalSearchParams();
+  const { fetchData } = useObjectsStore();
+  const { token } = useUserStore();
 
   React.useEffect(() => {
     console.log('Application start', params);
   }, []);
 
   const { t } = useTranslation();
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+
+      if (token) {
+        navigation.navigate('map-screen');
+      }
+    }, [])
+  );
 
   return (
     <>
