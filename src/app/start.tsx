@@ -27,7 +27,7 @@ export default function Start() {
     useCallback(() => {
       fetchData();
 
-      if (token) {
+      if (token !== null) {
         navigation.navigate('map-screen');
       }
     }, [])
