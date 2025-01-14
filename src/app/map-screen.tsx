@@ -27,6 +27,7 @@ import useLocationStore from '~/store/useLocationStore';
 import { useObjectsStore } from '~/store/useObjectsStore';
 import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
 import { useUserStore } from '~/store/useUserStore';
+import { NoInternet } from '~/components/NoInternet';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -215,6 +216,7 @@ export default function MapScreen() {
     <>
       {(isLoading || loading) && <Loading />}
       {errorMsg && <NoLocationPermission />}
+      <NoInternet />
 
       <Drawer.Screen
         options={{
