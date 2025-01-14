@@ -1,6 +1,6 @@
-import { Link, useFocusEffect, useNavigation } from 'expo-router';
+import { Link, useNavigation } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { View, Text, Image, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
@@ -10,7 +10,6 @@ import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
 import Loading from '~/components/Loading';
 import { Logo } from '~/components/Logo';
-import { useObjectsStore } from '~/store/useObjectsStore';
 import { useUserStore } from '~/store/useUserStore';
 
 export default function Login() {
@@ -18,8 +17,7 @@ export default function Login() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { t } = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const { token, loading, login } = useUserStore();
-  const { fetchData } = useObjectsStore();
+  const { loading, login } = useUserStore();
 
   const circleStyleClass =
     'h-[44px] w-[44px] rounded-full justify-center items-center bg-[#cccccc] mx-1';
@@ -27,16 +25,6 @@ export default function Login() {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchData();
-
-      if (token) {
-        navigation.navigate('map-screen');
-      }
-    }, [])
-  );
 
   const onSubmit = async (data: FieldValues) => {
     if (!data.usernameOrEmail || !data.password) {
