@@ -93,12 +93,6 @@ export default function MapScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchData();
-    }, [])
-  );
-
-  useFocusEffect(
-    useCallback(() => {
       (async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {

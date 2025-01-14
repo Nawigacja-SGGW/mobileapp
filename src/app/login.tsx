@@ -1,38 +1,42 @@
-import { Link, useNavigation } from 'expo-router';
+import { Link, useFocusEffect, useNavigation } from 'expo-router';
 import Drawer from 'expo-router/drawer';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  ToastAndroid,
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { AppButton } from '~/components/AppButton';
 import { AppInput, AppSecureInput } from '~/components/AppInput';
 import Loading from '~/components/Loading';
 import { Logo } from '~/components/Logo';
+import { useObjectsStore } from '~/store/useObjectsStore';
 import { useUserStore } from '~/store/useUserStore';
 
 export default function Login() {
   const { control, handleSubmit } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { t } = useTranslation();
-  const externalIconsSize = 44;
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
-  const { loading, login } = useUserStore();
+  const { token, loading, login } = useUserStore();
+  const { fetchData } = useObjectsStore();
 
-  const circleStyleClass = "h-[44px] w-[44px] rounded-full justify-center items-center bg-[#cccccc] mx-1";
+  const circleStyleClass =
+    'h-[44px] w-[44px] rounded-full justify-center items-center bg-[#cccccc] mx-1';
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+
+      if (token) {
+        navigation.navigate('map-screen');
+      }
+    }, [])
+  );
 
   const onSubmit = async (data: FieldValues) => {
     if (!data.usernameOrEmail || !data.password) {
@@ -54,7 +58,7 @@ export default function Login() {
       <Drawer.Screen options={{ headerShown: false }} />
 
       <ScrollView
-        className="p-[20px] bg-white"
+        className="bg-white p-[20px]"
         contentContainerStyle={{
           height: '100%',
           justifyContent: 'space-between',
@@ -93,14 +97,20 @@ export default function Login() {
             )}
           />
           <Link href={{ pathname: '/forgotPassword' }} asChild>
-            <Text className="text-[#003228] text-[12px] text-right underline mt-[10px] font-bold"> {t('login.password.forgotPassword')}</Text>
+            <Text className="mt-[10px] text-right text-[12px] font-bold text-[#003228] underline">
+              {' '}
+              {t('login.password.forgotPassword')}
+            </Text>
           </Link>
           <View style={{ marginTop: 16 }} />
           <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)} />
         </View>
         <View>
-          <Text className="text-[#003228] text-[13px] text-center font-medium"> {t('login.continueWith')}</Text>
-          <View className="flex-row justify-center mt-[10px] mb-[20px]">
+          <Text className="text-center text-[13px] font-medium text-[#003228]">
+            {' '}
+            {t('login.continueWith')}
+          </Text>
+          <View className="mb-[20px] mt-[10px] flex-row justify-center">
             <TouchableOpacity className={circleStyleClass}>
               <Image source={require('./../../assets/google.png')} alt="Google logo" />
             </TouchableOpacity>
