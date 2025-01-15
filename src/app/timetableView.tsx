@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import {View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions} from 'react-native';
 
 import TopHeader from '~/components/TopHeaderSort';
-import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection'
+import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection';
+import SearchBar from '~/components/SearchBar';
 
 export default function TimeTableView() {
     const [isSortVisible, setSortVisible] = useState(false);
@@ -43,11 +44,16 @@ export default function TimeTableView() {
       { id: 'location', label: 'events.location' },
       { id: 'category', label: 'events.category' }
     ];
+    const [searchQuery, setSearchQuery] = useState('');
+    
     return (
         <>
             <Drawer.Screen options={{ header: () =>
                 <TopHeader onSortClick = {toggleSortSheet} filter onFilterClick = {toggleFilterSheet} />
             }}/>
+            <View className="flex-1 bg-white px-3">
+              <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+            </View>
             {isSortVisible && (
                 <BottomChoiceSection
                 slideAnim={slideAnim}
