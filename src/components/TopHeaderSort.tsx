@@ -27,11 +27,11 @@ export default function TopHeader({onSortClick, filter = false, onFilterClick = 
           <FontAwesome6 name="arrow-right-arrow-left" size={28} color="#fff" />
         </View>
       </TouchableOpacity>
-      {filter ? (
+      {filter && (
         <TouchableOpacity className="p-2" onPress={onFilterClick}>
           <Feather name="filter" size={28} color="white" />
         </TouchableOpacity>
-      ) : (<></>)}
+      )}
     </View>
   );
 }
