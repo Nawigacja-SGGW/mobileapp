@@ -66,9 +66,8 @@
     "map": "Map",
     "objects": "Objects",
     "profile": "Profile",
-    "settings": "Settings",
     "timetable": "Timetable",
-    "logout": "Logout"
+    "settings": "Settings"
   },
   "navigation": {
     "counter": "Counter",
@@ -90,8 +89,8 @@
     "navigate": "Navigate"
   },
   "objects":{
-    "number": "number",
-    "name": "name: from A to Z"
+    "name": "name: from A to Z",
+    "number": "building number"
   },
   "events": {
     "date": "date",
@@ -102,9 +101,6 @@
   "filterBy": "FILER BY",
   "search": "Search",
   "noResults" : "No results found",
-
-  "loading": "Loading",
-
   "profile": {
     "email": "Email",
     "logOut": "Log out",
