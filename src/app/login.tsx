@@ -3,15 +3,7 @@ import Drawer from 'expo-router/drawer';
 import React, { useState } from 'react';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  ToastAndroid,
-} from 'react-native';
+import { View, Text, ScrollView, ToastAndroid } from 'react-native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import { AppButton } from '~/components/AppButton';
@@ -24,11 +16,8 @@ export default function Login() {
   const { control, handleSubmit } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { t } = useTranslation();
-  const externalIconsSize = 44;
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { loading, login } = useUserStore();
-
-  const circleStyleClass = "h-[44px] w-[44px] rounded-full justify-center items-center bg-[#cccccc] mx-1";
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
@@ -54,7 +43,7 @@ export default function Login() {
       <Drawer.Screen options={{ headerShown: false }} />
 
       <ScrollView
-        className="p-[20px] bg-white"
+        className="bg-white p-[20px]"
         contentContainerStyle={{
           height: '100%',
           justifyContent: 'space-between',
@@ -93,22 +82,15 @@ export default function Login() {
             )}
           />
           <Link href={{ pathname: '/forgotPassword' }} asChild>
-            <Text className="text-[#003228] text-[12px] text-right underline mt-[10px] font-bold"> {t('login.password.forgotPassword')}</Text>
+            <Text className="mt-[10px] text-right text-[12px] font-bold text-[#003228] underline">
+              {' '}
+              {t('login.password.forgotPassword')}
+            </Text>
           </Link>
           <View style={{ marginTop: 16 }} />
           <AppButton title={t('login.signInButton')} onPress={handleSubmit(onSubmit)} />
         </View>
-        <View>
-          <Text className="text-[#003228] text-[13px] text-center font-medium"> {t('login.continueWith')}</Text>
-          <View className="flex-row justify-center mt-[10px] mb-[20px]">
-            <TouchableOpacity className={circleStyleClass}>
-              <Image source={require('./../../assets/google.png')} alt="Google logo" />
-            </TouchableOpacity>
-            <TouchableOpacity className={circleStyleClass}>
-              <Image source={require('./../../assets/apple.png')} alt="Apple logo" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <View />
       </ScrollView>
     </>
   );

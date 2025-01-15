@@ -1,135 +1,134 @@
 {
-  "loading": "Loading",
-  "noLocationPermission": "No location permission",
-
   "button": {
-    "polish": "Polish",
-    "english": "English"
+    "english": "English",
+    "polish": "Polish"
   },
-  "navigation": {
-    "home": "Home",
-    "counter": "Counter",
-    "location": "Location",
-    "map": "Map",
-    "details": "Details",
-    "start":"Start",
-    "timeLeft": "Time left: {{time}}"
-
+  "cancel": "Cancel",
+  "changeCode": "Change any text, save the file and the app will update automatically.",
+  "getStarted": "Open this display's code:",
+  "loading": "Loading",
+  "login": {
+    "backToLogin": "Back to login",
+    "confirmNewPassword": {
+      "label": "Confirm new password",
+      "placeholder": "Enter new password"
+    },
+    "confirmPassword": {
+      "label": "Confirm password",
+      "placeholder": "Enter your password"
+    },
+    "confirmation": "Check email for reset link",
+    "confirmationText": "An email has been sent to your email address. Check your inbox and click the reset link provided.",
+    "continueWith": "Or continue with",
+    "didntReceiveEmail": "Didn't receive an email?",
+    "email": {
+      "label": "E-mail",
+      "placeholder": "Enter your e-mail"
+    },
+    "emailSentSuccessfully": "Email sent successfully",
+    "errorOccurred": "An error occurred",
+    "fillAllFields": "Complete all fields",
+    "forgotPassword": "Forgot password",
+    "forgotPasswordText": "Please enter the e-mail address and we will send you instructions to reset your password",
+    "newPassword": {
+      "label": "New password",
+      "placeholder": "Enter new password"
+    },
+    "password": {
+      "forgotPassword": "Forgot password?",
+      "label": "Password",
+      "placeholder": "Enter your password"
+    },
+    "passwordChanged": "Password changed successfully",
+    "passwordMismatch": "The passwords are not identical",
+    "registrationSuccessful": "Registered successfully",
+    "resetButton": "Reset password",
+    "resetPassword": "Reset password",
+    "resetPasswordText": "Enter a new password for ",
+    "sendButton": "Send",
+    "signInButton": "Sign in",
+    "signUpButton": "Sign up",
+    "username": {
+      "label": "Username",
+      "placeholder": "Enter your username"
+    },
+    "usernameOrEmail": {
+      "label": "E-mail",
+      "placeholder": "Enter your e-mail"
+    }
+  },
+  "map": {
+    "search.destination": "Destination",
+    "search.startingPoint": "Your location"
   },
   "menu": {
+    "logout": "Logout",
     "map": "Map",
     "objects": "Objects",
     "profile": "Profile",
-    "settings": "Settings",
-    "guide": "Campus guide",
-    "logout": "Logout"
+    "settings": "Settings"
   },
-  "map": {
-    "search.startingPoint": "Your location",
-    "search.destination": "Destination"
+  "navigation": {
+    "counter": "Counter",
+    "details": "Details",
+    "home": "Home",
+    "location": "Location",
+    "map": "Map",
+    "start": "Start",
+    "timeLeft": "Time left: {{time}}"
   },
-  "object":{
-    "moreInfo":"More Information",
-    "navigate":"Navigate"
+  "noInternet": {
+    "text": "The application requires a constant internet connection.",
+    "title": "No internet connection!",
+    "tryAgain": "Try again"
   },
-  "login":{
-    "usernameOrEmail" : {
-      "label" : "Username or e-mail",
-      "placeholder" : "Enter your username or e-mail"
-    },
-    "password" : {
-      "label" : "Password",
-      "placeholder" : "Enter your password",
-      "forgotPassword" : "Forgot password?"
-    },
-    "username" : {
-      "label" : "Username",
-      "placeholder" : "Enter your username"
-    },
-    "email" : {
-      "label" : "E-mail",
-      "placeholder" : "Enter your e-mail"
-    },
-    "confirmPassword" : {
-      "label" : "Confirm password",
-      "placeholder" : "Enter your password"
-    },
-    "newPassword" : {
-      "label" : "New password",
-      "placeholder" : "Enter new password"
-    },
-    "confirmNewPassword" : {
-      "label" : "Confirm new password",
-      "placeholder" : "Enter new password"
-    },
-    "signInButton" : "sign in",
-    "signUpButton":"sign up",
-    "sendButton":"send",
-    "resetButton":"reset password",
-    "forgotPassword":"Forgot password",
-    "forgotPasswordText":"Please enter the e-mail address and we will send you instructions to reset your password",
-    "resetPassword":"Reset password",
-    "resetPasswordText":"Enter a new password for ",
-    "continueWith" : "Or continue with",
-    "backToLogin" : "Back to login",
-    "confirmation" : "Check email for reset link",
-    "confirmationText" : "An email has been sent to your email address. Check your inbox and click the reset link provided.",
-    "didntReceiveEmail" : "Didn't receive an email?",
-    "emailSentSuccessfully": "Email sent successfully",
-    "fillAllFields": "Complete all fields",
-    "errorOccurred": "An error occurred",
-    "passwordMismatch": "The passwords are not identical",
-    "passwordChanged": "Password changed successfully",
-    "registrationSuccessful": "Registered successfully"
-
+  "noLocationPermission": "No location permission",
+  "object": {
+    "moreInfo": "More Information",
+    "navigate": "Navigate"
   },
-  "objects":{
-    "noResults" : "No results found",
-    "sortBy": "SORT BY",
-    "number": "building number",
+  "objects": {
     "name": "name: from A to Z",
-    "search": "Search"
+    "noResults": "No results found",
+    "number": "building number",
+    "search": "Search",
+    "sortBy": "SORT BY"
   },
-
   "profile": {
     "email": "Email",
+    "logOut": "Log out",
     "myKilometers": "My kilometers",
-    "myRoutes": "My routes",
-    "logOut": "Log out"
-  },
-  "getStarted": "Open this display's code:",
-  "changeCode": "Change any text, save the file and the app will update automatically.",
-  "cancel":"Cancel",
-
-  "settings": {
-    "routePreferences": "Route Preferences",
-    "language": "Language",
-    "changePassword": "Change a Password",
-    "informations": "Informations",
-    "save": "Save",
-    "saved": "Saved",
-    "walk": "By foot",
-    "bike": "By bike"
-},
-"resetPassword": {
-    "title": "Change Password",
-    "currentPassword": "Current Password",
-    "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "resetButton": "Reset Password"
+    "myRoutes": "My routes"
   },
   "rankingView": {
-    "users_with_the_most_visits_in_one_place": "Users with the most visits in one place",
-    "users_with_the_most_visited_places": "Users with the most visited places",
     "users_with_the_most_distance_traveled": "Users with the most distance traveled",
-    "your_place_in_ranking": "Your place in ranking",
-    "you": "You"
+    "users_with_the_most_visited_places": "Users with the most visited places",
+    "users_with_the_most_visits_in_one_place": "Users with the most visits in one place",
+    "you": "You",
+    "your_place_in_ranking": "Your place in ranking"
+  },
+  "resetPassword": {
+    "confirmNewPassword": "Confirm New Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "resetButton": "Reset Password",
+    "title": "Change Password"
+  },
+  "settings": {
+    "bike": "By bike",
+    "changePassword": "Change a Password",
+    "informations": "Informations",
+    "language": "Language",
+    "routePreferences": "Route Preferences",
+    "save": "Save",
+    "saved": "Saved",
+    "walk": "By foot"
   },
   "statistics": {
-    "totalDistance": "Total distance",
+    "noData": "No data",
     "times": "{{count}} time",
     "times_plural": "{{count}} times",
-    "visitedPlacesNumber": "Number of visited places",
-    "noData": "No data"
+    "totalDistance": "Total distance",
+    "visitedPlacesNumber": "Number of visited places"
   }
 }

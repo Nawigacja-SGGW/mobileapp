@@ -1,14 +1,12 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import MapLibreGL, { UserTrackingMode, CameraRef } from '@maplibre/maplibre-react-native';
-import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
+import MapLibreGL, { UserTrackingMode } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
 import { useFocusEffect } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
 
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
@@ -16,6 +14,7 @@ import SearchIcon1 from '../../assets/search1.svg';
 import Loading from '../components/Loading';
 
 import NavigationModal from '~/components/NavigationModal';
+import { NoInternet } from '~/components/NoInternet';
 import NoLocationPermission from '~/components/NoLocationPemission';
 import LocationModal from '~/components/ObjectModal';
 import TopHeader from '~/components/TopHeader';
@@ -70,7 +69,7 @@ export default function MapScreen() {
     distance,
     userLocation: uLocation,
   } = usePlaceNavigation(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
-  const { loading, fetchData, allObjects } = useObjectsStore();
+  const { loading, allObjects } = useObjectsStore();
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -90,12 +89,6 @@ export default function MapScreen() {
     if (searchMode === 'idle') setSearchMode('searchto');
     else setSearchMode('idle');
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchData();
-    }, [])
-  );
 
   useFocusEffect(
     useCallback(() => {
@@ -215,6 +208,7 @@ export default function MapScreen() {
     <>
       {(isLoading || loading) && <Loading />}
       {errorMsg && <NoLocationPermission />}
+      <NoInternet />
 
       <Drawer.Screen
         options={{
@@ -620,7 +614,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
             {shownLocations.map((item) => (
               <TouchableOpacity
                 key={item.id + item.type === 'Historia' ? 'history' : null}
-                className="flex-row items-center bg-white p-2"
+                className="flex-row items-center bg-white px-4 py-2"
                 onPress={async () => {
                   if (searchMode === 'searchfrom') {
                     setRoute({
@@ -641,7 +635,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                 <View>
                   <FontAwesome5 name={typeToIcon(item.type)} size={20} color="black" />
                 </View>
-                <Text className="ml-3 text-lg text-black">{item.name}</Text>
+                <Text className="ml-4 text-lg text-black">{item.name}</Text>
               </TouchableOpacity>
             ))}
             {shownLocations.length === 0 && (
