@@ -16,13 +16,23 @@ interface NavigationModalProps {
 }
 
 export default function NavigationModal({ onCancel, visible, distanceLeft }: NavigationModalProps) {
-  const { locationFrom, locationTo, navigationMode, setNavigationMode } = useLocationStore();
+  const { locationFrom, locationTo, navigationMode, isGuideActive, setNavigationMode } =
+    useLocationStore();
   const { t } = useTranslation();
   const { fetchUserStatistics, updateUserStatistics } = useUserStore();
   const { routePreference, setRoutePreference } = useSettingsStore();
   const { distance } = useRouteQuery(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
 
   if (!locationTo || !visible || distanceLeft === 0) return <></>;
+
+  if (isGuideActive)
+    return (
+      <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">
+        <View className="flex w-full justify-end bg-green-main">
+          <></>
+        </View>
+      </View>
+    );
 
   return (
     <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">

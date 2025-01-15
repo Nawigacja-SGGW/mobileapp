@@ -17,7 +17,7 @@ interface LocationStore {
   locationFrom: undefined | MapLocation | [number, number];
   locationTo: undefined | MapLocation;
   searchMode: SearchMode;
-  navigationMode?: 'routing' | 'navigating' | 'arrived';
+  navigationMode?: 'routing' | 'navigating' | 'arrived' | 'guide' | 'guidePreview';
   isGuideActive: boolean;
   setNavigationMode: (mode: NavigationMode | undefined) => void;
   setRoute: (options: { locationTo?: MapLocation; locationFrom?: MapLocation }) => void;
@@ -25,6 +25,7 @@ interface LocationStore {
   setSearchQuery: (query: string) => void;
   filterLocations: (query: string) => void;
   clearFilteredLocations: () => void;
+  startCampusGuide: () => void;
 }
 
 const useLocationStore = create<LocationStore>((set, get) => ({
@@ -42,6 +43,14 @@ const useLocationStore = create<LocationStore>((set, get) => ({
   },
   setNavigationMode: (mode: NavigationMode) => set({ navigationMode: mode }),
   setSearchQuery: (query) => set({ searchQuery: query }),
+
+  startCampusGuide: () => {
+    return set({ isGuideActive: true, navigationMode: 'guidePreview' });
+  },
+  stopCampusGuide: () => {
+    return set({ isGuideActive: false, navigationMode: undefined });
+  },
+
   filterLocations: (query) =>
     set((state) => {
       return {

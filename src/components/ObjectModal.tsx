@@ -105,6 +105,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
                     userLocation.current.coords.latitude,
                   ] as [number, number],
                 });
+
                 setNavigationMode('routing');
               }}>
               <Text className="font-bold text-green-main">{t('object.navigate')}</Text>
