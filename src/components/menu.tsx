@@ -7,6 +7,7 @@ import { TouchableOpacity, View, Text, ToastAndroid } from 'react-native';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 import Loading from './Loading';
+import RankingIcon from '../../assets/leaderboard.svg';
 import StatisticsIcon from '../../assets/trending-up.svg';
 
 import { LanguageSwitch } from '~/components/LanguageSwitch';
@@ -108,9 +109,23 @@ export function DrawerMenu() {
 
         <View className="mb-4 flex-row justify-between">
           <LanguageSwitch />
-          <StatisticsButton />
+          <View className="flex-row gap-6">
+            <StatisticsButton />
+            <RankingButton />
+          </View>
         </View>
       </View>
+    </>
+  );
+}
+
+function RankingButton() {
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  return (
+    <>
+      <TouchableOpacity onPress={() => navigation.navigate('rankingView')}>
+        <RankingIcon width={32} height={32} fill="white" />
+      </TouchableOpacity>
     </>
   );
 }
