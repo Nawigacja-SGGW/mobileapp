@@ -41,6 +41,13 @@ export function DrawerMenu() {
       },
     },
     {
+      label: t('menu.timetable'),
+      icon: <Feather name="clock" size={32} color="white" />,
+      onPress: () => {
+        navigation.navigate('timetableView');
+      },
+    },
+    {
       label: t('menu.settings'),
       icon: <Feather name="settings" size={32} color="white" />,
       onPress: () => {
