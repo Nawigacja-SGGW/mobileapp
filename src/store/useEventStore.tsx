@@ -174,5 +174,11 @@ const useFakeEvents = create<StoreState>((set, get) => ({
 
 export let useEvents: UseBoundStore<StoreApi<StoreState>>;
 
-if (process.env.EXPO_PUBLIC_MODE === 'development') useEvents = useFakeEvents;
-else useEvents = useRealEvents;
+if (process.env.EXPO_PUBLIC_MODE === 'development') {
+  useEvents = useFakeEvents;
+  console.log("Using Fake Events");
+}
+else {
+  useEvents = useRealEvents;
+  console.log("Using Real Events");
+}

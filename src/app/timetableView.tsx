@@ -9,13 +9,19 @@ import TopHeader from '~/components/TopHeaderSort';
 import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection';
 import SearchBar from '~/components/SearchBar';
 
+import {PointObject} from '~/store/useObjectsStore';
+import {useEvents} from '~/store/useEventStore';
+
 export default function TimeTableView() {
     const [isSortVisible, setSortVisible] = useState(false);
     const [isFilterVisible, setFilterVisible] = useState(false);
     const screenHeight = Dimensions.get('window').height;
     const slideAnim = useRef(new Animated.Value(screenHeight)).current;
+
     const [sortedBy, setSortedBy] = useState('date');
     const [filterBy, setFilteredBy] = useState('none');
+    const [searchQuery, setSearchQuery] = useState('');
+
     const toggleSortSheet = () => {
         Animated.timing(slideAnim, {
             toValue: isSortVisible ? screenHeight : screenHeight - 200,
@@ -34,6 +40,7 @@ export default function TimeTableView() {
       setFilterVisible(!isFilterVisible);
       setSortVisible(false);
     }
+
     const sortOptions = [
       {id: 'date', label: 'events.date'},
       { id: 'location', label: 'events.location' },
@@ -44,7 +51,6 @@ export default function TimeTableView() {
       { id: 'location', label: 'events.location' },
       { id: 'category', label: 'events.category' }
     ];
-    const [searchQuery, setSearchQuery] = useState('');
     
     return (
         <>
@@ -53,6 +59,7 @@ export default function TimeTableView() {
             }}/>
             <View className="flex-1 bg-white px-3">
               <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              <ObjectListSection sortedBy={sortedBy} filteredBy={filterBy} searchQuery={searchQuery}/>
             </View>
             {isSortVisible && (
                 <BottomChoiceSection
@@ -76,4 +83,68 @@ export default function TimeTableView() {
             )}
         </>
     );
+}
+
+type ObjectListArgs = {
+  sortedBy :string;
+  filteredBy: string;
+  searchQuery: string;
+};
+
+function ObjectListSection(args: ObjectListArgs) {
+  const eventsStore = useEvents();
+  const { t } = useTranslation();
+
+  let events :PointObject[];
+
+  switch(args.sortedBy) {
+    case "date": {
+      events = eventsStore.sortedByDate();
+      break;
+    }
+    case "location": {
+      events = eventsStore.sortedByLocation();
+      break;
+    }
+    case "category": {
+      events = eventsStore.sortedByCategory();
+      break;
+    }
+    default: {
+      events = eventsStore.objects;
+    }
+  }
+  console.log("Events: ", events);
+  //filteredBy
+  //searchQuery
+
+  return (
+    <ScrollView>
+      {
+        events.length > 0 ? (
+          events.map((item, index) => (<EventElement event={item} index={index}/>))
+        ) : (
+          <Text className="mt-5 text-center text-[16px] font-normal text-[#8B8B8B]">
+            {t('noResults')}
+          </Text>
+        )
+      }
+    </ScrollView>
+  );
+}
+
+type EventElementArgs = {
+  event :PointObject;
+  index :number;
+};
+
+function EventElement(args: EventElementArgs) {
+  return (
+    <TouchableOpacity
+      activeOpacity={1}
+      key={args.event.id}
+      className={`flex-row items-center p-5 active:bg-[#EDEDED] ${args.index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}>
+      <Text className="ml-3 text-lg text-black">{args.event.name}</Text>
+    </TouchableOpacity>
+  );
 }
