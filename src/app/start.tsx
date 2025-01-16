@@ -10,11 +10,13 @@ import Background from '../../assets/background.svg';
 import { AppButton } from '~/components/AppButton';
 import { useObjectsStore } from '~/store/useObjectsStore';
 import { useUserStore } from '~/store/useUserStore';
+import { useEventStore } from '~/store/useEventStore';
 
 export default function Start() {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const params = useLocalSearchParams();
-  const { fetchData } = useObjectsStore();
+  const { fetchData: fetchObjectData } = useObjectsStore();
+  const { fetchData: fetchEventData } = useEventStore();
   const { token } = useUserStore();
 
   React.useEffect(() => {
@@ -25,7 +27,8 @@ export default function Start() {
 
   useFocusEffect(
     useCallback(() => {
-      fetchData();
+      fetchObjectData();
+      fetchEventData();
 
       if (token !== null) {
         navigation.navigate('map-screen');

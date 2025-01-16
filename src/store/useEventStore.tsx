@@ -4,7 +4,7 @@ import {PointObject} from '~/store/useObjectsStore';
 
 const fakeEvents: PointObject[] = [
   {
-    id: 4,
+    id: 1,
     latitude: '52.15957117010191',
     longitude: '21.046369211223155',
     name: 'Dojenie krowy',
@@ -15,7 +15,7 @@ const fakeEvents: PointObject[] = [
     imageUrl: null,
     website: null,
     address: {
-        id: 4,
+        id: 2,
         street: 'Nowoursynowska 166',
         postalCode: '02-787',
         city: 'Warszawa',
@@ -27,7 +27,7 @@ const fakeEvents: PointObject[] = [
     eventEnd: new Date("2025-04-06T14:00:00")
   },
   {
-    id: 5,
+    id: 3,
     latitude: '52.15928975854478',
     longitude: '21.049575056750555',
     name: 'Wiosenna kąpiel w jeziorze',
@@ -38,7 +38,7 @@ const fakeEvents: PointObject[] = [
     imageUrl: null,
     website: null,
     address: {
-      id: 4,
+      id: 5,
       street: 'Nowoursynowska 166',
       postalCode: '02-787',
       city: 'Warszawa',
@@ -50,7 +50,7 @@ const fakeEvents: PointObject[] = [
     eventEnd: new Date("2025-05-01T12:00:00"),
   },
   {
-    id: 1,
+    id: 4,
     latitude: '52.161963648191104',
     longitude: '21.046332383073644',
     name: 'Hekaton Hackarea',
@@ -61,7 +61,7 @@ const fakeEvents: PointObject[] = [
     imageUrl: null,
     website: null,
     address: {
-      id: 2,
+      id: 6,
       street: 'Nowoursynowska 159/bud. 34',
       postalCode: '02-776',
       city: 'Warszawa',
@@ -72,12 +72,13 @@ const fakeEvents: PointObject[] = [
     eventStart: new Date("2025-05-01T9:00:00"),
     eventEnd: new Date("2025-05-01T12:00:00"),
   },
-]
+];
 
 interface StoreState {
   objects: PointObject[];
   loading: boolean;
   error: string | null;
+
   fetchData: () => Promise<void>;
   sortedByDate: () => PointObject[];
   sortedByLocation: () => PointObject[];
@@ -90,10 +91,11 @@ type FetchDataResponse = {
   objects: PointObject[];
 };
 
-const useRealEvents = create<StoreState>((set, get) => ({
+const useRealEventStore = create<StoreState>((set, get) => ({
   objects: [],
   loading: false,
   error: null,
+
   fetchData: async () => {
     set({ loading: true, error: null });
     try {
@@ -132,10 +134,11 @@ const useRealEvents = create<StoreState>((set, get) => ({
   }
 }));
 
-const useFakeEvents = create<StoreState>((set, get) => ({
+const useFakeEventStore = create<StoreState>((set, get) => ({
   objects: [],
   loading: false,
   error: null,
+
   fetchData: async () => {
     set({ loading: true, error: null });
     try {
@@ -172,13 +175,13 @@ const useFakeEvents = create<StoreState>((set, get) => ({
   }
 }));
 
-export let useEvents: UseBoundStore<StoreApi<StoreState>>;
+export let useEventStore: UseBoundStore<StoreApi<StoreState>>;
 
 if (process.env.EXPO_PUBLIC_MODE === 'development') {
-  useEvents = useFakeEvents;
+  useEventStore = useFakeEventStore;
   console.log("Using Fake Events");
 }
 else {
-  useEvents = useRealEvents;
+  useEventStore = useRealEventStore;
   console.log("Using Real Events");
 }

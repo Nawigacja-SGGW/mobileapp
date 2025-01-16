@@ -9,8 +9,8 @@ import TopHeader from '~/components/TopHeaderSort';
 import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection';
 import SearchBar from '~/components/SearchBar';
 
-import {PointObject} from '~/store/useObjectsStore';
-import {useEvents} from '~/store/useEventStore';
+import {PointObject, useObjectsStore} from '~/store/useObjectsStore';
+import {useEventStore} from '~/store/useEventStore';
 
 export default function TimeTableView() {
     const [isSortVisible, setSortVisible] = useState(false);
@@ -92,10 +92,10 @@ type ObjectListArgs = {
 };
 
 function ObjectListSection(args: ObjectListArgs) {
-  const eventsStore = useEvents();
+  const eventsStore = useEventStore();
   const { t } = useTranslation();
 
-  let events :PointObject[];
+  let events :PointObject[] = eventsStore.objects;
 
   switch(args.sortedBy) {
     case "date": {
@@ -122,7 +122,7 @@ function ObjectListSection(args: ObjectListArgs) {
     <ScrollView>
       {
         events.length > 0 ? (
-          events.map((item, index) => (<EventElement event={item} index={index}/>))
+          events.map((item, index) => (<EventElement key={item.id} event={item} index={index}/>))
         ) : (
           <Text className="mt-5 text-center text-[16px] font-normal text-[#8B8B8B]">
             {t('noResults')}
@@ -142,7 +142,6 @@ function EventElement(args: EventElementArgs) {
   return (
     <TouchableOpacity
       activeOpacity={1}
-      key={args.event.id}
       className={`flex-row items-center p-5 active:bg-[#EDEDED] ${args.index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}>
       <Text className="ml-3 text-lg text-black">{args.event.name}</Text>
     </TouchableOpacity>
