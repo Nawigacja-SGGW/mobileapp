@@ -12,11 +12,13 @@ import StatisticsIcon from '../../assets/trending-up.svg';
 
 import { LanguageSwitch } from '~/components/LanguageSwitch';
 import { useUserStore } from '~/store/useUserStore';
+import useLocationStore from '~/store/useLocationStore';
 
 export function DrawerMenu() {
   const { t } = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { logout, loading, error } = useUserStore();
+  const { startCampusGuide, navigationMode, isGuideActive } = useLocationStore();
 
   const menuOptions = [
     {
@@ -45,7 +47,8 @@ export function DrawerMenu() {
       icon: <FontAwesome5 name="flag" size={32} color="white" />,
       onPress: () => {
         navigation.dispatch(DrawerActions.toggleDrawer());
-        console.log("open campus guide")
+        startCampusGuide();
+        console.log('open campus guide', navigationMode, isGuideActive);
       },
     },
     {

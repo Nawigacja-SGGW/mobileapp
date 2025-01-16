@@ -23,7 +23,15 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
   const { routePreference, setRoutePreference } = useSettingsStore();
   const { distance } = useRouteQuery(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
 
-  if (!locationTo || !visible || distanceLeft === 0) return <></>;
+  if (navigationMode === 'guidePreview')
+    return (
+      <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">
+        <View className="flex w-full justify-end bg-green-main">
+          <></>
+        </View>
+      </View>
+    );
+  else if (!locationTo || !visible || distanceLeft === 0) return <></>;
 
   return (
     <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">
@@ -38,7 +46,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
           <Text className="ml-4 mr-20 text-2xl text-neutral-300">
             {formatDistance(distanceLeft)}
           </Text>
-          {navigationMode === 'routing' && (
+          {navigationMode === 'guidePreview' && (
             <View className="my-6 w-full flex-1 flex-row items-center justify-center gap-10">
               <RoutePreferenceOption
                 routePreference={RoutePreference.Walk}
@@ -54,7 +62,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
               />
             </View>
           )}
-          {navigationMode === 'navigating' && (
+          {navigationMode === 'guide' && (
             <View className="flex-row items-end  justify-center gap-5 py-4">
               <Text className="text-2xl font-bold text-white">
                 {t('navigation.timeLeft', { time: getFormattedTime(distanceLeft) })}

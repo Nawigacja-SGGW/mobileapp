@@ -79,7 +79,8 @@
     "map": "Mapa",
     "objects": "Obiekty",
     "profile": "Profil",
-    "settings": "Ustawienia"
+    "settings": "Ustawienia",
+    "guide":"Przewodnik"
   },
   "navigation": {
     "counter": "Licznik",

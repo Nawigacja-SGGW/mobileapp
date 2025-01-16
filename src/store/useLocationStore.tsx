@@ -25,7 +25,9 @@ interface LocationStore {
   setSearchQuery: (query: string) => void;
   filterLocations: (query: string) => void;
   clearFilteredLocations: () => void;
+
   startCampusGuide: () => void;
+  stopCampusGuide: () => void;
 }
 
 const useLocationStore = create<LocationStore>((set, get) => ({
@@ -41,7 +43,7 @@ const useLocationStore = create<LocationStore>((set, get) => ({
     get().filterLocations(get().searchQuery);
     return set({ searchMode: mode });
   },
-  setNavigationMode: (mode: NavigationMode) => set({ navigationMode: mode }),
+  setNavigationMode: (mode: NavigationMode | undefined) => set({ navigationMode: mode }),
   setSearchQuery: (query) => set({ searchQuery: query }),
 
   startCampusGuide: () => {

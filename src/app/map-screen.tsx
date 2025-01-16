@@ -90,6 +90,10 @@ export default function MapScreen() {
     else setSearchMode('idle');
   };
 
+  useEffect(() => {
+    console.log({ navigationMode });
+  }, [navigationMode]);
+
   useFocusEffect(
     useCallback(() => {
       (async () => {
@@ -217,6 +221,7 @@ export default function MapScreen() {
           ),
         }}
       />
+
       <View className="flex-1">
         {navigationMode !== 'navigating' && (
           <SearchBar
@@ -285,7 +290,9 @@ export default function MapScreen() {
             setNavigationMode(undefined);
           }}
           distanceLeft={
-            navigationMode === 'navigating' ? distance / 1000 : routeQueryDistance / 1000
+            navigationMode === 'navigating' || navigationMode === 'guide'
+              ? distance / 1000
+              : routeQueryDistance / 1000
           }
           visible={navigationMode === 'navigating' || navigationMode === 'routing'}
         />
