@@ -79,8 +79,12 @@ interface StoreState {
   loading: boolean;
   error: string | null;
   fetchData: () => Promise<void>;
-  getEvents: () => PointObject[];
+  sortedByDate: () => PointObject[];
+  sortedByLocation: () => PointObject[];
+  sortedByCategory: () => PointObject[];
+  filterSearch: (searchQuery :string) => PointObject[];
 }
+
 type FetchDataResponse = {
   code: number;
   objects: PointObject[];
@@ -91,16 +95,40 @@ const useRealEvents = create<StoreState>((set, get) => ({
   loading: false,
   error: null,
   fetchData: async () => {
-    const response = await api.get<FetchDataResponse>('/objects');
-    set({
-        objects: response.data.objects,
+    set({ loading: true, error: null });
+    try {
+      const response = await api.get<FetchDataResponse>('/objects');
+      const eventsObjects = response.data.objects.filter ((x) => x.eventCategory != null && x.eventStart != null);
+
+      set({
+        objects: eventsObjects,
         loading: false,
         error: null,
-    });
-    return Promise.resolve();
+      });
+      return Promise.resolve();
+    }
+    catch(error) {
+      set({ error: (error as Error).message, loading: false });
+      return Promise.reject(error);
+    }
   },
-  getEvents: (): PointObject[] => {
-    return [...get().objects].filter(x => x.eventCategory != null && x.eventStart != null);
+  sortedByDate: (): PointObject[] => {
+    return [...get().objects].sort(
+      (a, b) => new Date(a.eventStart!).getTime() - new Date(b.eventStart!).getTime()
+    );
+  },
+  sortedByLocation: (): PointObject[] => {
+    return [...get().objects];
+  },
+  sortedByCategory: (): PointObject[] => {
+    return [...get().objects].sort(
+      (a, b) => a.eventCategory!.toLowerCase().localeCompare(b.eventCategory!.toLowerCase())
+    );
+  },
+  filterSearch: (searchQuery): PointObject[] => {
+    return [...get().objects].filter(
+      (x) => x.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }
 }));
 
@@ -124,8 +152,23 @@ const useFakeEvents = create<StoreState>((set, get) => ({
       return Promise.reject(error);
     }
   },
-  getEvents: (): PointObject[] => {
-    return [...get().objects].filter(x => x.eventCategory != null && x.eventStart != null);
+  sortedByDate: (): PointObject[] => {
+    return [...get().objects].sort(
+      (a, b) => new Date(a.eventStart!).getTime() - new Date(b.eventStart!).getTime()
+    );
+  },
+  sortedByLocation: (): PointObject[] => {
+    return [...get().objects];
+  },
+  sortedByCategory: (): PointObject[] => {
+    return [...get().objects].sort(
+      (a, b) => a.eventCategory!.toLowerCase().localeCompare(b.eventCategory!.toLowerCase())
+    );
+  },
+  filterSearch: (searchQuery): PointObject[] => {
+    return [...get().objects].filter(
+      (x) => x.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }
 }));
 
