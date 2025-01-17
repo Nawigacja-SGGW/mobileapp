@@ -9,6 +9,7 @@ import {View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimension
 import TopHeader from '~/components/TopHeaderSort';
 import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection';
 import SearchBar from '~/components/SearchBar';
+import {formatDate, getDateRange} from "~/components/DateFormat";
 
 import {PointObject} from '~/store/useObjectsStore';
 import {useEventStore} from '~/store/useEventStore';
@@ -86,17 +87,6 @@ export default function TimeTableView() {
     );
 }
 
-const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat('pl-PL', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  }).format(date);
-};
-
 type ObjectListArgs = {
   sortedBy :string;
   filteredBy: string;
@@ -163,7 +153,6 @@ function EventElement(args: EventElementArgs) {
 
   const startDate :Date = args.event.eventStart!;
   const endDate :Date | null = args.event.eventEnd;
-  const sameDay :boolean = args.event.eventStart!.toDateString() === args.event.eventEnd?.toDateString();
 
   return (
     <TouchableOpacity
@@ -187,10 +176,7 @@ function EventElement(args: EventElementArgs) {
             <Feather name="clock" size={28} color="black"/>
           </Text>
           <Text className="text-black text-lg w-[200px] flex-wrap">
-            { endDate != null ? 
-              sameDay ? `${formatDate(startDate)} - ${formatDate(endDate).split(' ')[1]}` : `${formatDate(startDate)} - ${formatDate(endDate)}` 
-              : formatDate(startDate) 
-            }
+            { getDateRange(startDate, endDate) }
           </Text>
         </View>
 
