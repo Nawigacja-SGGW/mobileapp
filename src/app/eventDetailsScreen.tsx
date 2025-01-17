@@ -1,4 +1,5 @@
 import { useNavigation } from 'expo-router';
+import * as Location from 'expo-location';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import Drawer from 'expo-router/drawer';
@@ -11,9 +12,12 @@ import TopHeader from '~/components/TopHeader';
 import {getDateRange} from "~/components/DateFormat";
 
 import {useEventStore} from '~/store/useEventStore';
+import useLocationStore, {MapLocation}  from '~/store/useLocationStore';
 
 export default function EventDetailsScreen() {
     const { objectId } = useLocalSearchParams();
+    const { setRoute } = useLocationStore();
+    
     const eventsStore = useEventStore();
     const event = eventsStore.objects.find((n) => n.id === Number(objectId));
     if (!event) return null;
@@ -27,6 +31,7 @@ export default function EventDetailsScreen() {
     };
 
     const {t} = useTranslation();
+    const router = useRouter();
 
     return (
     <>
@@ -65,7 +70,22 @@ export default function EventDetailsScreen() {
             <Text className="text-white text-lg leading-6 mb-6">{event.description}</Text>
 
             {/* Navigation Button */}
-            <TouchableOpacity className="bg-white mx-auto w-[50%] py-3 rounded-3xl items-center mb-6">
+            <TouchableOpacity 
+            className="bg-white mx-auto w-[50%] py-3 rounded-3xl items-center mb-6"
+            onPress={async () => {
+                const location = await Location.getCurrentPositionAsync({});
+                const maplocation = {
+                    id: event.id,
+                    name: event.name,
+                    coordinates: [Number(event.longitude) , Number(event.latitude)]
+                };
+
+                setRoute({
+                locationTo: maplocation,
+                locationFrom: [location.coords.longitude, location.coords.latitude]
+                });
+                router.navigate('/map-screen');
+            }}>
                 <Text className="text-[#003228] font-semibold">{t('object.navigate')}</Text>
             </TouchableOpacity>
             </ScrollView>
