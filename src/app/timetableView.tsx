@@ -2,6 +2,7 @@ import { useNavigation } from 'expo-router';
 import { Feather, Ionicons } from '@expo/vector-icons';
 import Drawer from 'expo-router/drawer';
 import React, { useRef, useState } from 'react';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 import { useTranslation } from 'react-i18next';
 import {View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions} from 'react-native';
 
@@ -85,6 +86,17 @@ export default function TimeTableView() {
     );
 }
 
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('pl-PL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).format(date);
+};
+
 type ObjectListArgs = {
   sortedBy :string;
   filteredBy: string;
@@ -96,7 +108,8 @@ function ObjectListSection(args: ObjectListArgs) {
   const { t } = useTranslation();
 
   let events :PointObject[] = eventsStore.objects;
-
+  
+  // Sort by
   switch(args.sortedBy) {
     case "date": {
       events = eventsStore.sortedByDate();
@@ -114,9 +127,13 @@ function ObjectListSection(args: ObjectListArgs) {
       events = eventsStore.objects;
     }
   }
-  console.log("Events: ", events);
-  //filteredBy
-  //searchQuery
+  // Filter by
+  // Search Query
+  events = events.filter((event: PointObject) =>
+    event.name.toLowerCase().includes(args.searchQuery.toLowerCase()) || 
+    formatDate(event.eventStart!).includes(args.searchQuery.toLowerCase()) ||
+    (event.eventEnd != null && formatDate(event.eventEnd).includes(args.searchQuery.toLowerCase()))
+  );
 
   return (
     <ScrollView>
@@ -139,25 +156,22 @@ type EventElementArgs = {
 };
 
 function EventElement(args: EventElementArgs) {
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('pl-PL', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hourCycle: 'h23',
-    }).format(date);
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const onClick = (objectId: number) => {
+    navigation.navigate('eventDetailsScreen', { objectId });
   };
 
   const startDate :Date = args.event.eventStart!;
-  const endDate :Date = args.event.eventEnd!;
-  const sameDay :boolean = args.event.eventStart!.toDateString() === args.event.eventEnd!.toDateString();
+  const endDate :Date | null = args.event.eventEnd;
+  const sameDay :boolean = args.event.eventStart!.toDateString() === args.event.eventEnd?.toDateString();
 
   return (
     <TouchableOpacity
       activeOpacity={1}
-      className={`flex-row items-center p-5 active:bg-[#EDEDED] ${args.index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}>
+      className={`flex-row items-center p-5 active:bg-[#EDEDED] ${args.index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}
+      onPress={() => {
+        onClick(args.event.id);
+      }}>
       {/* Ikona książki */}
       <Text className="mr-3">
         <Ionicons name="book-outline" size={45} color="black" />
@@ -173,7 +187,10 @@ function EventElement(args: EventElementArgs) {
             <Feather name="clock" size={28} color="black"/>
           </Text>
           <Text className="text-black text-lg w-[200px] flex-wrap">
-            {sameDay ? `${formatDate(startDate)} - ${formatDate(endDate).split(' ')[1]}` : `${formatDate(startDate)} - ${formatDate(endDate)}`}
+            { endDate != null ? 
+              sameDay ? `${formatDate(startDate)} - ${formatDate(endDate).split(' ')[1]}` : `${formatDate(startDate)} - ${formatDate(endDate)}` 
+              : formatDate(startDate) 
+            }
           </Text>
         </View>
 

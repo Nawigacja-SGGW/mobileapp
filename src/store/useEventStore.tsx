@@ -72,6 +72,29 @@ const fakeEvents: PointObject[] = [
     eventStart: new Date("2025-05-01T9:00:00"),
     eventEnd: new Date("2025-05-01T12:00:00"),
   },
+  {
+    id: 7,
+    latitude: '52.161963648191104',
+    longitude: '21.046332383073644',
+    name: 'Wydział WZIM',
+    nameEng: 'WZIM department',
+    type: 'Wydział',
+    description: 'Ćwiczenia strzeleckie i przysposobienia obronnego studentów SGGW.',
+    descriptionEng: 'Shooting exercises and defense training for SGGW students.',
+    imageUrl: null,
+    website: null,
+    address: {
+      id: 8,
+      street: 'Nowoursynowska 159/bud. 34',
+      postalCode: '02-776',
+      city: 'Warszawa',
+      cityEng: 'Warsaw',
+    },
+    guide: null,
+    eventCategory: "training",
+    eventStart: new Date("2025-04-27T8:00:00"),
+    eventEnd: null,
+  },
 ];
 
 interface StoreState {
