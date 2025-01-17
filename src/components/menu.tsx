@@ -1,4 +1,4 @@
-import { Feather, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { Feather, FontAwesome5, SimpleLineIcons } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import React from 'react';
@@ -21,7 +21,7 @@ export function DrawerMenu() {
   const menuOptions = [
     {
       label: t('menu.map'),
-      icon: <Ionicons name="location-outline" size={32} color="white" />,
+      icon: <Feather name="map" size={32} color="white" />,
       onPress: () => {
         navigation.navigate('map-screen');
       },

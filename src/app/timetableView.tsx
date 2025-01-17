@@ -1,5 +1,5 @@
 import { useNavigation } from 'expo-router';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { Feather, Ionicons } from '@expo/vector-icons';
 import Drawer from 'expo-router/drawer';
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ import TopHeader from '~/components/TopHeaderSort';
 import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection';
 import SearchBar from '~/components/SearchBar';
 
-import {PointObject, useObjectsStore} from '~/store/useObjectsStore';
+import {PointObject} from '~/store/useObjectsStore';
 import {useEventStore} from '~/store/useEventStore';
 
 export default function TimeTableView() {
@@ -139,11 +139,52 @@ type EventElementArgs = {
 };
 
 function EventElement(args: EventElementArgs) {
+  const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat('pl-PL', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }).format(date);
+  };
+
+  const startDate :Date = args.event.eventStart!;
+  const endDate :Date = args.event.eventEnd!;
+  const sameDay :boolean = args.event.eventStart!.toDateString() === args.event.eventEnd!.toDateString();
+
   return (
     <TouchableOpacity
       activeOpacity={1}
       className={`flex-row items-center p-5 active:bg-[#EDEDED] ${args.index % 2 === 0 ? 'bg-[#F9F9F9]' : 'bg-white'}`}>
-      <Text className="ml-3 text-lg text-black">{args.event.name}</Text>
+      {/* Ikona książki */}
+      <Text className="mr-3">
+        <Ionicons name="book-outline" size={45} color="black" />
+      </Text>
+
+      {/* Separator */}
+      <View className="w-[1px] h-full bg-gray-400 mr-3" />
+
+      {/* Data i czas */}
+      <View className="flex-col">
+        <View className="flex-row items-center mb-1">
+          <Text className="mr-3">
+            <Feather name="clock" size={28} color="black"/>
+          </Text>
+          <Text className="text-black text-lg w-[200px] flex-wrap">
+            {sameDay ? `${formatDate(startDate)} - ${formatDate(endDate).split(' ')[1]}` : `${formatDate(startDate)} - ${formatDate(endDate)}`}
+          </Text>
+        </View>
+
+        {/* Lokalizacja */}
+        <View className="flex-row items-center">
+          <Text className="mr-3">
+            <Feather name="map" size={28} color="black" />
+          </Text>
+          <Text className="text-black text-lg">{args.event.name}</Text>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 }
