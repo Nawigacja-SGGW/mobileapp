@@ -46,8 +46,8 @@ const fakeEvents: PointObject[] = [
     },
     guide: null,
     eventCategory: "student activity",
-    eventStart: new Date("2025-05-01T9:00:00"),
-    eventEnd: new Date("2025-05-01T12:00:00"),
+    eventStart: new Date("2025-05-01T11:00:00"),
+    eventEnd: new Date("2025-05-02T18:00:00"),
   },
   {
     id: 4,
@@ -120,7 +120,9 @@ const useRealEventStore = create<StoreState>((set, get) => ({
     );
   },
   sortedByLocation: (): PointObject[] => {
-    return [...get().objects];
+    return [...get().objects].sort(
+      (a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+    );
   },
   sortedByCategory: (): PointObject[] => {
     return [...get().objects].sort(
@@ -161,7 +163,9 @@ const useFakeEventStore = create<StoreState>((set, get) => ({
     );
   },
   sortedByLocation: (): PointObject[] => {
-    return [...get().objects];
+    return [...get().objects].sort(
+      (a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+    );
   },
   sortedByCategory: (): PointObject[] => {
     return [...get().objects].sort(
