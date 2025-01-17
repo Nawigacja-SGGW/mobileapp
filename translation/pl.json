@@ -1,148 +1,150 @@
 {
   "button": {
-    "polish": "Polski",
-    "english": "Angielski"
+    "english": "Angielski",
+    "polish": "Polski"
   },
-  "navigation": {
-    "home": "Strona główna",
-    "counter": "Licznik",
-    "location": "Lokalizacja",
-    "map": "Mapa",
-    "details": "Szczegóły",
-    "navigatingTo":"Nawiguję do:",
-    "start":"Start"
+  "cancel": "Anuluj",
+  "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.",
+  "counter": {
+    "cunter-example": "przykład licznika",
+    "decrement": "Zmniejsz",
+    "increment": "Zwiększ",
+    "title": "Przykład licznika",
+    "value": "Licznik"
   },
   "getStarted": "Otwórz kod dla tego ekranu:",
-  "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.",
-
-  "counter": {
-    "title": "Przykład licznika",
-    "increment": "Zwiększ",
-    "decrement": "Zmniejsz",
-    "value": "Licznik",
-    "cunter-example": "przykład licznika"
-  },
+  "loading": "Ładowanie",
   "location": {
-    "title": "Lokalizacja",
-    "permissionStatus": "Status uprawnień",
     "granted": "przyznane",
+    "permissionStatus": "Status uprawnień",
+    "title": "Lokalizacja",
     "yourLocation": "Twoja lokalizacja"
   },
-  "menu": {
-    "map": "Mapa",
-    "objects": "Miejsca",
-    "profile": "Profil",
-    "settings": "Ustawienia",
-    "logout": "Wyloguj się"
-  },
-  "map": {
-    "search.startingPoint": "Twoja lokacja",
-    "search.destination": "Miejsce docelowe"
-  },
-  "object":{
-    "moreInfo":"Więcej informacji",
-    "navigate":"Nawiguj"
-  },
-  "login": { 
-    "usernameOrEmail": {
-      "label": "Nazwa użytkownika lub e-mail",
-      "placeholder": "Wprowadź nazwę użytkownika lub e-mail"
-    },
-    "password": {
-      "label": "Hasło",
-      "placeholder": "Wprowadź swoje hasło",
-      "forgotPassword": "Zapomniałeś hasła?"
-    },
-    "username": {
-      "label": "Nazwa użytkownika",
-      "placeholder": "Wprowadź swoją nazwę użytkownika"
-    },
-    "email": {
-      "label": "E-mail",
-      "placeholder": "Wprowadź swój e-mail"
+  "login": {
+    "backToLogin": "Wróć do logowania",
+    "confirmNewPassword": {
+      "label": "Potwierdź nowe hasło",
+      "placeholder": "Wprowadź nowe hasło"
     },
     "confirmPassword": {
       "label": "Potwierdź hasło",
       "placeholder": "Wprowadź swoje hasło"
     },
+    "confirmation": "Sprawdź email w celu zresetowania hasła",
+    "confirmationText": "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
+    "continueWith": "Lub kontynuuj z",
+    "didntReceiveEmail": "Nie otrzymałeś emaila?",
+    "email": {
+      "label": "E-mail",
+      "placeholder": "Wprowadź swój e-mail"
+    },
+    "emailSentSuccessfully": "Email wysłany poprawnie",
+    "errorOccurred": "Wystąpił błąd",
+    "fillAllFields": "Wypełnij wszystkie pola",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła.",
     "newPassword": {
       "label": "Nowe hasło",
       "placeholder": "Wprowadź nowe hasło"
     },
-    "confirmNewPassword": {
-      "label": "Potwierdź nowe hasło",
-      "placeholder": "Wprowadź nowe hasło"
+    "password": {
+      "forgotPassword": "Zapomniałeś hasła?",
+      "label": "Hasło",
+      "placeholder": "Wprowadź swoje hasło"
     },
-
-    "loading": "Ładowanie",
-
-    "signInButton": "Zaloguj się",
-    "signUpButton": "Zarejestruj się",
-    "sendButton": "Wyślij",
+    "passwordChanged": "Zmieniono hasło pomyślnie",
+    "passwordMismatch": "Hasła nie są identyczne",
+    "registrationSuccessful": "Zarejestrowano pomyślnie",
     "resetButton": "Zresetuj hasło",
-    "forgotPassword": "Zapomniałeś hasła?",
-    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła.",
     "resetPassword": "Zresetuj hasło",
     "resetPasswordText": "Wprowadź nowe hasło dla ",
-    "continueWith": "Lub kontynuuj z",
-    "backToLogin": "Wróć do logowania",
-    "confirmation" : "Sprawdź email w celu zresetowania hasła",
-    "confirmationText" : "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
-    "didntReceiveEmail" : "Nie otrzymałeś emaila?",
-    "emailSentSuccessfully": "Email wysłany poprawnie",
-    "fillAllFields": "Wypełnij wszystkie pola",
-    "errorOccurred": "Wystąpił błąd",
-    "passwordMismatch": "Hasła nie są identyczne",
-    "passwordChanged": "Zmieniono hasło pomyślnie",
-    "registrationSuccessful": "Zarejestrowano pomyślnie"
-
+    "sendButton": "Wyślij",
+    "signInButton": "Zaloguj się",
+    "signUpButton": "Zarejestruj się",
+    "username": {
+      "label": "Nazwa użytkownika",
+      "placeholder": "Wprowadź swoją nazwę użytkownika"
+    },
+    "usernameOrEmail": {
+      "label": "E-mail",
+      "placeholder": "Wprowadź swój e-mail"
+    }
   },
-  "cancel":"Anuluj",
-  "objects":{
-    "noResults" : "Nie znaleziono wyników",
-    "sortBy": "SORTUJ PO",
-    "number": "numerze",
+  "map": {
+    "search.destination": "Miejsce docelowe",
+    "search.startingPoint": "Twoja lokacja"
+  },
+  "menu": {
+    "logout": "Wyloguj się",
+    "map": "Mapa",
+    "objects": "Miejsca",
+    "profile": "Profil",
+    "settings": "Ustawienia"
+  },
+  "navigation": {
+    "counter": "Licznik",
+    "details": "Szczegóły",
+    "home": "Strona główna",
+    "location": "Lokalizacja",
+    "map": "Mapa",
+    "start": "Start",
+    "timeLeft": "Pozostało: {{time}}"
+  },
+  "noInternet": {
+    "text": "Aplikacja wymaga stałego dostępu do internetu.",
+    "title": "Brak połączenia z internetem!",
+    "tryAgain": "Spróbuj ponownie"
+  },
+  "noLocationPermission": "Brak pozwolenia na lokalizację",
+  "object": {
+    "moreInfo": "Więcej informacji",
+    "navigate": "Nawiguj"
+  },
+  "objects": {
     "name": "nazwie: od A do Z",
-    "search": "Szukaj"
+    "noResults": "Nie znaleziono wyników",
+    "number": "numerze budynku",
+    "search": "Szukaj",
+    "sortBy": "SORTUJ PO"
   },
   "profile": {
     "email": "Email",
+    "logOut": "Wyloguj się",
     "myKilometers": "Moje kilometry",
-    "myRoutes": "Moje trasy",
-    "logOut": "Wyloguj się"
+    "myRoutes": "Moje trasy"
+  },
+  "rankingView": {
+    "users_with_the_most_distance_traveled": "Użytkownicy z największym przebytym dystansem",
+    "users_with_the_most_visited_places": "Użytkownicy z największą liczbą odwiedzin unikalnych miejsc",
+    "users_with_the_most_visits_in_one_place": "Użytkownicy z największą liczbą odwiedzin jednego miejsca",
+    "you": "Ty",
+    "your_place_in_ranking": "Twoje miejsce w rankingu"
+  },
+  "resetPassword": {
+    "confirmNewPassword": "Potwierdź nowe hasło",
+    "currentPassword": "Aktualne hasło",
+    "newPassword": "Nowe hasło",
+    "resetButton": "Zresetuj hasło",
+    "title": "Zmień hasło"
   },
   "settings": {
-    "routePreferences": "Preferencje trasy",
-    "language": "Język",
+    "bike": "Rowerem",
     "changePassword": "Zmień hasło",
     "informations": "Informacje",
+    "language": "Język",
+    "routePreferences": "Preferencje trasy",
     "save": "Zapisz",
     "saved": "Zapisano",
-    "walk": "Pieszo",
-    "bike": "Rowerem"
-},
-"resetPassword": {
-  "title": "Zmień hasło",
-  "currentPassword": "Aktualne hasło",
-  "newPassword": "Nowe hasło",
-  "confirmNewPassword": "Potwierdź nowe hasło",
-  "resetButton": "Zresetuj hasło"
-},
-"rankingView": {
-  "users_with_the_most_visits_in_one_place": "Użytkownicy z największą liczbą odwiedzin jednego miejsca",
-  "users_with_the_most_visited_places": "Użytkownicy z największą liczbą odwiedzin unikalnych miejsc",
-  "users_with_the_most_distance_traveled": "Użytkownicy z największym przebytym dystansem",
-  "your_place_in_ranking": "Twoje miejsce w rankingu",
-  "you": "Ty"
-},
-"statistics": {
-  "totalDistance": "Pokonany dystans",
-  "times_0": "{{count}} raz",
-  "times_1": "{{count}} razy",
-  "times_2": "{{count}} razy",
-  "times_few": "{{count}} razy",
-  "times_other": "{{count}} razy",
-  "visitedPlacesNumber": "Ilość odwiedzonych miejsc",
-  "noData": "Brak danych"
-}
+    "walk": "Pieszo"
+  },
+  "statistics": {
+    "noData": "Brak danych",
+    "times_0": "{{count}} raz",
+    "times_1": "{{count}} razy",
+    "times_2": "{{count}} razy",
+    "times_few": "{{count}} razy",
+    "times_other": "{{count}} razy",
+    "totalDistance": "Pokonany dystans",
+    "visitedPlacesNumber": "Ilość odwiedzonych miejsc"
+  }
 }

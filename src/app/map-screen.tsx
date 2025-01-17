@@ -1,19 +1,21 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import MapLibreGL, { UserTrackingMode, CameraRef } from '@maplibre/maplibre-react-native';
-import { RegionPayload } from '@maplibre/maplibre-react-native/javascript/components/MapView';
+import MapLibreGL, { UserTrackingMode } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
+import { useFocusEffect } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Point } from 'react-native-svg/lib/typescript/elements/Shape';
 
 import LightGreenDot from '../../assets/ellipse1.svg';
 import DarkGreenDot from '../../assets/ellipse2.svg';
 import SearchIcon1 from '../../assets/search1.svg';
+import Loading from '../components/Loading';
 
 import NavigationModal from '~/components/NavigationModal';
+import { NoInternet } from '~/components/NoInternet';
+import NoLocationPermission from '~/components/NoLocationPemission';
 import LocationModal from '~/components/ObjectModal';
 import TopHeader from '~/components/TopHeader';
 import { OSM_RASTER_STYLE } from '~/core/OSRM-tiles';
@@ -22,6 +24,7 @@ import { useRouteQuery } from '~/hooks/useRouteQuery';
 import type { MapLocation } from '~/store/useLocationStore';
 import useLocationStore from '~/store/useLocationStore';
 import { useObjectsStore } from '~/store/useObjectsStore';
+import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
 import { useUserStore } from '~/store/useUserStore';
 
 MapLibreGL.setAccessToken(null);
@@ -40,6 +43,7 @@ export default function MapScreen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [selectedObject, setselectedObject] = useState(undefined);
   const userLocation = useRef<Location.LocationObject>();
+  const [locationEstablished, setLocationEstablished] = useState(false);
   const { fetchUserHistory, updateUserHistory } = useUserStore();
 
   const {
@@ -54,9 +58,18 @@ export default function MapScreen() {
     setNavigationMode,
     navigationMode,
   } = useLocationStore();
-  const { allObjects } = useObjectsStore();
-  const { route, distance: routeQueryDistance } = useRouteQuery('foot');
-  const { route: navRoute, distance, userLocation: uLocation } = usePlaceNavigation('foot');
+  const { routePreference } = useSettingsStore();
+  const {
+    isLoading,
+    route,
+    distance: routeQueryDistance,
+  } = useRouteQuery(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
+  const {
+    route: navRoute,
+    distance,
+    userLocation: uLocation,
+  } = usePlaceNavigation(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
+  const { loading, allObjects } = useObjectsStore();
 
   const camera = useRef<MapLibreGL.CameraRef | null>(null);
   const map = useRef(null);
@@ -77,39 +90,47 @@ export default function MapScreen() {
     else setSearchMode('idle');
   };
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
-      Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.High,
-          timeInterval: 100,
-        },
-        (location) => {
-          userLocation.current = location;
-          console.log('map-screen.tsx location');
-          console.log(location);
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied');
+          return;
         }
-      );
 
-      const location = await Location.getCurrentPositionAsync({});
-      userLocation.current = location;
-      if (userLocation.current !== undefined && locationFrom === undefined) {
-        setRoute({
-          locationFrom: [
-            userLocation.current.coords.longitude,
-            userLocation.current.coords.latitude,
-          ],
-        });
-      }
-      console.log('map-screen.tsx userLocation.current');
-      console.log(userLocation.current);
-    })();
-  }, []);
+        Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            timeInterval: 100,
+          },
+          (location) => {
+            userLocation.current = location;
+            setErrorMsg(null);
+            if (!locationEstablished) {
+              setLocationEstablished(true);
+            }
+            console.log('map-screen.tsx location');
+            console.log(location);
+          }
+        );
+
+        const location = await Location.getCurrentPositionAsync();
+        userLocation.current = location;
+
+        if (userLocation.current !== undefined && locationFrom === undefined) {
+          setRoute({
+            locationFrom: [
+              userLocation.current.coords.longitude,
+              userLocation.current.coords.latitude,
+            ],
+          });
+        }
+        console.log('map-screen.tsx userLocation.current');
+        console.log(userLocation.current);
+      })();
+    }, [])
+  );
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -185,6 +206,10 @@ export default function MapScreen() {
 
   return (
     <>
+      {(isLoading || loading) && <Loading />}
+      {errorMsg && <NoLocationPermission />}
+      <NoInternet />
+
       <Drawer.Screen
         options={{
           header: () => (
@@ -235,11 +260,13 @@ export default function MapScreen() {
             locations={locations}
             onMarkerPress={handleMarkerPress}
           />
-          <MapLibreGL.UserLocation
-            animated={false}
-            renderMode="native"
-            androidRenderMode="compass"
-          />
+          {(locationEstablished || userLocation.current) && (
+            <MapLibreGL.UserLocation
+              animated={false}
+              renderMode="native"
+              androidRenderMode="compass"
+            />
+          )}
         </MapLibreGL.MapView>
         {/* compass */}
         <TouchableOpacity
@@ -448,25 +475,55 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
     setSearchMode,
     searchMode,
   } = useLocationStore();
+  const { routePreference } = useSettingsStore();
   const { searchHistory, fetchUserHistory, updateUserHistory } = useUserStore();
-  const { distance } = useRouteQuery('foot');
+  const { distance } = useRouteQuery(routePreference === RoutePreference.Walk ? 'foot' : 'bike');
   const { allObjects } = useObjectsStore();
   const _locations =
     searchQuery.length !== 0 ? filteredLocations.slice(0, 8) : locations.slice(0, 8);
-  //console.log('locations', _locations, searchQuery);
 
-  let shownLocations = _locations;
+  let shownLocations: MapLocation[] = _locations;
+
+  let shownSearchHistory = searchHistory.filter((n) => {
+    const object = allObjects().find((l) => l.id === n.objectId);
+    if (!object) return false;
+    if (!(object.name.includes(searchQuery) || searchQuery.includes(object.name))) return false;
+    return true;
+  });
+
   if (searchHistory && allObjects) {
-    const mappedHistory = searchHistory.map((n) => {
-      const object = allObjects().find((l) => l.id === n.objectId);
-      return {
-        id: n.objectId,
-        name: object?.name ?? 'Brak nazwy',
-        type: 'Historia',
-        coordinates: [object?.latitude, object?.longitude],
-      };
+    shownSearchHistory = searchHistory.sort((a, b) => {
+      return b.timestamp - a.timestamp;
     });
+
+    const mappedHistory = shownSearchHistory
+      .map((n) => {
+        const object = allObjects().find((l) => l.id === n.objectId);
+        if (!object) return null;
+        if (!(object.name.includes(searchQuery) || searchQuery.includes(object.name))) return null;
+        return {
+          id: n.objectId,
+          name: object?.name ?? 'Brak nazwy',
+          type: 'Historia',
+          coordinates: [object?.latitude, object?.longitude],
+        };
+      })
+      .filter((n) => n != null);
+
     shownLocations = [...mappedHistory, ..._locations];
+
+    const uniqueLocations: MapLocation[] = [];
+    const seenNames = new Set<string>();
+
+    shownLocations.forEach((location) => {
+      if (!seenNames.has(location.name)) {
+        uniqueLocations.push(location);
+        seenNames.add(location.name);
+      }
+    });
+
+    // not the prettiest but quickly done
+    shownLocations = uniqueLocations;
   }
 
   const showSearchbar = searchMode !== 'idle';
@@ -557,7 +614,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
             {shownLocations.map((item) => (
               <TouchableOpacity
                 key={item.id + item.type === 'Historia' ? 'history' : null}
-                className="flex-row items-center bg-white p-2"
+                className="flex-row items-center bg-white px-4 py-2"
                 onPress={async () => {
                   if (searchMode === 'searchfrom') {
                     setRoute({
@@ -578,7 +635,7 @@ function SearchBar({ handleSearch, handleLocationSelect, isExpanded }: SearchBar
                 <View>
                   <FontAwesome5 name={typeToIcon(item.type)} size={20} color="black" />
                 </View>
-                <Text className="ml-3 text-lg text-black">{item.name}</Text>
+                <Text className="ml-4 text-lg text-black">{item.name}</Text>
               </TouchableOpacity>
             ))}
             {shownLocations.length === 0 && (

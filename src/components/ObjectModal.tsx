@@ -1,9 +1,9 @@
-import React, { MutableRefObject, useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { useTranslation } from 'react-i18next';
 import { LocationObject } from 'expo-location';
+import { useNavigation } from 'expo-router';
+import React, { MutableRefObject } from 'react';
+import { useTranslation } from 'react-i18next';
+import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 
 import useLocationStore from '~/store/useLocationStore';
 import { AreaObject, useObjectsStore } from '~/store/useObjectsStore';
@@ -22,7 +22,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
   const { allObjects } = useObjectsStore();
 
   const object = allObjects().find((n) => n.id === objectId);
-  const { locations, setRoute, setNavigationMode } = useLocationStore();
+  const { setRoute, setNavigationMode } = useLocationStore();
   if (!object) return null;
 
   const locationData = {
@@ -49,24 +49,26 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
           </TouchableOpacity>
 
           {/* Title */}
-          <Text className="mb-4 text-lg font-bold text-white">{locationData.title}</Text>
+          <Text className="mb-6 text-2xl font-bold text-white">{locationData.title}</Text>
 
           {/* Location details */}
           <View className="mb-6 space-y-3">
-            <View className="flex-row items-center space-x-3">
-              <FontAwesome5 name="building" size={16} color="white" />
-              <Text
-                className="my-2 flex-1 text-ellipsis px-4 text-white"
-                ellipsizeMode="tail"
-                numberOfLines={1}>
-                {locationData.buildingNo}
-              </Text>
-            </View>
+            {locationData.buildingNo && (
+              <View className="flex-row items-center space-x-3">
+                <FontAwesome5 name="building" size={16} color="white" />
+                <Text
+                  className="my-2 flex-1 text-ellipsis px-4 text-xl text-white"
+                  ellipsizeMode="tail"
+                  numberOfLines={1}>
+                  {locationData.buildingNo}
+                </Text>
+              </View>
+            )}
 
-            <View className="flex-row items-center space-x-3">
+            <View className="mb-6 flex-row items-center space-x-3">
               <FontAwesome5 name="map-marker-alt" size={16} color="white" />
               <Text
-                className="my-2 flex-1 text-ellipsis px-4 text-white"
+                className="my-2 flex-1 text-ellipsis px-4 text-xl text-white"
                 ellipsizeMode="tail"
                 numberOfLines={1}>
                 {locationData.address && locationData.address}
