@@ -1,15 +1,57 @@
 import { create } from 'zustand';
 
-import { MapLocation } from '~/store/useLocationStore';
+import useLocationStore, { MapLocation } from '~/store/useLocationStore';
 
-interface GuideStore {
-  points: MapLocation;
-  nextPointId: MapLocation|undefined;
+interface GuideState {
+  points: MapLocation[];
+  nextPoint: number | undefined;
   getNextPoint: () => MapLocation;
-  switchNextPoint: () => void;
+  startGuideNavigation: () => void;
+  skipPoint: () => void;
+  loadLocations: () => void;
+  stopCampusGuide: () => void;
 }
 
-const useGuideStore = create<GuideStore>((get, set) => ({
+export const useGuideStore = create<GuideState>((set, get) => ({
   points: [],
-  nextPointId: undefined,
+  nextPoint: undefined,
+  loadLocations: () => {
+    if (process.env.EXPO_PUBLIC_MODE === 'development') {
+      set({ points: routeWaypointsIds.map((n) => useLocationStore.getState().locations[n]) });
+    } else {
+      set({ points: useLocationStore.getState().locations.filter((n) => n.guide) });
+    }
+  },
+  getNextPoint: () => {
+    const nextPointId = get().nextPoint ?? 0;
+    return useLocationStore.getState().locations[nextPointId ?? 0];
+  },
+  startGuideNavigation: () => {
+    set({ nextPoint: 0 });
+    console.log('startGuideNavigation');
+    useLocationStore.getState().setRoute({ locationTo: get().points[0], changeModes: false });
+    useLocationStore.getState().setNavigationMode('guide');
+  },
+  skipPoint: () => {
+    const state = get();
+    console.log('skipPoint', state.nextPoint, (state.nextPoint ?? 0) + 1);
+    console.log('skipPoint', state.points);
+    const nextPoint = (state.nextPoint ?? 0) + 1;
+    if (nextPoint >= state.points.length) {
+      useLocationStore.getState().setRoute({ locationTo: undefined, changeModes: false });
+      return;
+    }
+    set({ nextPoint: nextPoint });
+    useLocationStore.getState().setRoute({
+      locationTo: state.points[nextPoint],
+      changeModes: false,
+    });
+  },
+  stopCampusGuide: () => {
+    set({ nextPoint: undefined });
+    useLocationStore.getState().setRoute({ locationTo: undefined, changeModes: false });
+  },
 }));
+
+// const routeWaypointsIds = [0, 1, 2, 3, 4];
+const routeWaypointsIds = [1, 4, 3, 0, 2];

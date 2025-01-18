@@ -18,7 +18,7 @@ export function DrawerMenu() {
   const { t } = useTranslation();
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const { logout, loading, error } = useUserStore();
-  const { startCampusGuide, navigationMode, isGuideActive } = useLocationStore();
+  const { previewGuide: startCampusGuide, navigationMode, isGuideActive } = useLocationStore();
 
   const menuOptions = [
     {
@@ -46,8 +46,8 @@ export function DrawerMenu() {
       label: t('menu.guide'),
       icon: <FontAwesome5 name="flag" size={32} color="white" />,
       onPress: () => {
-        navigation.dispatch(DrawerActions.toggleDrawer());
         startCampusGuide();
+        navigation.navigate('map-screen');
         console.log('open campus guide', navigationMode, isGuideActive);
       },
     },

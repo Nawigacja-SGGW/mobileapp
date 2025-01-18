@@ -59,6 +59,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
   const { navigationMode, locationTo, setNavigationMode } = useLocationStore();
   const lastLocations = useRef<[number, number][]>([]);
   const { fetchRoute } = useRoutingApiCache();
+  const isNavigating = navigationMode === 'navigating' || navigationMode === 'guide';
 
   useEffect(() => {
     Location.watchPositionAsync(
@@ -115,7 +116,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
 
   //apka nie będzie nas nawigować gdy jesteśmy za daleko od kampusu
   useEffect(() => {
-    if (navigationMode !== 'navigating' && navigationMode !== 'routing') return; //nie przerywamy dopiero wtedy anie nie nawigujemy ani nie rutujemy
+    if (!isNavigating && navigationMode !== 'routing') return; //nie przerywamy dopiero wtedy anie nie nawigujemy ani nie rutujemy
     console.log('uloc, toloc', userlocation, locationTo);
     let locfrom = userlocation;
     let locto = locationTo;
@@ -181,14 +182,14 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       });
     }
     console.log('routedata', routeData, lastLocations, userlocation);
-  }, [locationTo, navigationMode === 'navigating' ? userlocation : undefined, navigationMode]);
+  }, [locationTo, isNavigating ? userlocation : undefined, navigationMode]);
 
   useEffect(() => {
     lastLocations.current = [];
   }, [locationTo]);
 
   useEffect(() => {
-    if (navigationMode !== 'navigating') {
+    if (isNavigating) {
       setRouteData((n) => ({
         ...n,
         route: [],

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useGuideStore } from '~/store/useGuideStore';
 
 import useLocationStore from '~/store/useLocationStore';
 import { useRoutingApiCache } from '~/store/useRouteCache';
@@ -9,7 +10,8 @@ export function useRouteQuery(
   // locationTo: MapLocation | undefined | [number, number],
   routedBy: RoutedBy
 ) {
-  const { locationFrom, locationTo } = useLocationStore();
+  const { locationFrom, locationTo, navigationMode } = useLocationStore();
+  const { points } = useGuideStore();
   const { fetchRoute } = useRoutingApiCache();
 
   const [routeData, setRouteData] = useState({
@@ -21,6 +23,33 @@ export function useRouteQuery(
   });
 
   useEffect(() => {
+    if (navigationMode === 'guidePreview') {
+      const waypoints = points.map((n) => n.coordinates);
+      if (points.length < 1) {
+        return;
+      }
+      setRouteData({ isLoading: true, isError: false, route: [], distance: 0, duration: 0 });
+      try {
+        const wayString = waypoints.reduce((acc, c, i) => {
+          acc += c[0].toString() + ',';
+          acc += c[1].toString() + (waypoints.length - 1 === i ? '' : ';');
+          return acc;
+        }, '');
+        fetchRoute('foot', wayString).then((n) => {
+          setRouteData({
+            isLoading: false,
+            isError: false,
+            route: n['routes'][0].geometry.coordinates,
+            distance: n['routes'][0]['distance'],
+            duration: n['duration'],
+          });
+        });
+      } catch (error) {
+        setRouteData({ isLoading: false, isError: true, route: [], distance: 0, duration: 0 });
+        throw error;
+      }
+      return;
+    }
     console.log({ locationFrom, locationTo });
     let locfrom = locationFrom;
     let locto = locationTo;
@@ -68,6 +97,6 @@ export function useRouteQuery(
     //       duration: n['duration'],
     //     });
     //   });
-  }, [locationFrom, locationTo, routedBy]);
+  }, [locationFrom, locationTo, routedBy, navigationMode]);
   return routeData;
 }

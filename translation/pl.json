@@ -89,7 +89,9 @@
     "location": "Lokalizacja",
     "map": "Mapa",
     "start": "Start",
-    "timeLeft": "Pozostało: {{time}}"
+    "timeLeft": "Pozostało: {{time}}",
+    "finish": "Zakończ przewodnik",
+    "nextStop": "Następny Punkt"
   },
   "noInternet": {
     "text": "Aplikacja wymaga stałego dostępu do internetu.",

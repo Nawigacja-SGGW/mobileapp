@@ -76,7 +76,9 @@
     "location": "Location",
     "map": "Map",
     "start": "Start",
-    "timeLeft": "Time left: {{time}}"
+    "timeLeft": "Time left: {{time}}",
+    "finish": "Finish Guide",
+    "nextStop": "Next Stop"
   },
   "noInternet": {
     "text": "The application requires a constant internet connection.",
