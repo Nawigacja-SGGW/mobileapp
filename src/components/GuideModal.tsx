@@ -59,53 +59,58 @@ export default function GuideModal({ onCancel, visible, distanceLeft }: GuideMod
                   <CloseButton onClose={onCancel} />
                 </View>
                 <Text className="ml-4 mr-20 pt-5 text-3xl font-bold text-white">Campus Tour</Text>
+
+                <Text className="ml-4 mr-20 pt-5 text-base font-bold text-white">
+                  <Entypo size={20} name="time-slot" /> {getFormattedTime(distance / 1000)}
+                </Text>
+                <Text className="ml-4 mr-20 pt-5 text-base font-bold text-white">
+                  <FontAwesome5 size={20} name="walking" color="white" /> {formatDistance(distance)}
+                </Text>
+                <Text className="ml-4 mr-20 pt-5 text-base font-bold text-white">
+                  <Entypo size={20} name="location-pin" /> Start: {points[0].name}
+                </Text>
               </>
             )}
             {navigationMode === 'guide' && (
               <>
-                <Text className="ml-4 mr-20 pt-5 text-xl font-bold text-white">
+                <Text className=" pt-5 text-center text-xl font-bold text-white">
                   {points[nextPoint ?? 0].name}
                 </Text>
+
+                <View className="flex-row items-end  justify-center gap-5 py-4">
+                  <Text className="text-2xl font-bold text-white">
+                    {getFormattedTime(distanceLeft)} {formatDistance(distanceLeft)}
+                  </Text>
+                </View>
               </>
             )}
-            <Text className="ml-4 mr-20 pt-5 text-base font-bold text-white">
-              <Entypo size={20} name="time-slot" /> {getFormattedTime(distance / 1000)}
-            </Text>
-            <Text className="ml-4 mr-20 pt-5 text-base font-bold text-white">
-              <FontAwesome5 size={20} name="walking" color="white" /> {formatDistance(distanceLeft)}
-            </Text>
-            <Text className="ml-4 mr-20 pt-5 text-base font-bold text-white">
-              <Entypo size={20} name="location-pin" /> Start: {points[0].name}
-            </Text>
-            {isInGuideMode && (
-              <View className="flex-row items-end  justify-center gap-5 p-4">
+            <View className="flex-row items-end  justify-center gap-5 p-4">
+              <TouchableOpacity
+                className="h-12 flex-1 items-center rounded-full bg-white p-2 text-2xl font-bold text-green-main"
+                onPress={async () => {
+                  if (navigationMode === 'guidePreview') {
+                    setNavigationMode('guide');
+                    startGuideNavigation();
+                    await updateUserStatistics(distance);
+                  } else {
+                    setNavigationMode(undefined);
+                  }
+                }}>
+                <Text className="text-xl font-bold text-green-main">{cancelMessage}</Text>
+              </TouchableOpacity>
+
+              {nextPoint !== undefined && nextPoint < points.length - 1 && (
                 <TouchableOpacity
                   className="h-12 flex-1 items-center rounded-full bg-white p-2 text-2xl font-bold text-green-main"
                   onPress={async () => {
-                    if (navigationMode === 'guidePreview') {
-                      setNavigationMode('guide');
-                      startGuideNavigation();
-                      await updateUserStatistics(distance);
-                    } else {
-                      setNavigationMode(undefined);
-                    }
+                    await skipPoint();
                   }}>
-                  <Text className="text-xl font-bold text-green-main">{cancelMessage}</Text>
+                  <Text className="text-xl font-bold text-green-main">
+                    {t('navigation.nextStop')}
+                  </Text>
                 </TouchableOpacity>
-
-                {nextPoint !== undefined && nextPoint < points.length - 1 && (
-                  <TouchableOpacity
-                    className="h-12 flex-1 items-center rounded-full bg-white p-2 text-2xl font-bold text-green-main"
-                    onPress={async () => {
-                      await skipPoint();
-                    }}>
-                    <Text className="text-xl font-bold text-green-main">
-                    {t("navigation.nextStop")}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            )}
+              )}
+            </View>
           </>
         </View>
       </View>
