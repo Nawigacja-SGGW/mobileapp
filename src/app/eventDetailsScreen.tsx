@@ -46,7 +46,7 @@ export default function EventDetailsScreen() {
 
             <ScrollView className="mt-28 px-4">
             {/* Title */}
-            <Text className="text-white text-3xl font-bold mb-1 text-center">{displayData.date}</Text>
+            <Text className="text-white text-3xl font-bold mb-1 mt-3 text-center">{displayData.date}</Text>
             <View className='mb-6 flex justify-center items-center'>
                 <Text>
                     <Ionicons name="book-outline" size={45} color="black"/>
@@ -57,12 +57,12 @@ export default function EventDetailsScreen() {
             <View className="gap-4 mb-12">
                 <View className="flex-row items-center gap-3">
                     <Feather name="map-pin" size={20} color="white" />
-                    <Text className="text-white text-lg">{displayData.location}</Text>
+                    <Text className="text-white text-xl">{displayData.location}</Text>
                 </View>
 
                 <View className="flex-row items-center gap-3">
                     <FontAwesome5 name="building" size={20} color="white" />
-                    <Text className="text-white text-lg w-[300px] flex-wrap">{displayData.address}</Text>
+                    <Text className="text-white text-xl w-[300px] flex-wrap">{displayData.address}</Text>
                 </View>
             </View>
 

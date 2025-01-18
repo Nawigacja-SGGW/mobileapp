@@ -78,7 +78,7 @@ function SearchSection(props: SearchSectionProps) {
   );
 
   const handleLocationSelect = (objectId: number) => {
-    navigation.navigate('LocationDetailsScreen', { objectId });
+    navigation.navigate('locationDetailsScreen', { objectId });
   };
 
   return (
