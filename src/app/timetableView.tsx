@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import {View, Text, TouchableOpacity, ScrollView, TextInput, Animated, Dimensions} from 'react-native';
 
 import TopHeader from '~/components/TopHeaderSort';
-import {SortFilerOption, BottomChoiceSection} from '~/components/BottomChoiceSection';
+import {BottomChoiceSection} from '~/components/BottomChoiceSection';
 import SearchBar from '~/components/SearchBar';
 import {formatDate, getDateRange} from "~/components/DateFormat";
 
@@ -57,7 +57,7 @@ export default function TimeTableView() {
     return (
         <>
             <Drawer.Screen options={{ header: () =>
-                <TopHeader onSortClick = {toggleSortSheet} filter onFilterClick = {toggleFilterSheet} />
+                <TopHeader onSortClick = {toggleSortSheet}/>
             }}/>
             <View className="flex-1 bg-white px-3">
               <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
