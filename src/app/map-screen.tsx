@@ -210,8 +210,8 @@ export default function MapScreen() {
   };
   console.log(-mapRotation - 45);
 
-  console.log('Locations: ', locations);
-  console.log('objects: ', allObjects());
+  // console.log('Locations: ', locations);
+  // console.log('objects: ', allObjects());
 
   return (
     <>

@@ -17,29 +17,12 @@ interface GuideModalProps {
 }
 
 export default function GuideModal({ onCancel, visible, distanceLeft }: GuideModalProps) {
-  const {
-    locationFrom,
-    locationTo,
-    navigationMode,
-    isGuideActive,
-    setNavigationMode,
-    startGuideNavigation,
-  } = useLocationStore();
+  const { navigationMode, setNavigationMode, startGuideNavigation } = useLocationStore();
   const { t } = useTranslation();
   const { updateUserStatistics } = useUserStore();
-  const { routePreference, setRoutePreference } = useSettingsStore();
   const { distance } = useRouteQuery('foot');
-  const { getNextPoint, skipPoint, nextPoint, points } = useGuideStore();
+  const { skipPoint, nextPoint, points } = useGuideStore();
 
-  // if (navigationMode === 'guidePreview')
-  //   return (
-  //     <View className="absolute bottom-0 z-10 max-h-96 w-full items-end justify-center">
-  //       <View className="flex w-full justify-end bg-green-main">
-  //         <></>
-  //       </View>
-  //     </View>
-  //   );
-  // else if (!locationTo || !visible || distanceLeft === 0) return <></>;
   const isInGuideMode = navigationMode === 'guidePreview' || navigationMode === 'guide';
   const cancelMessage =
     navigationMode === 'guidePreview'
@@ -91,7 +74,7 @@ export default function GuideModal({ onCancel, visible, distanceLeft }: GuideMod
                   if (navigationMode === 'guidePreview') {
                     setNavigationMode('guide');
                     startGuideNavigation();
-                    await updateUserStatistics(distance);
+                    // await updateUserStatistics(distance);
                   } else {
                     setNavigationMode(undefined);
                   }
@@ -99,11 +82,11 @@ export default function GuideModal({ onCancel, visible, distanceLeft }: GuideMod
                 <Text className="text-xl font-bold text-green-main">{cancelMessage}</Text>
               </TouchableOpacity>
 
-              {nextPoint !== undefined && nextPoint < points.length - 1 && (
+              {navigationMode === 'guide' && nextPoint < points.length - 1 && (
                 <TouchableOpacity
                   className="h-12 flex-1 items-center rounded-full bg-white p-2 text-2xl font-bold text-green-main"
-                  onPress={async () => {
-                    await skipPoint();
+                  onPress={() => {
+                    skipPoint();
                   }}>
                   <Text className="text-xl font-bold text-green-main">
                     {t('navigation.nextStop')}
@@ -116,35 +99,6 @@ export default function GuideModal({ onCancel, visible, distanceLeft }: GuideMod
       </View>
     );
 }
-
-const RoutePreferenceOption = ({
-  routePreference,
-  setRoutePreference,
-  distance,
-  isActive,
-}: {
-  routePreference: RoutePreference;
-  setRoutePreference: (routePreference: RoutePreference) => void;
-  distance: number;
-  isActive: boolean;
-}) => {
-  const iconName = routePreference === RoutePreference.Bike ? 'biking' : 'walking';
-  return (
-    <>
-      <Pressable
-        className={`flex-row items-center justify-center gap-4
- rounded-full bg-neutral-600/50 px-6 py-3 ${isActive ? 'border border-white' : ''}`}
-        onPress={async () => {
-          await setRoutePreference(routePreference);
-        }}>
-        <View className="w-10">
-          <FontAwesome5 size={24} name={iconName} color="white" />
-        </View>
-        {isActive && <Text className="text-xl text-white">{getFormattedTime(distance)}</Text>}
-      </Pressable>
-    </>
-  );
-};
 
 //stuff that probably should be replaced by some lib but no time : (
 function formatDistance(distance: number) {
