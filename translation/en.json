@@ -66,8 +66,9 @@
     "map": "Map",
     "objects": "Places",
     "profile": "Profile",
-    "timetable": "Timetable",
-    "settings": "Settings"
+    "settings": "Settings",
+    "guide":"Campus Guide",
+    "timetable": "Timetable"
   },
   "navigation": {
     "counter": "Counter",
@@ -76,7 +77,9 @@
     "location": "Location",
     "map": "Map",
     "start": "Start",
-    "timeLeft": "Time left: {{time}}"
+    "timeLeft": "Time left: {{time}}",
+    "finish": "Finish Guide",
+    "nextStop": "Next Stop"
   },
   "noInternet": {
     "text": "The application requires a constant internet connection.",

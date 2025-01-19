@@ -79,8 +79,9 @@
     "map": "Mapa",
     "objects": "Miejsca",
     "profile": "Profil",
-    "timetable": "Harmonogram",
-    "settings": "Ustawienia"
+    "settings": "Ustawienia",
+    "guide":"Przewodnik",
+    "timetable": "Harmonogram"
   },
   "navigation": {
     "counter": "Licznik",
@@ -89,7 +90,9 @@
     "location": "Lokalizacja",
     "map": "Mapa",
     "start": "Start",
-    "timeLeft": "Pozostało: {{time}}"
+    "timeLeft": "Pozostało: {{time}}",
+    "finish": "Zakończ przewodnik",
+    "nextStop": "Następny Punkt"
   },
   "noInternet": {
     "text": "Aplikacja wymaga stałego dostępu do internetu.",

@@ -20,10 +20,9 @@ function PointsDistance(point1: [number, number], point2: [number, number]): num
   const dLat = toRadians(lat2 - lat1);
   const dLon = toRadians(lon2 - lon1);
 
-  const a = 
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
@@ -32,24 +31,12 @@ function PointsDistance(point1: [number, number], point2: [number, number]): num
   return distance;
 }
 
-
-
 export function isOutsideCampus(userLocation: [number, number] | undefined): boolean {
-
   if (!userLocation) return false;
 
-  const CAMPUS_CENTER: [number, number] = [21.046307578708316, 52.16363222817587]; // wspórzędne kampusu
-
-
-  // console.log("userLocation");
-  // console.log(userLocation);
-  
+  const CAMPUS_CENTER: [number, number] = [21.046307578708316, 52.16363222817587];
   const distanceFromCampus = PointsDistance(userLocation, CAMPUS_CENTER);
 
-  // console.log("distanceFromCampus");
-  // console.log(distanceFromCampus);
-
-  // Convert to kilometers and check if outside 1km radius
   return distanceFromCampus > 1.5;
 }
 
@@ -64,8 +51,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
   const { navigationMode, locationTo, setNavigationMode } = useLocationStore();
   const lastLocations = useRef<[number, number][]>([]);
   const { fetchRoute } = useRoutingApiCache();
-
-
+  const isNavigating = navigationMode === 'navigating' || navigationMode === 'guide';
 
   useEffect(() => {
     Location.watchPositionAsync(
@@ -83,13 +69,13 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
         // Add check for campus proximity
         if (isOutsideCampus(coords)) {
           ToastAndroid.show(
-            'You are outside the campus area (>1km from center)', 
+            'You are outside the campus area (>1km from center)',
             ToastAndroid.LONG
           );
         }
       }
     );
-  }, []);  
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -122,7 +108,8 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
 
   //apka nie będzie nas nawigować gdy jesteśmy za daleko od kampusu
   useEffect(() => {
-    if (navigationMode !== 'navigating' && navigationMode !== 'routing') return; //nie przerywamy dopiero wtedy anie nie nawigujemy ani nie rutujemy
+    console.log('USEEFFECT FIRED');
+    if (!isNavigating && navigationMode !== 'routing') return; //nie przerywamy dopiero wtedy anie nie nawigujemy ani nie rutujemy
     console.log('uloc, toloc', userlocation, locationTo);
     let locfrom = userlocation;
     let locto = locationTo;
@@ -131,18 +118,18 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
     // Sprawdzamy czy użytkownik jest poza kampusem przed próbą wyznaczenia trasy
     if (isOutsideCampus(userlocation)) {
       ToastAndroid.show(
-          'Cannot calculate route - you are outside the campus area', 
-          ToastAndroid.LONG
+        'Cannot calculate route - you are outside the campus area',
+        ToastAndroid.LONG
       );
-      setNavigationMode('idle'); // Przerywamy nawigację/routing
-      setRouteData({  // Czyścimy dane trasy
-          route: [],
-          distance: 0,
-          duration: 0
+      setNavigationMode(undefined); // Przerywamy nawigację/routing
+      setRouteData({
+        // Czyścimy dane trasy
+        route: [],
+        distance: 0,
+        duration: 0,
       });
       return;
-  }
-
+    }
 
     if (!Array.isArray(locto)) locto = locationTo.coordinates;
     const wayString = [locfrom, locto].reduce((acc, c, i) => {
@@ -155,11 +142,14 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       ToastAndroid.show('Arrived at destination', ToastAndroid.SHORT);
       setNavigationMode('arrived');
     }
-
-
-  
+    console.log(
+      'USEEFFECT FIRED2',
+      lastLocations.current.length === 0,
+      mapDistance(lastLocations.current[0], userlocation)
+    );
 
     if (
+      true ||
       lastLocations.current.length === 0 ||
       mapDistance(lastLocations.current[0], userlocation) > 0.01
     ) {
@@ -191,14 +181,14 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       });
     }
     console.log('routedata', routeData, lastLocations, userlocation);
-  }, [locationTo, navigationMode === 'navigating' ? userlocation : undefined, navigationMode]);
+  }, [locationTo, isNavigating ? userlocation : undefined, navigationMode]);
 
   useEffect(() => {
     lastLocations.current = [];
   }, [locationTo]);
 
   useEffect(() => {
-    if (navigationMode !== 'navigating') {
+    if (isNavigating) {
       setRouteData((n) => ({
         ...n,
         route: [],

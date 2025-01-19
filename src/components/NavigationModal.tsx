@@ -16,7 +16,8 @@ interface NavigationModalProps {
 }
 
 export default function NavigationModal({ onCancel, visible, distanceLeft }: NavigationModalProps) {
-  const { locationFrom, locationTo, navigationMode, setNavigationMode } = useLocationStore();
+  const { locationFrom, locationTo, navigationMode, isGuideActive, setNavigationMode } =
+    useLocationStore();
   const { t } = useTranslation();
   const { updateUserStatistics } = useUserStore();
   const { routePreference, setRoutePreference } = useSettingsStore();

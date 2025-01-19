@@ -187,6 +187,7 @@ const useRealUserStore = create<StoreState>()(
             user_id: get().id,
             distance_sum: currentDist + Math.round(newDistanceSum),
           });
+          set({ loading: false });
           return Promise.resolve();
         } catch (error) {
           console.log('Error updating user statistics', error);

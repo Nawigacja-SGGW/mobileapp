@@ -26,6 +26,7 @@ import useLocationStore from '~/store/useLocationStore';
 import { useObjectsStore } from '~/store/useObjectsStore';
 import { RoutePreference, useSettingsStore } from '~/store/useSettingsStore';
 import { useUserStore } from '~/store/useUserStore';
+import GuideModal from '~/components/GuideModal';
 
 MapLibreGL.setAccessToken(null);
 MapLibreGL.setConnected(true);
@@ -124,6 +125,7 @@ export default function MapScreen() {
               userLocation.current.coords.longitude,
               userLocation.current.coords.latitude,
             ],
+            changeModes: true,
           });
         }
         console.log('map-screen.tsx userLocation.current');
@@ -146,6 +148,7 @@ export default function MapScreen() {
     console.log('Selected location:', location);
     setRoute({
       locationFrom: [userLocation.current?.coords.longitude, userLocation.current?.coords.latitude],
+      changeModes: true,
     });
   };
 
@@ -163,11 +166,13 @@ export default function MapScreen() {
       case 'searchfrom':
         setRoute({
           locationFrom: locationObject,
+          changeModes: true,
         });
         break;
       case 'searchto':
         setRoute({
           locationTo: locationObject,
+          changeModes: true,
         });
         break;
       case 'idle':
@@ -201,9 +206,6 @@ export default function MapScreen() {
   };
   //console.log(-mapRotation - 45);
 
-  //console.log('Locations: ', locations);
-  //console.log('objects: ', allObjects());
-
   return (
     <>
       {(isLoading || loading) && <Loading />}
@@ -217,6 +219,7 @@ export default function MapScreen() {
           ),
         }}
       />
+
       <View className="flex-1">
         {navigationMode !== 'navigating' && (
           <SearchBar
@@ -251,7 +254,11 @@ export default function MapScreen() {
           {/* linia trasy */}
           <MapLine
             route={
-              navigationMode === 'navigating' ? navRoute : navigationMode === 'routing' ? route : []
+              navigationMode === 'navigating' || navigationMode === 'guide'
+                ? navRoute
+                : navigationMode === 'routing' || navigationMode === 'guidePreview'
+                  ? route
+                  : []
             }
             locationFrom={uLocation}
           />
@@ -280,12 +287,25 @@ export default function MapScreen() {
           objectId={selectedObject}
           userLocation={userLocation}
         />
+        <GuideModal
+          visible
+          onCancel={() => {
+            setNavigationMode(undefined);
+          }}
+          distanceLeft={
+            navigationMode === 'guide' || navigationMode === 'guidePreview'
+              ? distance / 1000
+              : routeQueryDistance / 1000
+          }
+        />
         <NavigationModal
           onCancel={() => {
             setNavigationMode(undefined);
           }}
           distanceLeft={
-            navigationMode === 'navigating' ? distance / 1000 : routeQueryDistance / 1000
+            navigationMode === 'navigating' || navigationMode === 'guide'
+              ? distance / 1000
+              : routeQueryDistance / 1000
           }
           visible={navigationMode === 'navigating' || navigationMode === 'routing'}
         />
@@ -383,6 +403,9 @@ interface MapMarkersProps {
 }
 
 function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProps) {
+  const { navigationMode } = useLocationStore();
+  const routeInactive = navigationMode === 'arrived' || !navigationMode;
+
   return (
     <>
       <MapLibreGL.Images
@@ -395,17 +418,18 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
         shape={{
           type: 'FeatureCollection',
           features: [
-            lastRoutePoint && {
-              type: 'Feature',
-              id: 'endpoint',
-              properties: {
-                icon: 'pin',
+            lastRoutePoint &&
+              !routeInactive && {
+                type: 'Feature',
+                id: 'endpoint',
+                properties: {
+                  icon: 'pin',
+                },
+                geometry: {
+                  coordinates: lastRoutePoint,
+                  type: 'Point',
+                },
               },
-              geometry: {
-                coordinates: lastRoutePoint,
-                type: 'Point',
-              },
-            },
           ].filter(Boolean),
         }}>
         <MapLibreGL.CircleLayer
