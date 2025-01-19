@@ -91,10 +91,6 @@ export default function MapScreen() {
     else setSearchMode('idle');
   };
 
-  useEffect(() => {
-    console.log({ navigationMode });
-  }, [navigationMode]);
-
   useFocusEffect(
     useCallback(() => {
       (async () => {

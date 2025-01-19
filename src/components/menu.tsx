@@ -46,8 +46,8 @@ export function DrawerMenu() {
       label: t('menu.guide'),
       icon: <FontAwesome5 name="flag" size={32} color="white" />,
       onPress: () => {
-        startCampusGuide();
         navigation.navigate('map-screen');
+        startCampusGuide();
         console.log('open campus guide', navigationMode, isGuideActive);
       },
     },
