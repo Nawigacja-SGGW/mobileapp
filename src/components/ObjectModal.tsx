@@ -114,7 +114,7 @@ const LocationModal = ({ isVisible, setIsVisible, objectId, userLocation }: Loca
             <TouchableOpacity
               className="flex-1 items-center rounded-full bg-white p-3"
               onPress={() => {
-                navigation.navigate('LocationDetailsScreen', { objectId });
+                navigation.navigate('locationDetailsScreen', { objectId });
                 setIsVisible(false);
               }}>
               <Text className="font-bold text-green-main">{t('object.moreInfo')}</Text>

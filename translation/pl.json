@@ -79,6 +79,7 @@
     "map": "Mapa",
     "objects": "Miejsca",
     "profile": "Profil",
+    "timetable": "Harmonogram",
     "settings": "Ustawienia"
   },
   "navigation": {
@@ -102,11 +103,17 @@
   },
   "objects": {
     "name": "nazwie: od A do Z",
-    "noResults": "Nie znaleziono wyników",
-    "number": "numerze budynku",
-    "search": "Szukaj",
-    "sortBy": "SORTUJ PO"
+    "number": "numerze budynku"
   },
+  "events": {
+    "date": "data",
+    "location": "lokacja",
+    "category": "kategoria"
+  },
+  "search": "Szukaj",
+  "noResults": "Nie znaleziono wyników",
+  "sortBy": "SORTUJ PO",
+  "filterBy": "FILTRUJ PO",
   "profile": {
     "email": "Email",
     "logOut": "Wyloguj się",

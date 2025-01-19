@@ -1,4 +1,4 @@
-import { Feather, FontAwesome5, MaterialIcons, Entypo, AntDesign} from '@expo/vector-icons';
+import { Feather, FontAwesome5, MaterialIcons, Entypo, AntDesign } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import React from 'react';
@@ -38,6 +38,13 @@ export function DrawerMenu() {
       icon: <FontAwesome5 name="user" size={32} color="white" />,
       onPress: () => {
         navigation.navigate('profileView');
+      },
+    },
+    {
+      label: t('menu.timetable'),
+      icon: <Feather name="clock" size={32} color="white" />,
+      onPress: () => {
+        navigation.navigate('timetableView');
       },
     },
     {

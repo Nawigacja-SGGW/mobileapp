@@ -110,8 +110,8 @@ export default function MapScreen() {
             if (!locationEstablished) {
               setLocationEstablished(true);
             }
-            console.log('map-screen.tsx location');
-            console.log(location);
+            //console.log('map-screen.tsx location');
+            //console.log(location);
           }
         );
 
@@ -151,7 +151,7 @@ export default function MapScreen() {
 
   const handleMarkerPress = (id: number, location: [number, number]) => {
     // if (navigationMode !== 'arrived' || navigationMode) return;
-    console.log({ navigationMode });
+    //console.log({ navigationMode });
     const locationObject = locations.find((l) => l.id == id);
     setIsExpanded(true);
     //console.log('location Object ', locationObject, id, locations);
@@ -199,10 +199,10 @@ export default function MapScreen() {
     transform: `rotate(${-mapRotation - 45}deg)`,
     margin: -5,
   };
-  console.log(-mapRotation - 45);
+  //console.log(-mapRotation - 45);
 
-  console.log('Locations: ', locations);
-  console.log('objects: ', allObjects());
+  //console.log('Locations: ', locations);
+  //console.log('objects: ', allObjects());
 
   return (
     <>
@@ -423,7 +423,7 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
         id="symbolLocationSource"
         hitbox={{ width: 20, height: 20 }}
         onPress={(e) => {
-          console.log(e);
+          //console.log(e);
           if (e.features.length > 0) {
             onMarkerPress(e.features[0].id, e.features[0].geometry.coordinates);
           }

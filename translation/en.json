@@ -66,6 +66,7 @@
     "map": "Map",
     "objects": "Places",
     "profile": "Profile",
+    "timetable": "Timetable",
     "settings": "Settings"
   },
   "navigation": {
@@ -89,11 +90,17 @@
   },
   "objects": {
     "name": "name: from A to Z",
-    "noResults": "No results found",
-    "number": "building number",
-    "search": "Search",
-    "sortBy": "SORT BY"
+    "number": "building number"
   },
+  "events": {
+    "date": "date",
+    "location": "location",
+    "category": "category"
+  },
+  "search": "Search",
+  "noResults": "No results found",
+  "sortBy": "SORT BY",
+  "filterBy": "FILER BY",
   "profile": {
     "email": "Email",
     "logOut": "Log out",
