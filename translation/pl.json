@@ -42,7 +42,7 @@
     "errorOccurred": "Wystąpił błąd",
     "fillAllFields": "Wypełnij wszystkie pola",
     "forgotPassword": "Zapomniałeś hasła?",
-    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła",
+    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła.",
     "newPassword": {
       "label": "Nowe hasło",
       "placeholder": "Wprowadź nowe hasło"
@@ -77,7 +77,7 @@
   "menu": {
     "logout": "Wyloguj się",
     "map": "Mapa",
-    "objects": "Obiekty",
+    "objects": "Miejsca",
     "profile": "Profil",
     "timetable": "Harmonogram",
     "settings": "Ustawienia"
@@ -135,14 +135,14 @@
     "title": "Zmień hasło"
   },
   "settings": {
-    "bike": "Rowerowa",
+    "bike": "Rowerem",
     "changePassword": "Zmień hasło",
     "informations": "Informacje",
     "language": "Język",
     "routePreferences": "Preferencje trasy",
     "save": "Zapisz",
     "saved": "Zapisano",
-    "walk": "Piesza"
+    "walk": "Pieszo"
   },
   "statistics": {
     "noData": "Brak danych",

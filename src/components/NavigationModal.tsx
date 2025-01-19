@@ -56,7 +56,7 @@ export default function NavigationModal({ onCancel, visible, distanceLeft }: Nav
           {navigationMode === 'navigating' && (
             <View className="flex-row items-end  justify-center gap-5 py-4">
               <Text className="text-2xl font-bold text-white">
-                {t('navigation.timeLeft', { time: getFormattedTime(distanceLeft) })}
+                {t('navigation.timeLeft', { time: getFormattedTime(distanceLeft, routePreference === RoutePreference.Bike) })}
               </Text>
             </View>
           )}
@@ -107,7 +107,7 @@ const RoutePreferenceOption = ({
         <View className="w-10">
           <FontAwesome5 size={24} name={iconName} color="white" />
         </View>
-        {isActive && <Text className="text-xl text-white">{getFormattedTime(distance)}</Text>}
+        {isActive && <Text className="text-xl text-white">{getFormattedTime(distance, routePreference === RoutePreference.Bike)}</Text>}
       </Pressable>
     </>
   );
@@ -119,6 +119,8 @@ function formatDistance(distance: number) {
   return `${Math.round((distance * 1000) / 5) * 5} m`;
 }
 
-function getFormattedTime(distance: number) {
-  return `${Math.ceil(distance / 0.0014 / 60)} min`;
+function getFormattedTime(distance: number, isBike: boolean) {
+  const speed = isBike ? 0.0042 : 0.0014; // 15 km/h dla rowerów, 5 km/h dla pieszych
+  return `${Math.ceil(distance / speed / 60)} min`;
 }
+

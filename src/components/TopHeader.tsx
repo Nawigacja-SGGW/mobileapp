@@ -1,4 +1,4 @@
-import { FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import React from 'react';
@@ -45,7 +45,7 @@ export default function TopHeader({ onlyBack, modeSearch, toggleSearchBar }: Top
     return (
       <View className="absolute left-0 right-0 top-0 z-20 h-28 flex-row items-center justify-between bg-green-main px-4 pb-0 pt-8">
         <TouchableOpacity className="p-2" onPress={() => navigation.goBack()}>
-          <FontAwesome5 name="chevron-left" size={32} color="white" />
+          <AntDesign name="arrowleft" size={32} color="white" />
         </TouchableOpacity>
         <Text className="text-2xl font-bold text-white">Nawigacja SGGW </Text>
         <View className="bg h-4 w-16" />
