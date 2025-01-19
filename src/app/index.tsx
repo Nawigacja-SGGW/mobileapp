@@ -28,7 +28,7 @@ export default function Home() {
           })),
         ],
       });
-      console.log('useLocationStore update', useLocationStore.getState());
+      //console.log('useLocationStore update', useLocationStore.getState());
     });
 
     navigation.navigate('start');

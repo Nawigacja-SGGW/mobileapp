@@ -26,7 +26,7 @@ interface Address {
   city: string;
 }
 
-interface PointObject extends MapObject {
+export interface PointObject extends MapObject {
   eventCategory: string | null;
   eventStart: Date | null;
   eventEnd: Date | null;

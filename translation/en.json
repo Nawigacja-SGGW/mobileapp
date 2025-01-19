@@ -29,7 +29,7 @@
     "errorOccurred": "An error occurred",
     "fillAllFields": "Complete all fields",
     "forgotPassword": "Forgot password",
-    "forgotPasswordText": "Please enter the e-mail address and we will send you instructions to reset your password",
+    "forgotPasswordText": "Please enter the e-mail address and we will send you instructions to reset your password.",
     "newPassword": {
       "label": "New password",
       "placeholder": "Enter new password"
@@ -64,10 +64,11 @@
   "menu": {
     "logout": "Logout",
     "map": "Map",
-    "objects": "Objects",
+    "objects": "Places",
     "profile": "Profile",
     "settings": "Settings",
-    "guide":"Campus Guide"
+    "guide":"Campus Guide",
+    "timetable": "Timetable"
   },
   "navigation": {
     "counter": "Counter",
@@ -92,11 +93,17 @@
   },
   "objects": {
     "name": "name: from A to Z",
-    "noResults": "No results found",
-    "number": "building number",
-    "search": "Search",
-    "sortBy": "SORT BY"
+    "number": "building number"
   },
+  "events": {
+    "date": "date",
+    "location": "location",
+    "category": "category"
+  },
+  "search": "Search",
+  "noResults": "No results found",
+  "sortBy": "SORT BY",
+  "filterBy": "FILER BY",
   "profile": {
     "email": "Email",
     "logOut": "Log out",
@@ -118,14 +125,14 @@
     "title": "Change Password"
   },
   "settings": {
-    "bike": "By bike",
+    "bike": "Bike",
     "changePassword": "Change a Password",
     "informations": "Informations",
     "language": "Language",
     "routePreferences": "Route Preferences",
     "save": "Save",
     "saved": "Saved",
-    "walk": "By foot"
+    "walk": "Walk"
   },
   "statistics": {
     "noData": "No data",

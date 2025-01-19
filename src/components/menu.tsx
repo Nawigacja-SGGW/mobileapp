@@ -1,4 +1,4 @@
-import { Feather, FontAwesome5, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { Feather, FontAwesome5, MaterialIcons, Entypo, AntDesign } from '@expo/vector-icons';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from 'expo-router';
 import React from 'react';
@@ -23,14 +23,14 @@ export function DrawerMenu() {
   const menuOptions = [
     {
       label: t('menu.map'),
-      icon: <Ionicons name="location-outline" size={32} color="white" />,
+      icon: <Entypo name="map" size={32} color="white" />,
       onPress: () => {
         navigation.navigate('map-screen');
       },
     },
     {
       label: t('menu.objects'),
-      icon: <FontAwesome5 name="building" size={32} color="white" />,
+      icon: <Feather name="map-pin" size={32} color="white" />,
       onPress: () => {
         navigation.navigate('objects');
       },
@@ -52,6 +52,13 @@ export function DrawerMenu() {
       },
     },
     {
+      label: t('menu.timetable'),
+      icon: <Feather name="clock" size={32} color="white" />,
+      onPress: () => {
+        navigation.navigate('timetableView');
+      },
+    },
+    {
       label: t('menu.settings'),
       icon: <Feather name="settings" size={32} color="white" />,
       onPress: () => {
@@ -62,7 +69,7 @@ export function DrawerMenu() {
 
   const logoutOption = {
     label: t('menu.logout'),
-    icon: <SimpleLineIcons name="logout" size={32} color="white" />,
+    icon: <MaterialIcons name="logout" size={32} color="white" />,
     onPress: async () => {
       try {
         await logout();
@@ -86,7 +93,7 @@ export function DrawerMenu() {
           <TouchableOpacity
             className="w-20"
             onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-            <FontAwesome5 name="chevron-left" size={32} color="white" />
+            <AntDesign name="arrowleft" size={32} color="white" />
           </TouchableOpacity>
           <Text className="absolute left-1/2 -translate-x-1/2 text-2xl font-bold text-white">
             Nawigacja SGGW

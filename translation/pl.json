@@ -42,7 +42,7 @@
     "errorOccurred": "Wystąpił błąd",
     "fillAllFields": "Wypełnij wszystkie pola",
     "forgotPassword": "Zapomniałeś hasła?",
-    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła",
+    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła.",
     "newPassword": {
       "label": "Nowe hasło",
       "placeholder": "Wprowadź nowe hasło"
@@ -77,10 +77,11 @@
   "menu": {
     "logout": "Wyloguj się",
     "map": "Mapa",
-    "objects": "Obiekty",
+    "objects": "Miejsca",
     "profile": "Profil",
     "settings": "Ustawienia",
-    "guide":"Przewodnik"
+    "guide":"Przewodnik",
+    "timetable": "Harmonogram"
   },
   "navigation": {
     "counter": "Licznik",
@@ -105,11 +106,17 @@
   },
   "objects": {
     "name": "nazwie: od A do Z",
-    "noResults": "Nie znaleziono wyników",
-    "number": "numerze budynku",
-    "search": "Szukaj",
-    "sortBy": "SORTUJ PO"
+    "number": "numerze budynku"
   },
+  "events": {
+    "date": "data",
+    "location": "lokacja",
+    "category": "kategoria"
+  },
+  "search": "Szukaj",
+  "noResults": "Nie znaleziono wyników",
+  "sortBy": "SORTUJ PO",
+  "filterBy": "FILTRUJ PO",
   "profile": {
     "email": "Email",
     "logOut": "Wyloguj się",
@@ -131,14 +138,14 @@
     "title": "Zmień hasło"
   },
   "settings": {
-    "bike": "Rowerowa",
+    "bike": "Rowerem",
     "changePassword": "Zmień hasło",
     "informations": "Informacje",
     "language": "Język",
     "routePreferences": "Preferencje trasy",
     "save": "Zapisz",
     "saved": "Zapisano",
-    "walk": "Piesza"
+    "walk": "Pieszo"
   },
   "statistics": {
     "noData": "Brak danych",
