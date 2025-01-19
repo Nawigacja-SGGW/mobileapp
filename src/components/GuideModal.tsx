@@ -50,7 +50,7 @@ export default function GuideModal({ onCancel, visible, distanceLeft }: GuideMod
                   <FontAwesome5 size={20} name="walking" color="white" /> {formatDistance(distance)}
                 </Text>
                 <Text className="ml-4 mr-20 pt-5 text-base font-bold text-white">
-                  <Entypo size={20} name="location-pin" /> Start: {points[0].name}
+                  <Entypo size={20} name="location-pin" /> Start: {points[0]?.name}
                 </Text>
               </>
             )}
@@ -102,6 +102,7 @@ export default function GuideModal({ onCancel, visible, distanceLeft }: GuideMod
 
 //stuff that probably should be replaced by some lib but no time : (
 function formatDistance(distance: number) {
+  // return `${distance}`;
   if (distance > 2) return `${Math.round(distance * 10) / 10} m`;
   return `${Math.round((distance * 1000) / 5) * 5} m`;
 }

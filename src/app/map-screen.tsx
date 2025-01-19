@@ -410,6 +410,9 @@ interface MapMarkersProps {
 }
 
 function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProps) {
+  const { navigationMode } = useLocationStore();
+  const routeInactive = navigationMode === 'arrived' || !navigationMode;
+
   return (
     <>
       <MapLibreGL.Images
@@ -422,17 +425,18 @@ function MapMarkers({ lastRoutePoint, locations, onMarkerPress }: MapMarkersProp
         shape={{
           type: 'FeatureCollection',
           features: [
-            lastRoutePoint && {
-              type: 'Feature',
-              id: 'endpoint',
-              properties: {
-                icon: 'pin',
+            lastRoutePoint &&
+              !routeInactive && {
+                type: 'Feature',
+                id: 'endpoint',
+                properties: {
+                  icon: 'pin',
+                },
+                geometry: {
+                  coordinates: lastRoutePoint,
+                  type: 'Point',
+                },
               },
-              geometry: {
-                coordinates: lastRoutePoint,
-                type: 'Point',
-              },
-            },
           ].filter(Boolean),
         }}>
         <MapLibreGL.CircleLayer

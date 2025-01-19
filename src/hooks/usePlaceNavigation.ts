@@ -34,17 +34,9 @@ function PointsDistance(point1: [number, number], point2: [number, number]): num
 export function isOutsideCampus(userLocation: [number, number] | undefined): boolean {
   if (!userLocation) return false;
 
-  const CAMPUS_CENTER: [number, number] = [21.046307578708316, 52.16363222817587]; // wspórzędne kampusu
-
-  // console.log("userLocation");
-  // console.log(userLocation);
-
+  const CAMPUS_CENTER: [number, number] = [21.046307578708316, 52.16363222817587];
   const distanceFromCampus = PointsDistance(userLocation, CAMPUS_CENTER);
 
-  // console.log("distanceFromCampus");
-  // console.log(distanceFromCampus);
-
-  // Convert to kilometers and check if outside 1km radius
   return distanceFromCampus > 1.5;
 }
 
@@ -116,6 +108,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
 
   //apka nie będzie nas nawigować gdy jesteśmy za daleko od kampusu
   useEffect(() => {
+    console.log('USEEFFECT FIRED');
     if (!isNavigating && navigationMode !== 'routing') return; //nie przerywamy dopiero wtedy anie nie nawigujemy ani nie rutujemy
     console.log('uloc, toloc', userlocation, locationTo);
     let locfrom = userlocation;
@@ -149,8 +142,14 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       ToastAndroid.show('Arrived at destination', ToastAndroid.SHORT);
       setNavigationMode('arrived');
     }
+    console.log(
+      'USEEFFECT FIRED2',
+      lastLocations.current.length === 0,
+      mapDistance(lastLocations.current[0], userlocation)
+    );
 
     if (
+      true ||
       lastLocations.current.length === 0 ||
       mapDistance(lastLocations.current[0], userlocation) > 0.01
     ) {

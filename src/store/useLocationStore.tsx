@@ -10,7 +10,7 @@ export interface MapLocation {
 }
 
 export type SearchMode = 'searchto' | 'searchfrom' | 'idle';
-export type NavigationMode = 'routing' | 'navigating' | 'arrived';
+export type NavigationMode = 'routing' | 'navigating' | 'arrived' | 'guide' | 'guidePreview';
 
 interface LocationStore {
   locations: MapLocation[];
@@ -19,7 +19,7 @@ interface LocationStore {
   locationFrom: undefined | MapLocation | [number, number];
   locationTo: undefined | MapLocation;
   searchMode: SearchMode;
-  navigationMode?: 'routing' | 'navigating' | 'arrived' | 'guide' | 'guidePreview';
+  navigationMode?: NavigationMode;
   isGuideActive: boolean;
   setNavigationMode: (mode: NavigationMode | undefined) => void;
   setRoute: (options: {

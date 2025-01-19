@@ -29,8 +29,8 @@ export const useGuideStore = create<GuideState>((set, get) => ({
   startGuideNavigation: () => {
     set({ nextPoint: 0 });
     console.log('startGuideNavigation');
-    useLocationStore.getState().setRoute({ locationTo: get().points[0], changeModes: false });
     useLocationStore.getState().setNavigationMode('guide');
+    useLocationStore.getState().setRoute({ locationTo: get().points[0], changeModes: false });
   },
   skipPoint: () => {
     const state = get();
