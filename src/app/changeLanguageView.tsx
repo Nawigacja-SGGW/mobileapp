@@ -13,6 +13,7 @@ import {
 
 import TopHeader from '~/components/TopHeader';
 import { useSettingsStore } from '~/store/useSettingsStore';
+import { AppButton } from '~/components/AppButton';
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -61,18 +62,18 @@ export default function ChangeLanguageView() {
       />
 
       {/* Przycisk zapisz */}
-      <TouchableOpacity
+      <AppButton
+        title={t('settings.save')}
         onPress={() => {
           useSettingsStore.getState().setLanguage(i18n.language);
           ToastAndroid.show(t('settings.saved'), ToastAndroid.SHORT);
         }}
-        className="mt-8 h-14 items-center justify-center rounded-full bg-[#004D40]"
         style={{
           width: width > 400 ? '80%' : '100%',
           alignSelf: 'center',
-        }}>
-        <Text className="text-base font-bold text-white">{t('settings.save')}</Text>
-      </TouchableOpacity>
+          marginTop: height * 0.01,
+        }}
+      />
     </SafeAreaView>
   );
 }
