@@ -1,0 +1,68 @@
+name: "Build Android app"
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: 'Dev'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+
+      - name: Decode Keystore from base64
+  # You may pin to the exact commit or the version.
+  # uses: timheuer/base64-to-file@784a1a4a994315802b7d8e2084e116e783d157be
+        uses: timheuer/base64-to-file@v1.2.4
+        with:
+          # Name of the file when written to temp location
+          fileName: 'my-release-key.keystore'
+          # If it is set, change the output location to specific one from temp location.
+          fileDir: 'android/app/'
+          # The base64 encoded string
+          encodedString: ${{ secrets.KEYSTORE }}
+
+      - name: Create .env file
+        run: |
+          echo "EXPO_PUBLIC_API_URL=${{ secrets.API_URL }}" >> .env
+          echo "EXPO_PUBLIC_MODE=${{ secrets.MODE }}" >> .env
+
+      - name: Verify .env content
+        run: cat .env
+          
+      - name: Install Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: adopt
+          cache: gradle
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup Node  
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: |
+             cd android
+             ./gradlew assembleRelease
+
+      - name: Upload application
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 3

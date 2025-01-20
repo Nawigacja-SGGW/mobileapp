@@ -1,40 +1,36 @@
-import { Stack, Link } from 'expo-router';
+import { useFocusEffect, useNavigation } from 'expo-router';
+import { LogBox } from 'react-native';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
-import { Button } from '~/components/Button';
-import { Container } from '~/components/Container';
-import { InternalizationExample } from '~/components/InternalizationExample';
-import { ScreenContent } from '~/components/ScreenContent';
+import useLocationStore from '~/store/useLocationStore';
+import { useObjectsStore } from '~/store/useObjectsStore';
 
 export default function Home() {
-  return (
-    <>
-      <Stack.Screen options={{ title: 'Home' }} />
-      <Container>
-        <ScreenContent path="app/index.tsx" title="Home">
-          <InternalizationExample />
-        </ScreenContent>
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-        <Link href={{ pathname: '/counter-example' }} asChild>
-          <Button title="Go to counter Example" />
-        </Link>
+  useFocusEffect(() => {
+    console.log('EXPO_PUBLIC_MODE', process.env.EXPO_PUBLIC_MODE);
+    console.log('go to start');
+    LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+    LogBox.ignoreAllLogs(); // Ignore all log notifications
 
-        <Link href={{ pathname: '/location-example' }} asChild>
-          <Button title="Go to location Example" />
-        </Link>
+    useObjectsStore.subscribe((state) => {
+      // Aktualizowanie listy lokalizacji na podstawie obiektów w useObjectsStore
+      useLocationStore.setState({
+        locations: [
+          ...useObjectsStore.getState().areaObjects.map((n, i) => ({
+            ...n,
+            coordinates: [Number(n.longitude), Number(n.latitude)],
+          })),
+          ...useObjectsStore.getState().pointObjects.map((n, i) => ({
+            ...n,
+            coordinates: [Number(n.longitude), Number(n.latitude)],
+          })),
+        ],
+      });
+      //console.log('useLocationStore update', useLocationStore.getState());
+    });
 
-        <Link href={{ pathname: '/map-example' }} asChild>
-          <Button title="Go to map Example" />
-        </Link>
-
-        <Link
-          href={{
-            pathname: '/details',
-            params: { name: 'Dan' },
-          }}
-          asChild>
-          <Button title="Show Details" />
-        </Link>
-      </Container>
-    </>
-  );
+    navigation.navigate('start');
+  });
 }

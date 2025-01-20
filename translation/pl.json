@@ -1,0 +1,160 @@
+{
+  "button": {
+    "english": "Angielski",
+    "polish": "Polski"
+  },
+  "cancel": "Anuluj",
+  "changeCode": "Zmień dowolny tekst, zapisz plik, a aplikacja automatycznie się zaktualizuje.",
+  "counter": {
+    "cunter-example": "przykład licznika",
+    "decrement": "Zmniejsz",
+    "increment": "Zwiększ",
+    "title": "Przykład licznika",
+    "value": "Licznik"
+  },
+  "getStarted": "Otwórz kod dla tego ekranu:",
+  "loading": "Ładowanie",
+  "location": {
+    "granted": "przyznane",
+    "permissionStatus": "Status uprawnień",
+    "title": "Lokalizacja",
+    "yourLocation": "Twoja lokalizacja"
+  },
+  "login": {
+    "backToLogin": "Wróć do logowania",
+    "confirmNewPassword": {
+      "label": "Potwierdź nowe hasło",
+      "placeholder": "Wprowadź nowe hasło"
+    },
+    "confirmPassword": {
+      "label": "Potwierdź hasło",
+      "placeholder": "Wprowadź swoje hasło"
+    },
+    "confirmation": "Sprawdź email w celu zresetowania hasła",
+    "confirmationText": "Email został wysłany na Twój adres. Sprawdź swoją skrzynkę odbiorczą i kliknij link resetowania hasła.",
+    "continueWith": "Lub kontynuuj z",
+    "didntReceiveEmail": "Nie otrzymałeś emaila?",
+    "email": {
+      "label": "E-mail",
+      "placeholder": "Wprowadź swój e-mail"
+    },
+    "emailSentSuccessfully": "Email wysłany poprawnie",
+    "errorOccurred": "Wystąpił błąd",
+    "fillAllFields": "Wypełnij wszystkie pola",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "forgotPasswordText": "Proszę podać adres e-mail, a wyślemy instrukcje do zresetowania hasła.",
+    "newPassword": {
+      "label": "Nowe hasło",
+      "placeholder": "Wprowadź nowe hasło"
+    },
+    "password": {
+      "forgotPassword": "Zapomniałeś hasła?",
+      "label": "Hasło",
+      "placeholder": "Wprowadź swoje hasło"
+    },
+    "passwordChanged": "Zmieniono hasło pomyślnie",
+    "passwordMismatch": "Hasła nie są identyczne",
+    "registrationSuccessful": "Zarejestrowano pomyślnie",
+    "resetButton": "Zresetuj hasło",
+    "resetPassword": "Zresetuj hasło",
+    "resetPasswordText": "Wprowadź nowe hasło dla ",
+    "sendButton": "Wyślij",
+    "signInButton": "Zaloguj się",
+    "signUpButton": "Zarejestruj się",
+    "username": {
+      "label": "Nazwa użytkownika",
+      "placeholder": "Wprowadź swoją nazwę użytkownika"
+    },
+    "usernameOrEmail": {
+      "label": "E-mail",
+      "placeholder": "Wprowadź swój e-mail"
+    }
+  },
+  "map": {
+    "search.destination": "Miejsce docelowe",
+    "search.startingPoint": "Twoja lokacja"
+  },
+  "menu": {
+    "logout": "Wyloguj się",
+    "map": "Mapa",
+    "objects": "Miejsca",
+    "profile": "Profil",
+    "settings": "Ustawienia",
+    "guide":"Przewodnik",
+    "timetable": "Harmonogram"
+  },
+  "navigation": {
+    "counter": "Licznik",
+    "details": "Szczegóły",
+    "home": "Strona główna",
+    "location": "Lokalizacja",
+    "map": "Mapa",
+    "start": "Start",
+    "timeLeft": "Pozostało: {{time}}",
+    "finish": "Zakończ przewodnik",
+    "nextStop": "Następny Punkt"
+  },
+  "noInternet": {
+    "text": "Aplikacja wymaga stałego dostępu do internetu.",
+    "title": "Brak połączenia z internetem!",
+    "tryAgain": "Spróbuj ponownie"
+  },
+  "noLocationPermission": "Brak pozwolenia na lokalizację",
+  "object": {
+    "moreInfo": "Więcej informacji",
+    "navigate": "Nawiguj"
+  },
+  "objects": {
+    "name": "nazwie: od A do Z",
+    "number": "numerze budynku"
+  },
+  "events": {
+    "date": "data",
+    "location": "lokacja",
+    "category": "kategoria"
+  },
+  "search": "Szukaj",
+  "noResults": "Nie znaleziono wyników",
+  "sortBy": "SORTUJ PO",
+  "filterBy": "FILTRUJ PO",
+  "profile": {
+    "email": "Email",
+    "logOut": "Wyloguj się",
+    "myKilometers": "Moje kilometry",
+    "myRoutes": "Moje trasy"
+  },
+  "rankingView": {
+    "users_with_the_most_distance_traveled": "Użytkownicy z największym przebytym dystansem",
+    "users_with_the_most_visited_places": "Użytkownicy z największą liczbą odwiedzin unikalnych miejsc",
+    "users_with_the_most_visits_in_one_place": "Użytkownicy z największą liczbą odwiedzin jednego miejsca",
+    "you": "Ty",
+    "your_place_in_ranking": "Twoje miejsce w rankingu"
+  },
+  "resetPassword": {
+    "confirmNewPassword": "Potwierdź nowe hasło",
+    "currentPassword": "Aktualne hasło",
+    "newPassword": "Nowe hasło",
+    "resetButton": "Zresetuj hasło",
+    "title": "Zmień hasło"
+  },
+  "settings": {
+    "bike": "Rowerem",
+    "changePassword": "Zmień hasło",
+    "informations": "Informacje",
+    "language": "Język",
+    "routePreferences": "Preferencje trasy",
+    "save": "Zapisz",
+    "saved": "Zapisano",
+    "walk": "Pieszo"
+  },
+  "statistics": {
+    "noData": "Brak danych",
+    "times_0": "{{count}} raz",
+    "times_1": "{{count}} razy",
+    "times_2": "{{count}} razy",
+    "times_few": "{{count}} razy",
+    "times_other": "{{count}} razy",
+    "totalDistance": "Pokonany dystans",
+    "visitedPlacesNumber": "Ilość odwiedzonych miejsc"
+  }
+}
