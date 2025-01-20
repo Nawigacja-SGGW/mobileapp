@@ -1,6 +1,7 @@
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
 import { ToastAndroid } from 'react-native';
+import { useGuideStore } from '~/store/useGuideStore';
 
 import useLocationStore, { MapLocation } from '~/store/useLocationStore';
 import { useRoutingApiCache } from '~/store/useRouteCache';
@@ -49,6 +50,7 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
 
   const [userlocation, setUserLocation] = useState<[number, number] | undefined>(undefined);
   const { navigationMode, locationTo, setNavigationMode } = useLocationStore();
+  const { points, nextPoint, skipPoint } = useGuideStore();
   const lastLocations = useRef<[number, number][]>([]);
   const { fetchRoute } = useRoutingApiCache();
   const isNavigating = navigationMode === 'navigating' || navigationMode === 'guide';
@@ -137,10 +139,20 @@ export function usePlaceNavigation(routedBy: RoutedBy) {
       acc += c[1].toString() + (1 === i ? '' : ';');
       return acc;
     }, '');
-    if (mapDistance(userlocation, locationTo) < 0.02) {
+    if (mapDistance(userlocation, locationTo) < 0.04) {
       console.log('ARRIVED');
-      ToastAndroid.show('Arrived at destination', ToastAndroid.SHORT);
-      setNavigationMode('arrived');
+      if (navigationMode === 'guide') {
+        if (nextPoint !== points.length - 1) {
+          skipPoint();
+          ToastAndroid.show('Routing to next point', ToastAndroid.SHORT);
+        } else {
+          setNavigationMode(undefined);
+          ToastAndroid.show('Campus guide finished', ToastAndroid.SHORT);
+        }
+      } else {
+        ToastAndroid.show('Arrived at destination', ToastAndroid.SHORT);
+        setNavigationMode('arrived');
+      }
     }
     console.log(
       'USEEFFECT FIRED2',
